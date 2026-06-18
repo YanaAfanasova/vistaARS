@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта анестезии — VISTAMED</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top-nav">
+    <div class="logo-section">
+        <span class="logo-text">Виста-МЕД</span>
+        <span class="logo-tag">АРС</span>
+        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
+    </div>
+    <div class="user-section">
+        <div class="doctor-meta">
+            <div class="doctor-name">Турчанинов А.Ю.</div>
+            <div class="doctor-specialty">Анестезиолог</div>
+        </div>
+        <div class="user-avatar">АЮ</div>
+    </div>
+</header>
+
+<div class="patient-bar" id="patientBar">
+    <div class="patient-data">
+        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
+        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
+        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
+        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
+        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+    </div>
+    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
+</div>
+<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
+    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
+</div>
+
+
+
+<nav class="tabs-nav">
+
+    <a href="consents.html" class="tab-item">Согласия</a>
+    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
+    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+    <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
+    <a href="anesthesia-card.html" class="tab-item active">Карта анестезии</a>
+    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
+    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
+    <a href="analyses.html" class="tab-item">Анализы</a>
+
+    <div class="tab-item" data-tab="plan">План лекарственного сопровождения</div>
+
+</nav>
+
+<div class="control-bar">
+    <div class="scale-selector">
+        <span>Масштаб времени:</span>
+        <button class="scale-btn" data-scale="5">5 мин</button>
+        <button class="scale-btn active" data-scale="15">15 мин</button>
+        <button class="scale-btn" data-scale="30">30 мин</button>
+        <button class="scale-btn" data-scale="60">1 час</button>
+    </div>
+    <div class="time-status">
+        <div><label>Начало операции:</label><br><strong>09:15 18.05.2026, вт</strong></div>
+        <div style="margin-left:20px;"><label style="color:var(--primary-green);">Идет операция:</label><br><strong style="color:var(--primary-green);" id="currentOperationTime">01:31:24</strong></div>
+    </div>
+    <div>
+        <button class="btn btn-green">Завершить операцию</button>
+        <button class="btn btn-outline" id="addStageBtn">+ Добавить этап</button>
+        <button class="btn btn-outline btn-outline-accent" id="applyPlanBtn">Применить план в карту</button>
+        <button class="btn btn-outline" id="addDrugBtn">Ввести препарат</button>
+    </div>
+</div>
+
+<div class="main-layout">
+    <div id="anesthesiaView" class="timeline-wrapper">
+        <div class="timeline-table" id="timelineTable"></div>
+    </div>
+    <div class="right-panel">
+        <!-- Форма моментального добавления показателя -->
+        <div class="panel-card">
+            <h4>Моментальное добавление показателя</h4>
+            <div class="form-field">
+                <label>Показатель</label>
+                <select id="quickVitalParam">
+                    <option>Пульс (уд/мин)</option>
+                    <option>АД (мм рт.ст.)</option>
+                    <option>SpO₂ (%)</option>
+                    <option>ЦВД (смH₂O)</option>
+                    <option>Температура (°C)</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>Время (ЧЧ:ММ)</label>
+                <input type="text" id="quickVitalTime" placeholder="например 10:30" value="10:30">
+            </div>
+            <div class="form-field">
+                <label>Значение</label>
+                <input type="text" id="quickVitalValue" placeholder="введите значение">
+            </div>
+            <button class="btn btn-green" id="quickVitalBtn" style="width:100%;">Добавить показатель</button>
+        </div>
+
+        <!-- Форма с фигурой человека и катетерами -->
+        <div class="panel-card">
+            <h4>Установка катетеров</h4>
+            <div class="person-schema" id="catheterSchema">
+                <svg class="person-svg" viewBox="0 0 200 300">
+                    <!-- Голова -->
+                    <circle cx="100" cy="40" r="20" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
+                    <!-- Шея/ключица (центральный катетер) -->
+                    <circle cx="100" cy="75" r="12" class="catheter-point" data-catheter="central" data-name="Центральный катетер"/>
+                    <!-- Туловище -->
+                    <rect x="70" y="90" width="60" height="100" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
+                    <!-- Рука левая (периферический) -->
+                    <line x1="70" y1="100" x2="35" y2="120" stroke="#999" stroke-width="3"/>
+                    <circle cx="35" cy="120" r="8" class="catheter-point" data-catheter="peripheral" data-name="Периферический катетер (левая рука)"/>
+                    <!-- Рука правая (периферический) -->
+                    <line x1="130" y1="100" x2="165" y2="120" stroke="#999" stroke-width="3"/>
+                    <circle cx="165" cy="120" r="8" class="catheter-point" data-catheter="peripheral" data-name="Периферический катетер (правая рука)"/>
+                    <!-- Нога левая (артериальный) -->
+                    <line x1="85" y1="190" x2="70" y2="240" stroke="#999" stroke-width="3"/>
+                    <circle cx="70" cy="240" r="8" class="catheter-point" data-catheter="arterial" data-name="Артериальный катетер (левая нога)"/>
+                    <!-- Нога правая (артериальный) -->
+                    <line x1="115" y1="190" x2="130" y2="240" stroke="#999" stroke-width="3"/>
+                    <circle cx="130" cy="240" r="8" class="catheter-point" data-catheter="arterial" data-name="Артериальный катетер (правая нога)"/>
+                    <!-- Пах (доп. центральный/артериальный) -->
+                    <circle cx="100" cy="170" r="8" class="catheter-point" data-catheter="femoral" data-name="Бедренный катетер"/>
+                </svg>
+            </div>
+            <div id="catheterInfo" class="catheter-info">
+                Нажмите на зону для установки катетера
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="planView" style="display:none;"></div>
+
+<!-- Модальные окна -->
+<div id="stageModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить этап операции</span><span class="close-modal" data-modal="stageModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Этап</label><select id="stageSelect"></select></div><div class="form-field"><label>Время (ЧЧ:ММ)</label><input type="text" id="stageTime"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelStageBtn">Отмена</button><button class="btn btn-green" id="saveStageBtn">Сохранить</button></div></div></div>
+<div id="vitalModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Ввод показателя</span><span class="close-modal" data-modal="vitalModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Показатель</label><input type="text" id="vitalParam" readonly></div><div class="form-field"><label>Время</label><input type="text" id="vitalTime" readonly></div><div class="form-field"><label>Значение</label><input type="text" id="vitalValue"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelVitalBtn">Отмена</button><button class="btn btn-green" id="saveVitalBtn">Сохранить</button></div></div></div>
+<div id="imnModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Инструмент / расходник</span><span class="close-modal" data-modal="imnModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Инструмент</label><input type="text" id="imnText"></div><div class="form-field"><label>Время</label><input type="text" id="imnTime" readonly></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelImnBtn">Отмена</button><button class="btn btn-green" id="saveImnBtn">Сохранить</button></div></div></div>
+<div id="drugRegisterModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Зарегистрировать введение</span><span class="close-modal" data-modal="drugRegisterModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Препарат</label><input type="text" id="regDrugName" readonly></div><div class="form-field"><label>Формат</label><select id="regFormat"><option>разовое</option><option>непрерывное</option></select></div><div class="form-field"><label>Доза</label><input type="text" id="regDose"> <select id="regUnit" style="width:80px;"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div><div class="form-field"><label>Время (мин от 09:00) / Start-End</label><input type="text" id="regTime"></div><div class="form-field" id="regSpeedRow"><label>Скорость (мл/ч)</label><input type="text" id="regSpeed"></div><div class="form-field"><label>Способ введения</label><select id="regRoute"><option>в/в</option><option>в/м</option><option>эпидурально</option><option>ингаляционно</option><option>подкожно</option></select></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelDrugRegBtn">Отмена</button><button class="btn btn-green" id="confirmDrugRegBtn">Зарегистрировать</button></div></div></div>
+<div id="addPlanModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить в план</span><span class="close-modal" data-modal="addPlanModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Название препарата</label><input type="text" id="planName"></div><div class="form-field"><label>Формат</label><select id="planFormat"><option value="single">Разовое</option><option value="continuous">Непрерывное</option></select></div><div class="form-field"><label>Доза</label><input type="text" id="planDose"></div><div class="form-field"><label>Единица</label><select id="planUnit"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div><div class="form-field"><label>Время / Start-End</label><input type="text" id="planTime" placeholder="например 30 или 30-150"></div><div class="form-field" id="planSpeedRow"><label>Скорость (мл/ч)</label><input type="text" id="planSpeed"></div><div class="form-field"><label>Способ введения</label><select id="planRoute"><option>в/в</option><option>в/м</option><option>эпидурально</option><option>ингаляционно</option><option>подкожно</option></select></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelPlanModalBtn">Отмена</button><button class="btn btn-green" id="savePlanModalBtn">Сохранить в план</button></div></div></div>
+
+<script src="common.js"></script>
+<script>
+    (function(){
+        // ---------- Константы ----------
+        const START_MIN = 0;
+        const END_MIN = 180;
+        const TOTAL_MIN = 180;
+        let currentScale = 15;
+        
+        // Данные
+        let actualSingles = [
+            { name: "Пропофол", detail: "200 мг, болюс", minutes: 30, markerClass: "marker-square" },
+            { name: "Фентанил", detail: "0.1 мг, болюс", minutes: 30, markerClass: "marker-circle" }
+        ];
+        let actualInfusions = [
+            { id: "remi", name: "Ремифентанил", detail: "инфузия с переменной скоростью", segments: [
+                { start: 15, end: 45, height: 12, css: "remi-seg", tooltip: "0.2 мкг/кг/мин" },
+                { start: 45, end: 75, height: 20, css: "remi-seg", tooltip: "Увеличение → 0.4" },
+                { start: 75, end: 105, height: 6, css: "pause-seg", tooltip: "ПАУЗА" },
+                { start: 105, end: 135, height: 8, css: "remi-seg", tooltip: "Снижение → 0.1" },
+                { start: 135, end: 165, height: 12, css: "remi-seg", tooltip: "Восстановление 0.2" }
+            ] },
+            { id: "bupi", name: "Бупивакаин", detail: "6 мл/ч, 0.1 мг/мл", segments: [{ start: 30, end: 150, height: 14, css: "bupi-seg", tooltip: "6 мл/ч" }] },
+            { id: "nacl", name: "Натрия хлорид 0.9%", detail: "100 мл/ч", segments: [{ start: 30, end: 195, height: 12, css: "nacl-seg", tooltip: "100 мл/ч" }] }
+        ];
+        let plannedElements = [];
+        let stages = [];
+        let vitalData = {};
+        let imnData = {};
+        let plannedDrugsList = [];
+        let nextPlanId = 1;
+        
+        let timelineTable, anesthesiaView, planView;
+        
+        const stageOptions = [
+            "Больной на столе", "Установка периферического катетера", "Установка центрального катетера",
+            "Установка артериального катетера", "Индукция анестезии", "Интубация трахеи",
+            "Установка желудочного зонда", "Катетеризация мочевого пузыря", "Кожный разрез (Начало операции)",
+            "Начало ИК", "Конец ИК", "Начало ПА", "Окончание ПА", "Конец операции", "Экстубация"
+        ];
+        
+        // ---------- Вспомогательные функции ----------
+        function getTimeLabels(scale) {
+            let labels = [];
+            for (let t = START_MIN; t <= END_MIN; t += scale) {
+                let h = Math.floor(t/60)+9, m = t%60;
+                labels.push(`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`);
+            }
+            return labels;
+        }
+        function getColIndex(minutes) { return Math.min(Math.round(minutes/currentScale), Math.floor(END_MIN/currentScale)); }
+        function escapeHtml(str) { return str?.replace(/[&<>]/g, m=> m==='&'?'&amp;': m==='<'?'&lt;': m==='>'?'&gt;': m) || ''; }
+        function timeToMinutes(timeStr) { let [h,m]=timeStr.split(':'); if(isNaN(h)||isNaN(m)) return null; return (h-9)*60 + +m; }
+        function minutesToTime(minutes) { let h=Math.floor(minutes/60)+9, m=minutes%60; return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; }
+        
+        // Отрисовка
+        function drawInfusionSegments() {
+            const wrapper = anesthesiaView?.querySelector('.timeline-table');
+            if (!wrapper) return;
+            const leftColWidth = 260;
+            const timeAreaWidth = wrapper.getBoundingClientRect().width - leftColWidth;
+            if (timeAreaWidth <= 0) return;
+            document.querySelectorAll('.infusion-segment:not(.planned-seg)').forEach(seg=>seg.remove());
+            actualInfusions.forEach(inf => {
+                const row = document.querySelector(`.infusion-row[data-drug-id="${inf.id}"]`);
+                if (!row) return;
+                inf.segments.forEach(seg => {
+                    let startPct = ((seg.start-START_MIN)/TOTAL_MIN)*100;
+                    let widthPct = ((seg.end-seg.start)/TOTAL_MIN)*100;
+                    let leftPx = (startPct/100)*timeAreaWidth;
+                    let widthPx = (widthPct/100)*timeAreaWidth;
+                    let bar = document.createElement('div');
+                    bar.className = `infusion-segment ${seg.css}`;
+                    bar.style.left = `${leftColWidth+leftPx}px`;
+                    bar.style.width = `${Math.max(widthPx,2)}px`;
+                    bar.style.height = `${seg.height}px`;
+                    bar.style.top = `calc(50% - ${seg.height/2}px)`;
+                    bar.title = seg.tooltip;
+                    row.appendChild(bar);
+                });
+            });
+        }
+        
+        function drawPlannedElements() {
+            if (!plannedElements.length) return;
+            const wrapper = anesthesiaView?.querySelector('.timeline-table');
+            if (!wrapper) return;
+            const leftColWidth = 260;
+            const timeAreaWidth = wrapper.getBoundingClientRect().width - leftColWidth;
+            if (timeAreaWidth <= 0) return;
+            document.querySelectorAll('.planned-seg, .planned-marker-elem').forEach(el=>el.remove());
+            plannedElements.forEach(plan => {
+                const row = document.querySelector(`.planned-row[data-plan-name="${plan.name}"]`);
+                if (!row) return;
+                if (plan.format === 'continuous') {
+                    let startPct = ((plan.start-START_MIN)/TOTAL_MIN)*100;
+                    let widthPct = ((plan.end-plan.start)/TOTAL_MIN)*100;
+                    let leftPx = (startPct/100)*timeAreaWidth;
+                    let widthPx = (widthPct/100)*timeAreaWidth;
+                    let bar = document.createElement('div');
+                    bar.className = 'infusion-segment planned-seg';
+                    bar.style.left = `${leftColWidth+leftPx}px`;
+                    bar.style.width = `${Math.max(widthPx,2)}px`;
+                    bar.style.height = `12px`;
+                    bar.style.top = `calc(50% - 6px)`;
+                    bar.setAttribute('data-plan-id', plan.id);
+                    bar.addEventListener('click', (e)=>{ e.stopPropagation(); openDrugRegisterFromPlan(plan); });
+                    row.appendChild(bar);
+                } else {
+                    let col = getColIndex(plan.minutes);
+                    let slots = row.querySelectorAll('.time-slot');
+                    if (slots[col]) {
+                        let marker = document.createElement('div');
+                        marker.className = 'marker marker-square planned-marker-elem';
+                        marker.style.background = '#aaa';
+                        marker.style.border = '1px dashed #333';
+                        marker.style.opacity = '0.6';
+                        marker.setAttribute('data-plan-id', plan.id);
+                        marker.addEventListener('click', (e)=>{ e.stopPropagation(); openDrugRegisterFromPlan(plan); });
+                        slots[col].innerHTML = '';
+                        slots[col].appendChild(marker);
+                    }
+                }
+            });
+        }
+        
+        function buildTable() {
+            let labels = getTimeLabels(currentScale);
+            let cols = labels.length;
+            if (!timelineTable) return;
+            timelineTable.style.setProperty('--cols', cols);
+            let html = `<div class="time-header"><div class="section-header">Разделы / Параметры</div>`;
+            labels.forEach(lbl => html+=`<div class="time-col">${lbl}</div>`);
+            html+=`</div>`;
+            // Этапы
+            html+=`<div style="background:#f8f9fc; padding:4px 12px;">ЭТАПЫ ОПЕРАЦИИ</div><div class="data-row stages-row"><div class="row-label">Этапы</div>`;
+            for(let i=0;i<cols;i++){
+                let slotStart=i*currentScale;
+                let stage = stages.find(s=>s.minutes>=slotStart && s.minutes<slotStart+currentScale);
+                let txt=stage?stage.text:'';
+                html+=`<div class="time-slot" data-col="${i}" data-row-type="stage">${txt?`<span class="stage-text">${escapeHtml(txt)}</span>`:''}</div>`;
+            }
+            html+=`</div>`;
+            // Препараты фактические
+            html+=`<div style="background:#f8f9fc; padding:4px 12px;">ВВЕДЁННЫЕ ЛС</div>`;
+            actualSingles.forEach(drug=>{
+                let col=getColIndex(drug.minutes);
+                html+=`<div class="data-row drug-row" data-drug-name="${drug.name}" data-drug-type="single"><div class="row-label">${drug.name} <span class="sub-text">${drug.detail}</span></div>`;
+                for(let i=0;i<cols;i++){
+                    let marker=(i===col)?`<div class="marker ${drug.markerClass}" data-name="${drug.name}"></div>`:'';
+                    html+=`<div class="time-slot" data-col="${i}" data-drug-name="${drug.name}">${marker}</div>`;
+                }
+                html+=`</div>`;
+            });
+            actualInfusions.forEach(inf=>{
+                html+=`<div class="data-row drug-row infusion-row" data-drug-id="${inf.id}" data-drug-name="${inf.name}" style="position:relative;"><div class="row-label">${inf.name} <span class="sub-text">${inf.detail}</span></div>`;
+                for(let i=0;i<cols;i++) html+=`<div class="time-slot" data-col="${i}" data-drug-name="${inf.name}"></div>`;
+                html+=`</div>`;
+            });
+            // Плановые строки
+            let uniquePlanNames = [...new Map(plannedElements.map(p=>[p.name,p])).values()];
+            uniquePlanNames.forEach(plan=>{
+                html+=`<div class="data-row planned-row" data-plan-name="${plan.name}" style="position:relative;"><div class="row-label">${plan.name} (план) <span class="sub-text"></span></div>`;
+                for(let i=0;i<cols;i++) html+=`<div class="time-slot" data-col="${i}"></div>`;
+                html+=`</div>`;
+            });
+            // Показатели
+            let vitals=['Пульс (уд/мин)','АД (мм рт.ст.)','SpO₂ (%)','ЦВД (смH₂O)','Температура (°C)'];
+            html+=`<div style="background:#f8f9fc; padding:4px 12px;">ПОКАЗАТЕЛИ СОСТОЯНИЯ</div>`;
+            vitals.forEach(v=>{
+                html+=`<div class="data-row vital-row" data-param="${v}"><div class="row-label">${v}</div>`;
+                for(let i=0;i<cols;i++){
+                    let slotStart=i*currentScale;
+                    let val=null;
+                    if(vitalData[v]){
+                        let entry=Object.entries(vitalData[v]).find(([min])=>parseInt(min)>=slotStart && parseInt(min)<slotStart+currentScale);
+                        if(entry) val=entry[1];
+                    }
+                    html+=`<div class="time-slot" data-col="${i}" data-param="${v}">${val?`<span class="value-text">${escapeHtml(val)}</span>`:''}</div>`;
+                }
+                html+=`</div>`;
+            });
+            // ИМН
+            let imns=['Лапароскопические инструменты','Зажимы, иглодержатели'];
+            html+=`<div style="background:#f8f9fc; padding:4px 12px;">ИМН</div>`;
+            imns.forEach((imn,idx)=>{
+                html+=`<div class="data-row imn-row" data-imn-idx="${idx}"><div class="row-label">${imn}</div>`;
+                for(let i=0;i<cols;i++){
+                    let slotStart=i*currentScale;
+                    let val=null;
+                    if(imnData[idx]){
+                        let entry=Object.entries(imnData[idx]).find(([min])=>parseInt(min)>=slotStart && parseInt(min)<slotStart+currentScale);
+                        if(entry) val=entry[1];
+                    }
+                    html+=`<div class="time-slot" data-col="${i}" data-imn-idx="${idx}">${val?`<span class="value-text">${escapeHtml(val)}</span>`:''}</div>`;
+                }
+                html+=`</div>`;
+            });
+            timelineTable.innerHTML=html;
+            attachEvents();
+            drawInfusionSegments();
+            drawPlannedElements();
+        }
+        
+        function attachEvents(){
+            // Этапы
+            document.querySelectorAll('.stages-row .time-slot').forEach(slot=>{
+                slot.addEventListener('click',()=>{
+                    let col=parseInt(slot.getAttribute('data-col'));
+                    let minutes=col*currentScale;
+                    openStageModal(minutesToTime(minutes));
+                });
+            });
+            // Показатели
+            document.querySelectorAll('.vital-row .time-slot').forEach(slot=>{
+                slot.addEventListener('click',()=>{
+                    let param=slot.closest('.vital-row').getAttribute('data-param');
+                    let col=parseInt(slot.getAttribute('data-col'));
+                    let minutes=col*currentScale;
+                    openVitalModal(param, minutesToTime(minutes), minutes);
+                });
+            });
+            // ИМН
+            document.querySelectorAll('.imn-row .time-slot').forEach(slot=>{
+                slot.addEventListener('click',()=>{
+                    let idx=slot.closest('.imn-row').getAttribute('data-imn-idx');
+                    let col=parseInt(slot.getAttribute('data-col'));
+                    let minutes=col*currentScale;
+                    openImnModal(idx, minutesToTime(minutes), minutes);
+                });
+            });
+            // Препараты (клик по ячейке существующего препарата)
+            document.querySelectorAll('.drug-row .time-slot').forEach(slot=>{
+                let drugName=slot.getAttribute('data-drug-name');
+                if(drugName){
+                    slot.addEventListener('click',(e)=>{
+                        e.stopPropagation();
+                        let col=parseInt(slot.getAttribute('data-col'));
+                        let minutes=col*currentScale;
+                        let drug = actualSingles.find(d=>d.name===drugName) || actualInfusions.find(d=>d.name===drugName);
+                        if(drug) openDrugRegisterForExisting(drug, minutes);
+                    });
+                }
+            });
+        }
+        
+        // Модальные окна
+        function openStageModal(defaultTime){
+            let select=document.getElementById('stageSelect');
+            select.innerHTML='';
+            stageOptions.forEach(opt=>{ let o=document.createElement('option'); o.value=opt; o.textContent=opt; select.appendChild(o); });
+            document.getElementById('stageTime').value=defaultTime;
+            document.getElementById('stageModal').style.display='flex';
+            window._stageCallback=(stage,timeStr)=>{
+                let minutes=timeToMinutes(timeStr);
+                if(minutes!==null && minutes>=START_MIN && minutes<=END_MIN){
+                    stages.push({minutes, text:stage});
+                    buildTable();
+                } else alert("Время вне 09:00-12:00");
+            };
+        }
+        function openVitalModal(param, timeStr, minutes){
+            document.getElementById('vitalParam').value=param;
+            document.getElementById('vitalTime').value=timeStr;
+            document.getElementById('vitalValue').value='';
+            document.getElementById('vitalModal').style.display='flex';
+            window._vitalCallback=(val)=>{ if(val?.trim()){ if(!vitalData[param]) vitalData[param]={}; vitalData[param][minutes]=val; buildTable(); } };
+        }
+        function openImnModal(idx, timeStr, minutes){
+            document.getElementById('imnText').value='';
+            document.getElementById('imnTime').value=timeStr;
+            document.getElementById('imnModal').style.display='flex';
+            window._imnCallback=(txt)=>{ if(txt?.trim()){ if(!imnData[idx]) imnData[idx]={}; imnData[idx][minutes]=txt; buildTable(); } };
+        }
+        function openDrugRegisterFromPlan(plan){
+            document.getElementById('regDrugName').value=plan.name;
+            document.getElementById('regFormat').value=plan.format;
+            document.getElementById('regDose').value=plan.dose;
+            document.getElementById('regUnit').value=plan.unit;
+            if(plan.format==='continuous'){
+                document.getElementById('regTime').value=`${plan.start}-${plan.end}`;
+                document.getElementById('regSpeed').value=plan.speed||'';
+                document.getElementById('regSpeedRow').style.display='block';
+            }else{
+                document.getElementById('regTime').value=plan.minutes;
+                document.getElementById('regSpeedRow').style.display='none';
+            }
+            document.getElementById('regRoute').value=plan.route;
+            document.getElementById('drugRegisterModal').style.display='flex';
+            window._drugRegPlan=plan;
+        }
+        function openDrugRegisterForExisting(drug, minutes){
+            document.getElementById('regDrugName').value=drug.name;
+            let format=drug.segments?'continuous':'single';
+            document.getElementById('regFormat').value=format;
+            document.getElementById('regDose').value='';
+            document.getElementById('regUnit').value='мг';
+            if(format==='continuous'){
+                document.getElementById('regTime').value=`${minutes}-${minutes+30}`;
+                document.getElementById('regSpeed').value='';
+                document.getElementById('regSpeedRow').style.display='block';
+            }else{
+                document.getElementById('regTime').value=minutes;
+                document.getElementById('regSpeedRow').style.display='none';
+            }
+            document.getElementById('regRoute').value='в/в';
+            document.getElementById('drugRegisterModal').style.display='flex';
+            window._drugRegExisting={drug, minutes};
+        }
+        
+        // Планирование через модальное окно
+        function openAddPlanModal(){
+            document.getElementById('planName').value='';
+            document.getElementById('planFormat').value='single';
+            document.getElementById('planDose').value='';
+            document.getElementById('planUnit').value='мг';
+            document.getElementById('planTime').value='';
+            document.getElementById('planSpeed').value='';
+            document.getElementById('planRoute').value='в/в';
+            document.getElementById('planSpeedRow').style.display='none';
+            document.getElementById('addPlanModal').style.display='flex';
+        }
+        
+        function savePlanFromModal(){
+            let name=document.getElementById('planName').value.trim();
+            if(!name){ alert("Введите название"); return; }
+            let format=document.getElementById('planFormat').value;
+            let dose=document.getElementById('planDose').value;
+            let unit=document.getElementById('planUnit').value;
+            let time=document.getElementById('planTime').value;
+            let speed=document.getElementById('planSpeed').value;
+            let route=document.getElementById('planRoute').value;
+            if(!time){ alert("Введите время/диапазон"); return; }
+            plannedDrugsList.push({ id:nextPlanId++, name, format, dose, unit, timeOrStartEnd:time, speed, route });
+            renderPlanTable();
+            document.getElementById('addPlanModal').style.display='none';
+        }
+        
+        function renderPlanTable(){
+            if(!planView) return;
+            let container=planView.querySelector('.plan-container');
+            if(!container){ planView.innerHTML=`<div class="plan-container"></div>`; container=planView.querySelector('.plan-container'); }
+            container.innerHTML=`
+                <div style="margin-bottom:10px;">
+                    <button class="btn btn-green" id="addPlanRowBtn">+ Добавить в план</button>
+                    <span class="sub-text" style="margin-left:10px;">Запланируйте препараты, затем нажмите "Применить план в карту"</span>
+                </div>
+                <div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse;"><thead><tr><th>Название</th><th>Формат</th><th>Доза</th><th>Ед.</th><th>Время / Start-End</th><th>Скорость</th><th>Способ</th><th></th></tr></thead><tbody id="planTbody"></tbody></table></div>
+            `;
+            let tbody=document.getElementById('planTbody');
+            tbody.innerHTML='';
+            plannedDrugsList.forEach((p,idx)=>{
+                let row=tbody.insertRow();
+                row.insertCell(0).innerText=p.name;
+                row.insertCell(1).innerText=p.format;
+                row.insertCell(2).innerText=p.dose;
+                row.insertCell(3).innerText=p.unit;
+                row.insertCell(4).innerText=p.timeOrStartEnd;
+                row.insertCell(5).innerText=p.speed||'';
+                row.insertCell(6).innerText=p.route;
+                let delBtn=document.createElement('button');
+                delBtn.innerText='Удалить'; delBtn.className='btn-outline'; delBtn.style.padding='2px 6px';
+                delBtn.onclick=()=>{ plannedDrugsList.splice(idx,1); renderPlanTable(); };
+                row.insertCell(7).appendChild(delBtn);
+            });
+            document.getElementById('addPlanRowBtn')?.addEventListener('click', openAddPlanModal);
+        }
+        
+        function applyPlanToCard(){
+            let newPlanned=[];
+            plannedDrugsList.forEach(p=>{
+                if(p.format==='single'){
+                    let minutes=parseInt(p.timeOrStartEnd);
+                    if(!isNaN(minutes)) newPlanned.push({ id:p.id, name:p.name, format:'single', minutes, dose:p.dose, unit:p.unit, route:p.route });
+                }else{
+                    let parts=p.timeOrStartEnd.split('-');
+                    if(parts.length===2){
+                        let start=parseInt(parts[0]), end=parseInt(parts[1]);
+                        if(!isNaN(start)&&!isNaN(end)) newPlanned.push({ id:p.id, name:p.name, format:'continuous', start, end, dose:p.dose, unit:p.unit, speed:p.speed, route:p.route });
+                    }
+                }
+            });
+            plannedElements=newPlanned;
+            buildTable();
+            alert(`План применён: ${newPlanned.length} препаратов`);
+        }
+        
+        // Быстрое добавление показателя
+        document.getElementById('quickVitalBtn')?.addEventListener('click',()=>{
+            let param=document.getElementById('quickVitalParam').value;
+            let timeStr=document.getElementById('quickVitalTime').value;
+            let value=document.getElementById('quickVitalValue').value.trim();
+            if(!value){ alert("Введите значение"); return; }
+            let minutes=timeToMinutes(timeStr);
+            if(minutes===null){ alert("Неверный формат времени"); return; }
+            if(!vitalData[param]) vitalData[param]={};
+            vitalData[param][minutes]=value;
+            buildTable();
+            document.getElementById('quickVitalValue').value='';
+        });
+        
+        // Катетеры
+        let catheters=[];
+        function updateCatheterInfo(){
+            let infoDiv=document.getElementById('catheterInfo');
+            if(catheters.length===0) infoDiv.innerHTML="Нажмите на зону для установки катетера";
+            else infoDiv.innerHTML=catheters.map(c=>`<div>• ${c.name} (${c.type}): ${c.size||''}</div>`).join('');
+        }
+        document.querySelectorAll('.catheter-point').forEach(point=>{
+            point.addEventListener('click',()=>{
+                let type=point.getAttribute('data-catheter');
+                let name=point.getAttribute('data-name');
+                let size=prompt(`Введите размер/название для ${name}:`, "16G");
+                if(size){
+                    catheters.push({ type, name, size });
+                    updateCatheterInfo();
+                }
+            });
+        });
+        
+        // Инициализация и обработчики
+        function addCurrentLine(){
+            if(!anesthesiaView) return;
+            let old=anesthesiaView.querySelector('.current-time-line');
+            if(old) old.remove();
+            let line=document.createElement('div');
+            line.className='current-time-line';
+            let currentMinutes=106;
+            let percent=(currentMinutes/TOTAL_MIN)*100;
+            line.style.left=`${percent}%`;
+            let label=document.createElement('div');
+            label.className='current-time-label';
+            label.innerText=document.getElementById('currentOperationTime')?.innerText||'01:31:24';
+            line.appendChild(label);
+            anesthesiaView.style.position='relative';
+            anesthesiaView.appendChild(line);
+        }
+        
+        function init(){
+            timelineTable=document.getElementById('timelineTable');
+            anesthesiaView=document.getElementById('anesthesiaView');
+            planView=document.getElementById('planView');
+            if(!timelineTable) return;
+            buildTable(); addCurrentLine();
+            document.querySelectorAll('.scale-btn').forEach(btn=>{
+                btn.addEventListener('click',()=>{
+                    document.querySelectorAll('.scale-btn').forEach(b=>b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentScale=parseInt(btn.getAttribute('data-scale'),10);
+                    buildTable(); addCurrentLine();
+                });
+            });
+            document.getElementById('addStageBtn')?.addEventListener('click',()=>openStageModal(minutesToTime(106)));
+            document.getElementById('applyPlanBtn')?.addEventListener('click',applyPlanToCard);
+            document.getElementById('addDrugBtn')?.addEventListener('click',()=>alert('Окно ввода препарата (можно расширить)'));
+            document.querySelectorAll('.tab-item').forEach(tab=>{
+                tab.addEventListener('click',()=>{
+                    document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
+                    tab.classList.add('active');
+                    let view=tab.getAttribute('data-tab');
+                    if(view==='anesthesia'){
+                        anesthesiaView.style.display='block';
+                        planView.style.display='none';
+                        buildTable(); addCurrentLine();
+                    }else if(view==='plan'){
+                        anesthesiaView.style.display='none';
+                        planView.style.display='block';
+                        renderPlanTable();
+                    }
+                });
+            });
+            // Закрытие модальных окон
+            document.querySelectorAll('.close-modal').forEach(btn=>{
+                btn.addEventListener('click',()=>{
+                    let modalId=btn.getAttribute('data-modal');
+                    document.getElementById(modalId).style.display='none';
+                });
+            });
+            document.getElementById('cancelStageBtn')?.addEventListener('click',()=>document.getElementById('stageModal').style.display='none');
+            document.getElementById('saveStageBtn')?.addEventListener('click',()=>{
+                let stage=document.getElementById('stageSelect').value;
+                let timeStr=document.getElementById('stageTime').value;
+                if(window._stageCallback) window._stageCallback(stage,timeStr);
+                document.getElementById('stageModal').style.display='none';
+            });
+            document.getElementById('cancelVitalBtn')?.addEventListener('click',()=>document.getElementById('vitalModal').style.display='none');
+            document.getElementById('saveVitalBtn')?.addEventListener('click',()=>{
+                let val=document.getElementById('vitalValue').value;
+                if(window._vitalCallback) window._vitalCallback(val);
+                document.getElementById('vitalModal').style.display='none';
+            });
+            document.getElementById('cancelImnBtn')?.addEventListener('click',()=>document.getElementById('imnModal').style.display='none');
+            document.getElementById('saveImnBtn')?.addEventListener('click',()=>{
+                let txt=document.getElementById('imnText').value;
+                if(window._imnCallback) window._imnCallback(txt);
+                document.getElementById('imnModal').style.display='none';
+            });
+            document.getElementById('cancelDrugRegBtn')?.addEventListener('click',()=>document.getElementById('drugRegisterModal').style.display='none');
+            document.getElementById('confirmDrugRegBtn')?.addEventListener('click',()=>{
+                let name=document.getElementById('regDrugName').value;
+                let format=document.getElementById('regFormat').value;
+                let dose=document.getElementById('regDose').value;
+                let unit=document.getElementById('regUnit').value;
+                let route=document.getElementById('regRoute').value;
+                let timeStr=document.getElementById('regTime').value;
+                let speed=document.getElementById('regSpeed').value;
+                if(window._drugRegPlan){
+                    if(format==='continuous'){
+                        let [start,end]=timeStr.split('-').map(Number);
+                        actualInfusions.push({ id:'custom_'+Date.now(), name, detail:`${dose} ${unit}, ${route}`, segments:[{ start, end, height:12, css:'remi-seg', tooltip:`${dose} ${unit}` }] });
+                    }else{
+                        let minutes=parseInt(timeStr);
+                        actualSingles.push({ name, detail:`${dose} ${unit}, ${route}`, minutes, markerClass:'marker-square' });
+                    }
+                    plannedElements=plannedElements.filter(p=>p.id!==window._drugRegPlan.id);
+                    buildTable();
+                }else if(window._drugRegExisting){
+                    if(format==='continuous'){
+                        let [start,end]=timeStr.split('-').map(Number);
+                        actualInfusions.push({ id:'custom_'+Date.now(), name, detail:`${dose} ${unit}, ${route}`, segments:[{ start, end, height:12, css:'remi-seg', tooltip:`${dose} ${unit}` }] });
+                    }else{
+                        let minutes=parseInt(timeStr);
+                        actualSingles.push({ name, detail:`${dose} ${unit}, ${route}`, minutes, markerClass:'marker-square' });
+                    }
+                    buildTable();
+                }
+                document.getElementById('drugRegisterModal').style.display='none';
+                window._drugRegPlan=null;
+                window._drugRegExisting=null;
+            });
+            document.getElementById('cancelPlanModalBtn')?.addEventListener('click',()=>document.getElementById('addPlanModal').style.display='none');
+            document.getElementById('savePlanModalBtn')?.addEventListener('click',savePlanFromModal);
+            document.getElementById('planFormat')?.addEventListener('change',function(){
+                document.getElementById('planSpeedRow').style.display=this.value==='continuous'?'block':'none';
+            });
+        }
+        init();
+    })();
+</script>
+</body>
+</html>

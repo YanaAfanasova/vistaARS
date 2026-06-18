@@ -1,0 +1,370 @@
+<!--
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Протокол анестезии — VISTAMED</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top-nav">
+    <div class="logo-section">
+        <span class="logo-text">Виста-МЕД</span>
+        <span class="logo-tag">АРС</span>
+        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
+    </div>
+    <div class="user-section">
+        <div class="doctor-meta">
+            <div class="doctor-name">Турчанинов А.Ю.</div>
+            <div class="doctor-specialty">Анестезиолог</div>
+        </div>
+        <div class="user-avatar">АЮ</div>
+    </div>
+</header>
+
+<div class="patient-bar" id="patientBar">
+    <div class="patient-data">
+        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
+        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
+        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
+        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
+        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+    </div>
+    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
+</div>
+<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
+    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
+</div>
+
+<nav class="tabs-nav">
+    <a href="consents.html" class="tab-item">Согласия</a>
+    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
+    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+    <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
+    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
+    <a href="protocol-anesthesia.html" class="tab-item active">Протокол анестезии</a>
+    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
+    <a href="analyses.html" class="tab-item">Анализы</a>
+</nav>
+
+<main class="main-content">
+    <h1 class="page-title">Протокол анестезии</h1>
+    <div class="page-placeholder">
+        <p>Итоговый протокол проведённой анестезии.</p>
+        <p class="text-muted" style="margin-top:8px;">Страница в разработке.</p>
+    </div>
+</main>
+
+<script src="common.js"></script>
+</body>
+</html>
+
+-->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Протокол анестезии — VISTAMED</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top-nav">
+    <div class="logo-section">
+        <span class="logo-text">Виста-МЕД</span>
+        <span class="logo-tag">АРС</span>
+        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
+    </div>
+    <div class="user-section">
+        <div class="doctor-meta">
+            <div class="doctor-name">Турчанинов А.Ю.</div>
+            <div class="doctor-specialty">Анестезиолог</div>
+        </div>
+        <div class="user-avatar">АЮ</div>
+    </div>
+</header>
+
+<div class="patient-bar" id="patientBar">
+    <div class="patient-data">
+        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
+        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
+        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
+        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
+        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+    </div>
+    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
+</div>
+<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
+    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
+</div>
+
+<nav class="tabs-nav">
+    <a href="consents.html" class="tab-item">Согласия</a>
+    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
+    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+    <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
+    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
+    <a href="protocol-anesthesia.html" class="tab-item active">Протокол анестезии</a>
+    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
+    <a href="analyses.html" class="tab-item">Анализы</a>
+</nav>
+
+<main class="main-content">
+	 <h1 class="page-title">Протокол анестезиологического пособия</h1>
+    <div class="constructor-header">
+        <button class="btn btn-outline" id="copyPrevBtn">Копировать из предыдущего</button>
+        <button class="btn btn-outline" id="saveTemplateBtn">Сохранить шаблон</button>
+        <button class="btn btn-outline" id="loadTemplateBtn">Загрузить шаблон</button>
+        <button class="btn btn-outline" id="copyFieldsBtn">Копирование полей осмотров</button>
+    </div>
+
+    <div class="constructor-table" id="examForm">
+        <table>
+            <tbody>
+                <tr><th class="field-label">Дата выполнения</th><td><input type="datetime-local" id="examDate" value="2026-05-18T11:20"></td>
+                <tr><th class="field-label">Назначил</th><td><select id="assignedDoctor"><option value="В. А. Конашов" selected>А.Ю. Турчанинов</option><option value="А. И. Иванов">А. И. Иванов</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
+                <tr><th class="field-label">Исполнитель</th><td><select id="executorDoctor"><option value="В. А. Конашов" selected>А.Ю. Турчанинов</option><option value="А. И. Иванов">А. И. Иванов</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
+                <tr><th class="field-label">Уникальный номер</th><td><input type="text" id="uniqueNumber" value="1370"></td></tr>
+                <tr><th class="field-label">Операционная</th><td><input type="text" id="operationRoom" value="2"></td></tr>
+				
+				
+				
+				
+                <tr><th class="field-label">Хирург №1</th><td>
+				<select id="surgeon1"><option value="А. И. Иванов" selected>А. И. Иванов</option><option value="Е. Е. Петров">Е. Е. Петров</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
+                
+				<tr><th class="field-label">Хирург №2</th><td>
+				<select id="surgeon1"><option value="А. А. Другов" selected>А. А. Другов</option><option value="Е. Е. Петров">Е. Е. Петров</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
+                <tr><th class="field-label">Операционная сестра</th><td><input type="text" id="operNurse" value="Ефремова Марина Николаевна"></td></tr>
+                <tr><th class="field-label">Анестезиолог №1</th><td><input type="text" id="anesthesiologist1" value="Конашов Владислав Алексеевич"></td></tr>
+                <tr><th class="field-label">Анестезиолог №2</th><td><input type="text" id="anesthesiologist2" value="Давыдов Сергей Николаевич"></td></tr>
+                <tr><th class="field-label">Медицинская сестра-анестезист №1</th><td><input type="text" id="nurseAnest1" value="Газизова Ирина Анатольевна"></td></tr>
+                <tr><th class="field-label">Медицинская сестра-анестезист №2</th><td><input type="text" id="nurseAnest2" value="Гайсина Лидия Рифовна"></td></tr>
+                <tr><th class="field-label">Премедикация</th><td><textarea id="premedication" rows="2">Накануне операции 22:00 Гидроксизина гидрохлорид 25 мг (аторакс) 1 таб внутрь, Пантопразол 20 мг 1 таб внутрь. В день операции: Морфин 10 мг/мл, 1 мл внутримышечно за 40 мин до операции</textarea></td></tr>
+                <tr><th class="field-label">Справочник операций для анестезиолога</th><td><input type="text" id="surgeryHandbook" value=""></td></tr>
+                <tr><th class="field-label">Вид анестезии</th><td><select id="anesthesiaType"><option value="эндотрахеальный наркоз" selected>эндотрахеальный наркоз</option><option value="внутривенный">внутривенный</option><option value="комбинированный">комбинированный</option></select></td></tr>
+                <tr><th class="field-label">Положение пациента на операционном столе</th><td><select id="patientPosition"><option value="горизонтально" selected>горизонтально</option><option value="Фовлера">Фовлера</option><option value="на боку">на боку</option></select></td></tr>
+                <tr><th class="field-label">Больной на столе (время)</th><td><input type="time" id="onTableTime" value="08:00"></td></tr>
+                <tr><th class="field-label">Начало анестезии (время)</th><td><input type="time" id="anesthesiaStart" value="08:20"></td></tr>
+                <tr><th class="field-label">Начало операции (время)</th><td><input type="time" id="operationStart" value="08:55"></td></tr>
+                <tr><th class="field-label">АД (начало)</th><td><input type="text" id="bpInitial" value="140\80"></td></tr>
+                <tr><th class="field-label">ЧСС (начало)</th><td><input type="number" id="hrInitial" value="88"></td></tr>
+                <tr><th class="field-label">SpO2</th><td><input type="number" id="spo2Initial" value="98"></td></tr>
+                <tr><th class="field-label">ЧП ЭХО</th><td><select id="echoCp"><option value="нет" selected>нет</option><option value="да">да</option></select></td></tr>
+                <tr><th class="field-label">Периф. доступ</th><td><input type="text" id="peripheralAccess" value="20 G справа"></td></tr>
+                <tr><th class="field-label">Внутренняя яремная вена</th><td><input type="text" id="ijvCannula" value="12\20 справа"></td></tr>
+                <tr><th class="field-label">Лучевая артерия</th><td><input type="text" id="radialArtery" value="22\80 справа"></td></tr>
+                <tr><th class="field-label">Индукция анестезии</th><td><input type="text" id="inductionDescription" value="плавная, преоксигенация"></td></tr>
+                <tr><th class="field-label">Индукция анестезии (гипнотик)</th><td><input type="text" id="inductionHypnotic" value="Пропофол 120 мг"></td></tr>
+                <tr><th class="field-label">Индукция анестезии (наркотический анальгетик)</th><td><input type="text" id="inductionOpioid" value="Фентанил 0,25 мг"></td></tr>
+                <tr><th class="field-label">Индукция анестезии (миоплегия)</th><td><input type="text" id="inductionMuscleRelax" value="Рокуроний 75 мг"></td></tr>
+                <tr><th class="field-label">Интубация трахеи</th><td><input type="text" id="intubation" value="оротрахеально, б/о"></td></tr>
+                <tr><th class="field-label">Класс по Маллампати</th><td><select id="mallampati"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select></td></tr>
+                <tr><th class="field-label">Интубация с попытки</th><td><input type="number" id="intubationAttempt" value="1"></td></tr>
+                <tr><th class="field-label">Эндотрахеальная трубка</th><td><input type="text" id="ettSize" value="8.0"></td></tr>
+                <tr><th class="field-label">ИВЛ</th><td><select id="ventilator"><option value="GE Avance" selected>GE Avance</option><option value="Drager">Drager</option></select></td></tr>
+                <tr><th class="field-label">Режим вентиляции</th><td><select id="ventilationMode"><option value="PCV VG" selected>PCV VG</option><option value="VCV">VCV</option><option value="SIMV">SIMV</option></select></td></tr>
+                <tr><th class="field-label">О2 (л/мин)</th><td><input type="text" id="o2Flow" value="1.4"></td></tr>
+                <tr><th class="field-label">Воздух (л/мин)</th><td><input type="text" id="airFlow" value="1.3"></td></tr>
+                <tr><th class="field-label">ДО</th><td><input type="number" id="tidalVolume" value="550"></td></tr>
+                <tr><th class="field-label">МОД</th><td><input type="text" id="minuteVolume" value="5.3"></td></tr>
+                <tr><th class="field-label">Пиковое давление, см. водяного столба</th><td><input type="number" id="peakPressure" value="14"></td></tr>
+                <tr><th class="field-label">FiO2</th><td><input type="number" id="fio2" value="70"></td></tr>
+                <tr><th class="field-label">I : E</th><td><input type="text" id="ieRatio" value="1:2"></td></tr>
+                <tr><th class="field-label">ПДКВ</th><td><input type="number" id="peep" value="5"></td></tr>
+                <tr><th class="field-label">Желудочный зонд</th><td><select id="gastricTube"><option value="да" selected>да</option><option value="нет">нет</option></select></td></tr>
+                <tr><th class="field-label">Поддержание анестезии (гипнотик)</th><td><input type="text" id="maintHypnotic" value="Пропофол 80 мг"></td></tr>
+                <tr><th class="field-label">Поддержание анестезии (ингаляционный анестетик)</th><td><input type="text" id="maintInhalation" value="Севофлюран 1-2% об."></td></tr>
+                <tr><th class="field-label">Поддержание анестезии (наркотический анальгетик)</th><td><input type="text" id="maintOpioid" value="Фентанил 1.25 мг"></td></tr>
+                <tr><th class="field-label">Поддержание анестезии (миоплегия)</th><td><input type="text" id="maintMuscleRelax" value="Рокуроний 75 мг"></td></tr>
+                <tr><th class="field-label">Течение анестезии</th><td><input type="text" id="anesthesiaCourse" value="См. особенности"></td></tr>
+                <tr><th class="field-label">Гемодинамика</th><td><textarea id="hemodynamics" rows="2">Гемодинамика стабильная, умеренная вазопрессорная поддержка норадреналином в дозировке 0,03-0,01 мкг*кг/мин. Ишемических явлений на кардиомониторе не выявлено. Ритм синусовый с частотой 62-88 уд/мин.</textarea></td></tr>
+                <tr><th class="field-label">АД</th><td><input type="text" id="bpIntra" value="126/72"></td></tr>
+                <tr><th class="field-label">ЧСС</th><td><input type="number" id="hrIntra" value="64"></td></tr>
+                <tr><th class="field-label">Поддержание гемодинамики</th><td><select id="hemodynamicSupport"><option value="БЕЗ ИНОТРОПНОЙ ПОДДЕРЖКИ" selected>БЕЗ ИНОТРОПНОЙ ПОДДЕРЖКИ</option><option value="норадреналин">норадреналин</option><option value="добутамин">добутамин</option></select></td></tr>
+                <tr><th class="field-label">Потребность</th><td><input type="number" id="fluidRequirement" value="550"></td></tr>
+                <tr><th class="field-label">Кровопотеря</th><td><input type="number" id="bloodLoss" value="200"></td></tr>
+                <tr><th class="field-label">Диурез</th><td><input type="number" id="diuresis" value="600"></td></tr>
+                <tr><th class="field-label">Всего потери</th><td><input type="number" id="totalLoss" value="1350"></td></tr>
+                <tr><th class="field-label">Солевые</th><td><input type="number" id="crystalloids" value="1500"></td></tr>
+                <tr><th class="field-label">Коллойдные</th><td><input type="number" id="colloids" value="500"></td></tr>
+                <tr><th class="field-label">Всего перелито</th><td><input type="number" id="totalInfused" value="2000"></td></tr>
+                <tr><th class="field-label">Баланс по протоколу</th><td><input type="number" id="balanceProtocol" value="650"></td></tr>
+                <tr><th class="field-label">Баланс по протоколу + Баланс за ИК</th><td><input type="number" id="balanceTotal" value="0"></td></tr>
+                <tr><th class="field-label">Особенности</th><td><input type="text" id="specialNotes" value="операция проводилась в условиях работающего сердца (off-pump)"></td></tr>
+                <tr><th class="field-label">Транспортирован в</th><td><select id="transferredTo"><option value="ОРиИТ" selected>ОРиИТ</option><option value="палата">палата</option></select></td></tr>
+                <tr><th class="field-label">Дыхание</th><td><select id="breathing"><option value="ПИВЛ" selected>ПИВЛ</option><option value="самостоятельное">самостоятельное</option></select></td></tr>
+                <tr><th class="field-label">Конец операции (время)</th><td><input type="time" id="operationEnd" value="11:10"></td></tr>
+                <tr><th class="field-label">Пробуждение</th><td><select id="awakening"><option value="в отделении реанимации и интенсивной терапии" selected>в отделении реанимации и интенсивной терапии</option><option value="в операционной">в операционной</option></select></td></tr>
+                <tr><th class="field-label">Особенности пробуждения</th><td><input type="text" id="awakeningDetails" value="пробуждения не проводилось"></td></tr>
+                <tr><th class="field-label">Декураризация</th><td><select id="decurarization"><option value="не проводилась" selected>не проводилась</option><option value="проведена">проведена</option></select></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer-actions">
+        <button class="btn btn-green" id="signBtn">Подписать и закрыть для редактирования</button>
+        <button class="btn btn-danger" id="deleteBtn">Удалить</button>
+    </div>
+</main>
+
+<!-- Модальные окна -->
+<div id="confirmSignModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Подтверждение</span>
+            <span class="close-modal" data-modal="confirmSignModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Вы действительно хотите подписать и закрыть протокол для редактирования?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="confirmSignNo">Нет</button>
+            <button class="btn btn-green" id="confirmSignYes">Да</button>
+        </div>
+    </div>
+</div>
+
+<div id="missingFieldsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Уведомление</span>
+            <span class="close-modal" data-modal="missingFieldsModal">&times;</span>
+        </div>
+        <div class="modal-body" id="missingFieldsBody">
+            <p>Для подписания документа заполните обязательные поля:</p>
+            <ul id="missingFieldsList" style="color:#d9534f; list-style:disc; margin-left:20px;"></ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="missingFieldsOk">OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="confirmDeleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Подтверждение</span>
+            <span class="close-modal" data-modal="confirmDeleteModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Вы действительно хотите удалить протокол анестезии?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="confirmDeleteNo">Нет</button>
+            <button class="btn btn-danger" id="confirmDeleteYes">Да</button>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    (function(){
+        function getFields() {
+            const container = document.getElementById('examForm');
+            return container.querySelectorAll('input, select, textarea');
+        }
+
+        function checkFields() {
+            let missing = [];
+            const fields = getFields();
+            fields.forEach(el => {
+                if (el.value.trim() === '') missing.push(el);
+            });
+            return missing;
+        }
+
+        function highlightMissing(missing) {
+            document.querySelectorAll('.highlight-missing').forEach(el => el.classList.remove('highlight-missing'));
+            missing.forEach(el => {
+                const cell = el.closest('td');
+                if (cell) cell.classList.add('highlight-missing');
+                else el.classList.add('highlight-missing');
+            });
+        }
+
+        document.getElementById('signBtn').addEventListener('click', function() {
+            const missing = checkFields();
+            if (missing.length === 0) {
+                document.getElementById('confirmSignModal').style.display = 'flex';
+            } else {
+                highlightMissing(missing);
+                const list = document.getElementById('missingFieldsList');
+                list.innerHTML = '';
+                missing.forEach(el => {
+                    let row = el.closest('tr');
+                    let label = row ? row.querySelector('th') : null;
+                    let labelText = label ? label.innerText.trim() : 'неизвестное поле';
+                    const li = document.createElement('li');
+                    li.textContent = labelText;
+                    list.appendChild(li);
+                });
+                document.getElementById('missingFieldsModal').style.display = 'flex';
+            }
+        });
+
+        document.getElementById('confirmSignYes').addEventListener('click', function() {
+            document.getElementById('confirmSignModal').style.display = 'none';
+            alert('Протокол подписан и закрыт для редактирования (демонстрация).');
+        });
+        document.getElementById('confirmSignNo').addEventListener('click', function() {
+            document.getElementById('confirmSignModal').style.display = 'none';
+        });
+
+        document.getElementById('missingFieldsOk').addEventListener('click', function() {
+            document.getElementById('missingFieldsModal').style.display = 'none';
+        });
+
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'flex';
+        });
+        document.getElementById('confirmDeleteYes').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+            alert('Протокол удалён (демонстрация).');
+        });
+        document.getElementById('confirmDeleteNo').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+        });
+
+        // Заглушки для верхних кнопок
+        document.getElementById('copyPrevBtn').addEventListener('click', ()=>alert('Копирование из предыдущего протокола (заглушка)'));
+        document.getElementById('saveTemplateBtn').addEventListener('click', ()=>alert('Сохранение шаблона (заглушка)'));
+        document.getElementById('loadTemplateBtn').addEventListener('click', ()=>alert('Загрузка шаблона (заглушка)'));
+        document.getElementById('copyFieldsBtn').addEventListener('click', ()=>alert('Копирование полей (заглушка)'));
+
+        // Снятие подсветки при редактировании
+        getFields().forEach(el => {
+            el.addEventListener('input', function() {
+                const cell = this.closest('td');
+                if (cell) cell.classList.remove('highlight-missing');
+                this.classList.remove('highlight-missing');
+            });
+            el.addEventListener('change', function() {
+                const cell = this.closest('td');
+                if (cell) cell.classList.remove('highlight-missing');
+                this.classList.remove('highlight-missing');
+            });
+        });
+
+        // Автодата, если пусто
+        const dateField = document.getElementById('examDate');
+        if (!dateField.value) {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            dateField.value = now.toLocaleDateString('ru-RU', options);
+        }
+    })();
+</script>
+</body>
+</html>
+

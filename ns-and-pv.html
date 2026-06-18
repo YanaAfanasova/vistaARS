@@ -1,0 +1,343 @@
+<!--
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Получение НС и ПВ — VISTAMED</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top-nav">
+    <div class="logo-section">
+        <span class="logo-text">Виста-МЕД</span>
+        <span class="logo-tag">АРС</span>
+        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
+    </div>
+    <div class="user-section">
+        <div class="doctor-meta">
+            <div class="doctor-name">Турчанинов А.Ю.</div>
+            <div class="doctor-specialty">Анестезиолог</div>
+        </div>
+        <div class="user-avatar">АЮ</div>
+    </div>
+</header>
+
+<div class="patient-bar" id="patientBar">
+    <div class="patient-data">
+        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
+        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
+        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
+        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
+        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+    </div>
+    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
+</div>
+<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
+    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
+</div>
+
+<nav class="tabs-nav">
+    <a href="consents.html" class="tab-item">Согласия</a>
+    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
+    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+    <a href="ns-and-pv.html" class="tab-item active">Получение НС и ПВ</a>
+    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
+    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
+    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
+    <a href="analyses.html" class="tab-item">Анализы</a>
+</nav>
+
+<main class="main-content">
+    <h1 class="page-title">Получение наркотических средств и психотропных веществ</h1>
+    <div class="page-placeholder">
+        <p>Учёт получения и расходования НС и ПВ в периоперационном периоде.</p>
+        <p class="text-muted" style="margin-top:8px;">Страница в разработке.</p>
+    </div>
+</main>
+
+<script src="common.js"></script>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Протокол назначения НСПВ — VISTAMED</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top-nav">
+    <div class="logo-section">
+        <span class="logo-text">Виста-МЕД</span>
+        <span class="logo-tag">АРС</span>
+        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
+    </div>
+    <div class="user-section">
+        <div class="doctor-meta">
+            <div class="doctor-name">Турчанинов А.Ю.</div>
+            <div class="doctor-specialty">Анестезиолог</div>
+        </div>
+        <div class="user-avatar">АЮ</div>
+    </div>
+</header>
+
+<div class="patient-bar" id="patientBar">
+    <div class="patient-data">
+        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
+        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
+        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
+        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
+        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+    </div>
+    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
+</div>
+<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
+    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
+</div>
+
+<nav class="tabs-nav">
+    <a href="consents.html" class="tab-item">Согласия</a>
+    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
+    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+    <a href="ns-and-pv.html" class="tab-item active">Получение НС и ПВ</a>
+    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
+    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
+    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
+    <a href="analyses.html" class="tab-item">Анализы</a>
+</nav>
+
+<main class="main-content">
+    <h1 class="page-title">Получение наркотических средств и психотропных веществ</h1>
+    <div class="constructor-header">
+        <button class="btn btn-outline" id="copyPrevBtn">Копировать из предыдущего</button>
+        <button class="btn btn-outline" id="saveTemplateBtn">Сохранить шаблон</button>
+        <button class="btn btn-outline" id="loadTemplateBtn">Загрузить шаблон</button>
+        <button class="btn btn-outline" id="copyFieldsBtn">Копирование полей осмотров</button>
+    </div>
+
+    <div class="constructor-table" id="examForm">
+        <table>
+            <tbody>
+                <tr>
+                    <th class="field-label">Дата выполнения</th>
+                    <td><input type="datetime-local" id="examDate" value="2026-05-18T13:00"></td>
+                </tr>
+                <tr>
+                    <th class="field-label">Назначил</th>
+                    <td>
+                        <select id="assignedDoctor">
+                            <option value="А. Ю. Турчанинов" selected>А. Ю. Турчанинов</option>
+                            <option value="А. И. Иванов">А. И. Иванов</option>
+                            <option value="М. П. Смирнова">М. П. Смирнова</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="field-label">Исполнитель</th>
+                    <td>
+                        <select id="executorDoctor">
+                            <option value="не определено" selected>не определено</option>
+                            <option value="А. Ю. Турчанинов">А. Ю. Турчанинов</option>
+                            <option value="А. И. Иванов">А. И. Иванов</option>
+                            <option value="М. П. Смирнова">М. П. Смирнова</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="field-label">Назначено</th>
+                    <td><input type="text" id="appointmentNumber" value="59369030"></td>
+                </tr>
+                <tr>
+                    <th class="field-label">Обоснование назначения</th>
+                    <td><input type="text" id="justification" value="Планируемый объем оперативного вмешательства"></td>
+                </tr>
+                <tr>
+                    <th class="field-label">С целью</th>
+                    <td><input type="text" id="purpose" value="проведения общей анестезии"></td>
+                </tr>
+                <tr>
+                    <th class="field-label">Назначение наркотических средств, психотропных веществ, сильнодействующих лекарственных средств</th>
+                    <td><textarea id="drugDetails" rows="3">наименование, дозировка: Фентанил р-р для в/в и в/м введ., 50 мкг/мл, 2 мл</textarea></td>
+                </tr>
+                <tr>
+                    <th class="field-label">Количество (ампулы/флаконы/таблетки)</th>
+                    <td><input type="text" id="quantity" value="15"></td>
+                </tr>
+                <tr>
+                    <th class="field-label">Номер документа</th>
+                    <td><input type="text" id="documentNumber" value="623963"></td>
+                </tr>
+                <tr>
+                    <th class="field-label">Отделение</th>
+                    <td><input type="text" id="department" value="Отделение анестезиологии и реанимации"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer-actions">
+        <button class="btn btn-green" id="signBtn">Подписать и закрыть для редактирования</button>
+        <button class="btn btn-danger" id="deleteBtn">Удалить</button>
+    </div>
+</main>
+
+<div id="confirmSignModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Подтверждение</span>
+            <span class="close-modal" data-modal="confirmSignModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Вы действительно хотите подписать и закрыть протокол для редактирования?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="confirmSignNo">Нет</button>
+            <button class="btn btn-green" id="confirmSignYes">Да</button>
+        </div>
+    </div>
+</div>
+
+<div id="missingFieldsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Уведомление</span>
+            <span class="close-modal" data-modal="missingFieldsModal">&times;</span>
+        </div>
+        <div class="modal-body" id="missingFieldsBody">
+            <p>Для подписания документа заполните обязательные поля:</p>
+            <ul id="missingFieldsList" style="color:#d9534f; list-style:disc; margin-left:20px;"></ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="missingFieldsOk">OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="confirmDeleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Подтверждение</span>
+            <span class="close-modal" data-modal="confirmDeleteModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Вы действительно хотите удалить протокол назначения НСПВ?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="confirmDeleteNo">Нет</button>
+            <button class="btn btn-danger" id="confirmDeleteYes">Да</button>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    (function(){
+        function getFields() {
+            const container = document.getElementById('examForm');
+            return container.querySelectorAll('input, select, textarea');
+        }
+
+        function checkFields() {
+            let missing = [];
+            const fields = getFields();
+            fields.forEach(el => {
+                if (el.value.trim() === '') missing.push(el);
+            });
+            return missing;
+        }
+
+        function highlightMissing(missing) {
+            document.querySelectorAll('.highlight-missing').forEach(el => el.classList.remove('highlight-missing'));
+            missing.forEach(el => {
+                const cell = el.closest('td');
+                if (cell) cell.classList.add('highlight-missing');
+                else el.classList.add('highlight-missing');
+            });
+        }
+
+        document.getElementById('signBtn').addEventListener('click', function() {
+            const missing = checkFields();
+            if (missing.length === 0) {
+                document.getElementById('confirmSignModal').style.display = 'flex';
+            } else {
+                highlightMissing(missing);
+                const list = document.getElementById('missingFieldsList');
+                list.innerHTML = '';
+                missing.forEach(el => {
+                    let row = el.closest('tr');
+                    let label = row ? row.querySelector('th') : null;
+                    let labelText = label ? label.innerText.trim() : 'неизвестное поле';
+                    const li = document.createElement('li');
+                    li.textContent = labelText;
+                    list.appendChild(li);
+                });
+                document.getElementById('missingFieldsModal').style.display = 'flex';
+            }
+        });
+
+        document.getElementById('confirmSignYes').addEventListener('click', function() {
+            document.getElementById('confirmSignModal').style.display = 'none';
+            alert('Протокол назначения НСПВ подписан и закрыт для редактирования (демонстрация).');
+        });
+        document.getElementById('confirmSignNo').addEventListener('click', function() {
+            document.getElementById('confirmSignModal').style.display = 'none';
+        });
+
+        document.getElementById('missingFieldsOk').addEventListener('click', function() {
+            document.getElementById('missingFieldsModal').style.display = 'none';
+        });
+
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'flex';
+        });
+        document.getElementById('confirmDeleteYes').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+            alert('Протокол назначения НСПВ удалён (демонстрация).');
+        });
+        document.getElementById('confirmDeleteNo').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+        });
+
+        // Заглушки для верхних кнопок
+        document.getElementById('copyPrevBtn').addEventListener('click', ()=>alert('Копирование из предыдущего протокола (заглушка)'));
+        document.getElementById('saveTemplateBtn').addEventListener('click', ()=>alert('Сохранение шаблона (заглушка)'));
+        document.getElementById('loadTemplateBtn').addEventListener('click', ()=>alert('Загрузка шаблона (заглушка)'));
+        document.getElementById('copyFieldsBtn').addEventListener('click', ()=>alert('Копирование полей (заглушка)'));
+
+        // Снятие подсветки при редактировании
+        getFields().forEach(el => {
+            el.addEventListener('input', function() {
+                const cell = this.closest('td');
+                if (cell) cell.classList.remove('highlight-missing');
+                this.classList.remove('highlight-missing');
+            });
+            el.addEventListener('change', function() {
+                const cell = this.closest('td');
+                if (cell) cell.classList.remove('highlight-missing');
+                this.classList.remove('highlight-missing');
+            });
+        });
+
+        // Автозаполнение даты, если пусто
+        const dateField = document.getElementById('examDate');
+        if (!dateField.value) {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            dateField.value = now.toLocaleDateString('ru-RU', options);
+        }
+    })();
+</script>
+</body>
+</html>

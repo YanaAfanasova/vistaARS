@@ -1,0 +1,335 @@
+<!--
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Протокол ИК — VISTAMED</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top-nav">
+    <div class="logo-section">
+        <span class="logo-text">Виста-МЕД</span>
+        <span class="logo-tag">АРС</span>
+        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
+    </div>
+    <div class="user-section">
+        <div class="doctor-meta">
+            <div class="doctor-name">Турчанинов А.Ю.</div>
+            <div class="doctor-specialty">Анестезиолог</div>
+        </div>
+        <div class="user-avatar">АЮ</div>
+    </div>
+</header>
+
+<div class="patient-bar" id="patientBar">
+    <div class="patient-data">
+        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
+        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
+        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
+        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
+        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+    </div>
+    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
+</div>
+<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
+    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
+</div>
+
+<nav class="tabs-nav">
+    <a href="consents.html" class="tab-item">Согласия</a>
+    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
+    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+    <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
+    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
+    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
+    <a href="protocol-ic.html" class="tab-item active">Протокол ИК</a>
+    <a href="analyses.html" class="tab-item">Анализы</a>
+</nav>
+
+<main class="main-content">
+    <h1 class="page-title">Протокол искусственного кровообращения</h1>
+    <div class="page-placeholder">
+        <p>Протокол проведения искусственного кровообращения.</p>
+        <p class="text-muted" style="margin-top:8px;">Страница в разработке.</p>
+    </div>
+</main>
+
+<script src="common.js"></script>
+</body>
+</html>
+-->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Протокол искусственного кровообращения — VISTAMED</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top-nav">
+    <div class="logo-section">
+        <span class="logo-text">Виста-МЕД</span>
+        <span class="logo-tag">АРС</span>
+        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
+    </div>
+    <div class="user-section">
+        <div class="doctor-meta">
+            <div class="doctor-name">Турчанинов А.Ю.</div>
+            <div class="doctor-specialty">Анестезиолог</div>
+        </div>
+        <div class="user-avatar">АЮ</div>
+    </div>
+</header>
+
+<div class="patient-bar" id="patientBar">
+    <div class="patient-data">
+        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
+        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
+        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
+        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
+        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+    </div>
+    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
+</div>
+<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
+    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
+</div>
+
+<nav class="tabs-nav">
+    <a href="consents.html" class="tab-item">Согласия</a>
+    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
+    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+    <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
+    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
+    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
+    <a href="protocol-ic.html" class="tab-item active">Протокол ИК</a>
+    <a href="analyses.html" class="tab-item">Анализы</a>
+</nav>
+
+<main class="main-content">
+
+    <h1 class="page-title">Протокол искусственного кровообращения</h1>
+
+
+    <div class="constructor-header">
+        <button class="btn btn-outline" id="copyPrevBtn">Копировать из предыдущего</button>
+        <button class="btn btn-outline" id="saveTemplateBtn">Сохранить шаблон</button>
+        <button class="btn btn-outline" id="loadTemplateBtn">Загрузить шаблон</button>
+        <button class="btn btn-outline" id="copyFieldsBtn">Копирование полей осмотров</button>
+    </div>
+
+    <div class="constructor-table" id="examForm">
+        <table>
+            <tbody>
+                <tr><th class="field-label">Дата выполнения</th><td><input type="text" id="examDate" value="15 июня 2026 10:19"></td></tr>
+                <tr><th class="field-label">Назначил</th><td><select id="assignedDoctor"><option value="И. А. Беденко" selected>И. А. Беденко</option><option value="А. И. Иванов">А. И. Иванов</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
+                <tr><th class="field-label">Исполнитель</th><td><select id="executorDoctor"><option value="И. А. Беденко" selected>И. А. Беденко</option><option value="А. И. Иванов">А. И. Иванов</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
+                <tr><th class="field-label">Уникальный номер</th><td><input type="text" id="uniqueNumber" value="794"></td></tr>
+                <tr><th class="field-label">№ операционной</th><td><input type="text" id="operRoom" value="3"></td></tr>
+                <tr><th class="field-label">Перфузиолог</th><td><input type="text" id="perfusiologist" value="Беденко,Игорь,Алексеевич"></td></tr>
+                <tr><th class="field-label">Медицинская сестра перфузионист</th><td><input type="text" id="perfNurse" value="Мелешкина,Людмила,Владимировна"></td></tr>
+                <tr><th class="field-label">Таблица скоростей для данного пациента</th><td><textarea id="speedTable" rows="5">2 - 3.66
+2,5 - 4.57
+2,7 - 4.94
+3 - 5.49</textarea></td></tr>
+                <tr><th class="field-label">Аппарат ИК</th><td><input type="text" id="icDevice" value="MAQUET HL-20"></td></tr>
+                <tr><th class="field-label">Температура</th><td><input type="text" id="temperature" value="36.6"></td></tr>
+                <tr><th class="field-label">Начало ИК (время)</th><td><input type="time" id="icStart" value="12:44"></td></tr>
+                <tr><th class="field-label">Начало пережатия аорты (время)</th><td><input type="time" id="aortaClampStart" value="12:52"></td></tr>
+                <tr><th class="field-label">Конец пережатия аорты (время)</th><td><input type="time" id="aortaClampEnd" value="13:23"></td></tr>
+                <tr><th class="field-label">Конец ИК (время)</th><td><input type="time" id="icEnd" value="13:43"></td></tr>
+                <tr><th class="field-label">ОСП</th><td><input type="text" id="osp" value="2.8"></td></tr>
+                <tr><th class="field-label">АОРТА</th><td><input type="text" id="aorta" value="87224"></td></tr>
+                <tr><th class="field-label">ВЕНА</th><td><input type="text" id="vein" value="91265"></td></tr>
+                <tr><th class="field-label">ОКСИГЕНАЦИОННАЯ СИСТЕМА</th><td><input type="text" id="oxySystem" value="Affinity NT"></td></tr>
+                <tr><th class="field-label">КАНЮЛЯ ДЛЯ КАРДИОПЛЕГИИ</th><td><input type="text" id="cardioplegiaCannula" value="2302"></td></tr>
+                <tr><th class="field-label">Место установки ДРЕНАЖА ЛЕВОГО ЖЕЛУДОЧКА</th><td><input type="text" id="lvDrainageSite" value="трансаортально"></td></tr>
+                <tr><th class="field-label">Солевые</th><td><input type="number" id="crystalloidsPrim" value="1000"></td></tr>
+                <tr><th class="field-label">Коллоидные</th><td><input type="number" id="colloidsPrim" value="500"></td></tr>
+                <tr><th class="field-label">NaHCO3</th><td><input type="number" id="nahco3Prim" value="100"></td></tr>
+                <tr><th class="field-label">Маннит</th><td><input type="number" id="mannitol" value="200"></td></tr>
+                <tr><th class="field-label">Итого за ИК первичное заполнение</th><td><input type="number" id="totalPrimVolume" value="1800"></td></tr>
+                <tr><th class="field-label">Солевые (коррекция)</th><td><input type="number" id="crystalloidsCorr" value="500"></td></tr>
+                <tr><th class="field-label">NaHCO3 (коррекция)</th><td><input type="number" id="nahco3Corr" value="100"></td></tr>
+                <tr><th class="field-label">Итого за ИК коррекция</th><td><input type="number" id="totalCorrVolume" value="600"></td></tr>
+                <tr><th class="field-label">Диурез</th><td><input type="number" id="diuresis" value="700"></td></tr>
+                <tr><th class="field-label">Баланс за ИК</th><td><input type="number" id="balanceIc" value="1700"></td></tr>
+                <tr><th class="field-label">КАРДИОПЛЕГИЯ (ЗАЩИТА МИОКАРДА)</th><td><input type="text" id="cardioplegiaType" value="антеградно корень аорты"></td></tr>
+                <tr><th class="field-label">Состав</th><td><input type="text" id="cardioplegiaComposition" value="Калафиори"></td></tr>
+                <tr><th class="field-label">Периодичность</th><td><input type="text" id="cardioplegiaFrequency" value="повтор каждые 20 мин"></td></tr>
+                <tr><th class="field-label">Объем</th><td><input type="number" id="cardioplegiaVolume" value="1200"></td></tr>
+                <tr><th class="field-label">ВОССТАНОВЛЕНИЕ СЕРДЕЧНОЙ ДЕЯТЕЛЬНОСТИ</th><td><input type="text" id="heartRecovery" value="самостоятельное"></td></tr>
+                <tr><th class="field-label">ВСПОМОГАТЕЛЬНОЕ КРОВООБРАЩЕНИЕ</th><td><input type="text" id="assistCirculation" value="нет"></td></tr>
+                <tr><th class="field-label">ОТКЛЮЧЕНИЕ ОТ ИСКУСТВЕННОГО КРОВООБРАЩЕНИЯ</th><td><input type="text" id="weaningFromIc" value="БЕЗ ИНОТРОПНОЙ ПОДДЕРЖКИ"></td></tr>
+                <tr><th class="field-label">ВИК (ВРЕМЯ ИСКУСТВЕННОГО КРОВООБРАЩЕНИЯ)</th><td><input type="number" id="vic" value="59"></td></tr>
+                <tr><th class="field-label">ВПА (ВРЕМЯ ПЕРЕЖАТИЯ АОРТЫ)</th><td><input type="number" id="vpa" value="31"></td></tr>
+                <tr><th class="field-label">ОСОБЕННОСТИ ИК</th><td><input type="text" id="icFeatures" value="без особенностей"></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer-actions">
+        <button class="btn btn-green" id="signBtn">Подписать и закрыть для редактирования</button>
+        <button class="btn btn-danger" id="deleteBtn">Удалить</button>
+    </div>
+</main>
+
+<div id="confirmSignModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Подтверждение</span>
+            <span class="close-modal" data-modal="confirmSignModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Вы действительно хотите подписать и закрыть протокол для редактирования?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="confirmSignNo">Нет</button>
+            <button class="btn btn-green" id="confirmSignYes">Да</button>
+        </div>
+    </div>
+</div>
+
+<div id="missingFieldsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Уведомление</span>
+            <span class="close-modal" data-modal="missingFieldsModal">&times;</span>
+        </div>
+        <div class="modal-body" id="missingFieldsBody">
+            <p>Для подписания документа заполните обязательные поля:</p>
+            <ul id="missingFieldsList" style="color:#d9534f; list-style:disc; margin-left:20px;"></ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="missingFieldsOk">OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="confirmDeleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Подтверждение</span>
+            <span class="close-modal" data-modal="confirmDeleteModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Вы действительно хотите удалить протокол ИК?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="confirmDeleteNo">Нет</button>
+            <button class="btn btn-danger" id="confirmDeleteYes">Да</button>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    (function(){
+        function getFields() {
+            const container = document.getElementById('examForm');
+            return container.querySelectorAll('input, select, textarea');
+        }
+
+        function checkFields() {
+            let missing = [];
+            const fields = getFields();
+            fields.forEach(el => {
+                if (el.value.trim() === '') missing.push(el);
+            });
+            return missing;
+        }
+
+        function highlightMissing(missing) {
+            document.querySelectorAll('.highlight-missing').forEach(el => el.classList.remove('highlight-missing'));
+            missing.forEach(el => {
+                const cell = el.closest('td');
+                if (cell) cell.classList.add('highlight-missing');
+                else el.classList.add('highlight-missing');
+            });
+        }
+
+        document.getElementById('signBtn').addEventListener('click', function() {
+            const missing = checkFields();
+            if (missing.length === 0) {
+                document.getElementById('confirmSignModal').style.display = 'flex';
+            } else {
+                highlightMissing(missing);
+                const list = document.getElementById('missingFieldsList');
+                list.innerHTML = '';
+                missing.forEach(el => {
+                    let row = el.closest('tr');
+                    let label = row ? row.querySelector('th') : null;
+                    let labelText = label ? label.innerText.trim() : 'неизвестное поле';
+                    const li = document.createElement('li');
+                    li.textContent = labelText;
+                    list.appendChild(li);
+                });
+                document.getElementById('missingFieldsModal').style.display = 'flex';
+            }
+        });
+
+        document.getElementById('confirmSignYes').addEventListener('click', function() {
+            document.getElementById('confirmSignModal').style.display = 'none';
+            alert('Протокол ИК подписан и закрыт для редактирования (демонстрация).');
+        });
+        document.getElementById('confirmSignNo').addEventListener('click', function() {
+            document.getElementById('confirmSignModal').style.display = 'none';
+        });
+
+        document.getElementById('missingFieldsOk').addEventListener('click', function() {
+            document.getElementById('missingFieldsModal').style.display = 'none';
+        });
+
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'flex';
+        });
+        document.getElementById('confirmDeleteYes').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+            alert('Протокол ИК удалён (демонстрация).');
+        });
+        document.getElementById('confirmDeleteNo').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+        });
+
+        // Заглушки для верхних кнопок
+        document.getElementById('copyPrevBtn').addEventListener('click', ()=>alert('Копирование из предыдущего протокола (заглушка)'));
+        document.getElementById('saveTemplateBtn').addEventListener('click', ()=>alert('Сохранение шаблона (заглушка)'));
+        document.getElementById('loadTemplateBtn').addEventListener('click', ()=>alert('Загрузка шаблона (заглушка)'));
+        document.getElementById('copyFieldsBtn').addEventListener('click', ()=>alert('Копирование полей (заглушка)'));
+
+        // Снятие подсветки при редактировании
+        getFields().forEach(el => {
+            el.addEventListener('input', function() {
+                const cell = this.closest('td');
+                if (cell) cell.classList.remove('highlight-missing');
+                this.classList.remove('highlight-missing');
+            });
+            el.addEventListener('change', function() {
+                const cell = this.closest('td');
+                if (cell) cell.classList.remove('highlight-missing');
+                this.classList.remove('highlight-missing');
+            });
+        });
+
+        // Автозаполнение даты, если пусто
+        const dateField = document.getElementById('examDate');
+        if (!dateField.value) {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            dateField.value = now.toLocaleDateString('ru-RU', options);
+        }
+    })();
+</script>
+</body>
+</html>

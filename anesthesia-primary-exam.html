@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Первичный осмотр анестезиолога — VISTAMED</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top-nav">
+    <div class="logo-section">
+        <span class="logo-text">Виста-МЕД</span>
+        <span class="logo-tag">АРС</span>
+        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
+    </div>
+    <div class="user-section">
+        <div class="doctor-meta">
+            <div class="doctor-name">Турчанинов А.Ю.</div>
+            <div class="doctor-specialty">Анестезиолог</div>
+        </div>
+        <div class="user-avatar">АЮ</div>
+    </div>
+</header>
+
+<div class="patient-bar" id="patientBar">
+    <div class="patient-data">
+        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
+        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
+        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
+        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
+        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+    </div>
+    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
+</div>
+<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
+    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
+</div>
+
+<nav class="tabs-nav">
+    <a href="consents.html" class="tab-item">Согласия</a>
+    <a href="anesthesia-primary-exam.html" class="tab-item active">Первичный осмотр</a>
+    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+    <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
+    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
+    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
+    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
+    <a href="analyses.html" class="tab-item">Анализы</a>
+</nav>
+
+<main class="main-content">
+    <div class="constructor-header">
+        <button class="btn btn-outline" id="copyPrevBtn">Копировать из предыдущего</button>
+        <button class="btn btn-outline" id="saveTemplateBtn">Сохранить шаблон</button>
+        <button class="btn btn-outline" id="loadTemplateBtn">Загрузить шаблон</button>
+        <button class="btn btn-outline" id="copyFieldsBtn">Копирование полей осмотров</button>
+    </div>
+
+    <div class="constructor-table" id="examForm">
+        <table>
+            <tbody>
+                <!-- Дата выполнения -->
+                <tr>
+                    <th class="field-label">Дата выполнения</th>
+                    <td><input type="text" id="examDate" value="17 июня 2026 15:53"></td>
+                </tr>
+                <!-- Назначил -->
+                <tr>
+                    <th class="field-label">Назначил</th>
+                    <td>
+                        <select id="assignedDoctor">
+                            <option value="С. В. Поповцев" selected>С. В. Поповцев</option>
+                            <option value="А. И. Иванов">А. И. Иванов</option>
+                            <option value="М. П. Смирнова">М. П. Смирнова</option>
+                            <option value="Д. А. Козлов">Д. А. Козлов</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- Исполнитель -->
+                <tr>
+                    <th class="field-label">Исполнитель</th>
+                    <td>
+                        <select id="executorDoctor">
+                            <option value="С. В. Поповцев" selected>С. В. Поповцев</option>
+                            <option value="А. И. Иванов">А. И. Иванов</option>
+                            <option value="М. П. Смирнова">М. П. Смирнова</option>
+                            <option value="Д. А. Козлов">Д. А. Козлов</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- Данные иммуно-серологической лаборатории -->
+                <tr>
+                    <th class="field-label">Данные иммуно-серологической лаборатории</th>
+                    <td>
+                        <div class="inline-fields">
+                            <label>Группа крови: 
+                                <select id="bloodGroup">
+                                    <option value="A (II)">A (II)</option>
+                                    <option value="B (III)" selected>B (III)</option>
+                                    <option value="AB (IV)">AB (IV)</option>
+                                    <option value="O (I)">O (I)</option>
+                                </select>
+                            </label>
+                            <label>Резус фактор: 
+                                <select id="rhFactor">
+                                    <option value="(+)">(+)</option>
+                                    <option value="(-)">(-)</option>
+                                </select>
+                            </label>
+                            <label>Фенотип: 
+                                <select id="phenotype">
+                                    <option value="CCDee" selected>CCDee</option>
+                                    <option value="ccDEE">ccDEE</option>
+                                    <option value="CCDEE">CCDEE</option>
+                                    <option value="ccdee">ccdee</option>
+                                </select>
+                            </label>
+                            <label>KELL: 
+                                <select id="kell">
+                                    <option value="KELL-" selected>KELL-</option>
+                                    <option value="KELL+">KELL+</option>
+                                </select>
+                            </label>
+                        </div>
+                        <label style="display:block; margin-top:6px;">Заключение: <input type="text" id="immunoConclusion" style="width:100%;" placeholder="введите заключение"></label>
+                    </td>
+                </tr>
+                <!-- Диагноз -->
+                <tr>
+                    <th class="field-label">Диагноз</th>
+                    <td><textarea id="diagnosis" rows="3">Гипертоническая болезнь III ст. Риск 4 очень высокий. Целевой уровень АД менее 130/80 мм рт.ст.
+Недостаточность митрального клапана 2-3 ст.
+СКФ (CKD-EPI): 21 мл/мин/1,73м2, ХБП С4.
+ХСН 1 ФК2 с сохранной ФВ ЛЖ(54%).
+Хронический бронхит с явлениями бронхообструкции Первичный остеоартроз с поражением коленных суставов, Rg 2-3ст, ФК 1. Продольное плоскостопие 3 ст. Узловой зоб, эутиреоз</textarea></td>
+                </tr>
+                <!-- Жалобы -->
+                <tr>
+                    <th class="field-label">Жалобы</th>
+                    <td><input type="text" id="complaints" value="инспираторная одышка при ходьбе до 400 метров"></td>
+                </tr>
+                <!-- Перенесённые оперативные вмешательства -->
+                <tr>
+                    <th class="field-label">Перенесённые оперативные вмешательства</th>
+                    <td><input type="text" id="surgeries" value="холецистэктомия, секторальная резекция левой молочной железы"></td>
+                </tr>
+                <!-- Трансфузионный анамнез -->
+                <tr>
+                    <th class="field-label">Трансфузионный анамнез</th>
+                    <td><input type="text" id="transfusion" value="отрицает"></td>
+                </tr>
+                <!-- Аллергоанамнез -->
+                <tr>
+                    <th class="field-label">Аллергоанамнез</th>
+                    <td><input type="text" id="allergy" value="не отягощён (аллергическую реакцию на принимаемые ранее препараты отрицает)."></td>
+                </tr>
+                <!-- Постоянный прием лекарственных препаратов -->
+                <tr>
+                    <th class="field-label">Постоянный прием лекарственных препаратов</th>
+                    <td><input type="text" id="permanentMed" value="см запись кардиолога"></td>
+                </tr>
+                <!-- Физикальное исследование -->
+                <tr>
+                    <th class="field-label">Физикальное исследование</th>
+                    <td><textarea id="physicalExam" rows="6">Общее состояние: обусловлено ожирением ИМТ 45.45. Функциональным классом основной и сопутствующей патологии, необходимостью выполнения КАГ Уровень сознания по шкале Глазго (баллов) 15 баллов
+по Глазго, сознание ясное.
+Кожные покровы: нормальной окраски и влажности. Видимые слизистые: без патологических высыпаний, Подкожно-жировая клетчатка: развита избыточно. Аускультация легких: дыхание проводится по всем
+отделам, хрипов нет, ЧДД 18, Аускультация сердца: аускультативно тоны сердца ритмичные, приглушены, средней громкости систолический шум на верхушке, АД слева 90/60, АД справа 90/60, ЧСС 68,
+насыщение крови кислородом (сатурация): 97, Живот: значительно увеличен изза ПЖК. симметричный, участвует в акте дыхания, при пальпации мягкий, безболезненный, Печень: не увеличена,
+Мочеиспускание: дизурических явлений нет., Температура тела 36.6</textarea></td>
+                </tr>
+                <!-- Мониторинг жизненно важных функций организма -->
+                <tr>
+                    <th class="field-label">Мониторинг жизненно важных функций организма</th>
+                    <td><input type="text" id="monitoring" value="стандартный"></td>
+                </tr>
+                <!-- Заключение -->
+                <tr>
+                    <th class="field-label">Заключение</th>
+                    <td><input type="text" id="conclusion" value="Абсолютных противопоказаний к анестезии не выявлено"></td>
+                </tr>
+                <!-- Прогностическая оценка трудности интубации -->
+                <tr>
+                    <th class="field-label">Прогностическая оценка трудности интубации</th>
+                    <td>
+                        <select id="intubationDifficulty">
+                            <option value="Маллампати 1">Маллампати 1</option>
+                            <option value="Маллампати 2" selected>Маллампати 2</option>
+                            <option value="Маллампати 3">Маллампати 3</option>
+                            <option value="Маллампати 4">Маллампати 4</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- Курение -->
+                <tr>
+                    <th class="field-label">Курение</th>
+                    <td>
+                        <select id="smoking">
+                            <option value="нет" selected>нет</option>
+                            <option value="да">да</option>
+                            <option value="бывшее">бывшее</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- ЧДД -->
+                <tr>
+                    <th class="field-label">ЧДД</th>
+                    <td><input type="number" id="respRate" value="18"></td>
+                </tr>
+                <!-- АД справа -->
+                <tr>
+                    <th class="field-label">АД справа</th>
+                    <td><input type="text" id="bpRight" value="90/60"></td>
+                </tr>
+                <!-- АД слева -->
+                <tr>
+                    <th class="field-label">АД слева</th>
+                    <td><input type="text" id="bpLeft" value="90/60"></td>
+                </tr>
+                <!-- ЧСС -->
+                <tr>
+                    <th class="field-label">ЧСС</th>
+                    <td><input type="number" id="heartRate" value="68"></td>
+                </tr>
+                <!-- Вид планируемой анестезии -->
+                <tr>
+                    <th class="field-label">Вид планируемой анестезии</th>
+                    <td>
+                        <select id="anesthesiaType">
+                            <option value="местное обезболивание" selected>местное обезболивание</option>
+                            <option value="общая анестезия">общая анестезия</option>
+                            <option value="проводниковая анестезия">проводниковая анестезия</option>
+                            <option value="спинальная анестезия">спинальная анестезия</option>
+                            <option value="эпидуральная анестезия">эпидуральная анестезия</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- Вид операции -->
+                <tr>
+                    <th class="field-label">Вид операции</th>
+                    <td>
+                        <select id="operationType">
+                            <option value="плановая" selected>плановая</option>
+                            <option value="экстренная">экстренная</option>
+                            <option value="срочная">срочная</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- Планируется оперативное вмешательство -->
+                <tr>
+                    <th class="field-label">Планируется оперативное вмешательство</th>
+                    <td><input type="text" id="plannedSurgery" value="КАГ"></td>
+                </tr>
+                <!-- Оценка степени риска анестезиологического пособия ASA -->
+                <tr>
+                    <th class="field-label">Оценка степени риска анестезиологического пособия ASA</th>
+                    <td>
+                        <select id="asaRisk">
+                            <option value="I">I</option>
+                            <option value="II">II</option>
+                            <option value="III" selected>III</option>
+                            <option value="IV">IV</option>
+                            <option value="V">V</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- Рекомендации -->
+                <tr>
+                    <th class="field-label">Рекомендации</th>
+                    <td><input type="text" id="recommendations" value="голод за 6 часов до направления в р-оп"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer-actions">
+        <button class="btn btn-green" id="signBtn">Подписать и закрыть для редактирования</button>
+        <button class="btn btn-danger" id="deleteBtn">Удалить</button>
+    </div>
+</main>
+
+<!-- Модальное окно подтверждения подписания (если все заполнено) -->
+<div id="confirmSignModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Подтверждение</span>
+            <span class="close-modal" data-modal="confirmSignModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Вы действительно хотите подписать и закрыть осмотр для редактирования?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="confirmSignNo">Нет</button>
+            <button class="btn btn-green" id="confirmSignYes">Да</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно уведомления о незаполненных полях -->
+<div id="missingFieldsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Уведомление</span>
+            <span class="close-modal" data-modal="missingFieldsModal">&times;</span>
+        </div>
+        <div class="modal-body" id="missingFieldsBody">
+            <p>Для подписания документа заполните обязательные поля:</p>
+            <ul id="missingFieldsList" style="color:#d9534f; list-style:disc; margin-left:20px;"></ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="missingFieldsOk">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения удаления -->
+<div id="confirmDeleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Подтверждение</span>
+            <span class="close-modal" data-modal="confirmDeleteModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Вы действительно хотите удалить консультацию/осмотр?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="confirmDeleteNo">Нет</button>
+            <button class="btn btn-danger" id="confirmDeleteYes">Да</button>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    (function(){
+        // Получить все поля, которые нужно проверять (все input, select, textarea, кроме служебных)
+        function getFields() {
+            const container = document.getElementById('examForm');
+            const inputs = container.querySelectorAll('input, select, textarea');
+            // Исключаем поля, которые не обязательны? По заданию все поля обязательны.
+            // Но можно исключить поля, которые являются частью составных (например, внутри inline-fields)
+            // Мы проверяем все, кроме тех, что внутри inline-fields (они уже входят в составные)
+            const result = [];
+            inputs.forEach(el => {
+                // Пропускаем элементы, которые являются частью inline-fields (они внутри .inline-fields)
+                const parentInline = el.closest('.inline-fields');
+                if (parentInline) {
+                    // Для составных полей мы будем проверять только select'ы и input'ы, но они все должны быть заполнены
+                    // Но чтобы не дублировать, добавим только родительские элементы? 
+                    // Проще проверить все и пропустить те, что внутри .inline-fields, если мы уже учли их как группу.
+                    // Но здесь мы просто добавим все, т.к. все должны быть заполнены.
+                }
+                result.push(el);
+            });
+            return result;
+        }
+
+        function checkFields() {
+            let missing = [];
+            const fields = getFields();
+            fields.forEach(el => {
+                const value = el.value.trim();
+                if (value === '') {
+                    missing.push(el);
+                }
+            });
+            return missing;
+        }
+
+        // Подсветка незаполненных полей
+        function highlightMissing(missing) {
+            // Сначала убираем подсветку у всех
+            document.querySelectorAll('.highlight-missing').forEach(el => el.classList.remove('highlight-missing'));
+            missing.forEach(el => {
+                // Находим родительскую ячейку (td) и добавляем класс
+                const cell = el.closest('td');
+                if (cell) cell.classList.add('highlight-missing');
+                else el.classList.add('highlight-missing');
+            });
+        }
+
+        function clearHighlight() {
+            document.querySelectorAll('.highlight-missing').forEach(el => el.classList.remove('highlight-missing'));
+        }
+
+        // Кнопка "Подписать и закрыть"
+        document.getElementById('signBtn').addEventListener('click', function() {
+            const missing = checkFields();
+            if (missing.length === 0) {
+                // Все поля заполнены, показываем подтверждение
+                document.getElementById('confirmSignModal').style.display = 'flex';
+            } else {
+                // Есть незаполненные поля
+                highlightMissing(missing);
+                const list = document.getElementById('missingFieldsList');
+                list.innerHTML = '';
+                missing.forEach(el => {
+                    // Ищем заголовок поля (ближайший th)
+                    let row = el.closest('tr');
+                    let label = row ? row.querySelector('th') : null;
+                    let labelText = label ? label.innerText.trim() : 'неизвестное поле';
+                    const li = document.createElement('li');
+                    li.textContent = labelText;
+                    list.appendChild(li);
+                });
+                document.getElementById('missingFieldsModal').style.display = 'flex';
+            }
+        });
+
+        // Модалка подтверждения – Да
+        document.getElementById('confirmSignYes').addEventListener('click', function() {
+            document.getElementById('confirmSignModal').style.display = 'none';
+            alert('Осмотр подписан и закрыт для редактирования (демонстрация).');
+            // Здесь можно заблокировать поля или отправить на сервер
+        });
+        document.getElementById('confirmSignNo').addEventListener('click', function() {
+            document.getElementById('confirmSignModal').style.display = 'none';
+        });
+
+        // Модалка незаполненных полей – OK
+        document.getElementById('missingFieldsOk').addEventListener('click', function() {
+            document.getElementById('missingFieldsModal').style.display = 'none';
+            // Подсветка уже применена
+        });
+
+        // Кнопка удаления
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'flex';
+        });
+        document.getElementById('confirmDeleteYes').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+            alert('Осмотр удалён (демонстрация).');
+            // Здесь можно очистить форму или перенаправить
+        });
+        document.getElementById('confirmDeleteNo').addEventListener('click', function() {
+            document.getElementById('confirmDeleteModal').style.display = 'none';
+        });
+
+        // Кнопки-заглушки
+        document.getElementById('copyPrevBtn').addEventListener('click', function() {
+            alert('Копирование из предыдущего осмотра (заглушка)');
+        });
+        document.getElementById('saveTemplateBtn').addEventListener('click', function() {
+            alert('Сохранение шаблона (заглушка)');
+        });
+        document.getElementById('loadTemplateBtn').addEventListener('click', function() {
+            alert('Загрузка шаблона (заглушка)');
+        });
+        document.getElementById('copyFieldsBtn').addEventListener('click', function() {
+            alert('Копирование полей осмотров (заглушка)');
+        });
+
+        // Автоматическое заполнение даты (если поле пустое)
+        (function setDefaultDate() {
+            const dateField = document.getElementById('examDate');
+            if (!dateField.value) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                dateField.value = now.toLocaleDateString('ru-RU', options);
+            }
+        })();
+
+        // При клике на "Подписать" и закрытии модалки – можно очистить подсветку
+        document.getElementById('missingFieldsOk').addEventListener('click', function() {
+            // Подсветка остаётся, чтобы пользователь видел ошибки
+        });
+        // Также при закрытии модалки через крестик или фон – подсветка не снимается.
+        // Для удобства можно добавить кнопку "Отменить" в уведомлении, но по заданию её нет.
+        // Добавим возможность снять подсветку при редактировании полей
+        const fields = getFields();
+        fields.forEach(el => {
+            el.addEventListener('input', function() {
+                // Снимаем подсветку с ячейки, если она была
+                const cell = this.closest('td');
+                if (cell) cell.classList.remove('highlight-missing');
+                this.classList.remove('highlight-missing');
+            });
+            el.addEventListener('change', function() {
+                const cell = this.closest('td');
+                if (cell) cell.classList.remove('highlight-missing');
+                this.classList.remove('highlight-missing');
+            });
+        });
+    })();
+</script>
+</body>
+</html>
