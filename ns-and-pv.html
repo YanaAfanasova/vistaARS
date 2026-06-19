@@ -130,6 +130,9 @@
     <div class="constructor-table" id="examForm">
         <table>
             <tbody>
+                <tr class="section-header">
+                    <th colspan="2">Общие сведения</th>
+                </tr>
                 <tr>
                     <th class="field-label">Дата выполнения</th>
                     <td><input type="datetime-local" id="examDate" value="2026-05-18T13:00"></td>
@@ -156,8 +159,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <th class="field-label">Назначено</th>
-                    <td><input type="text" id="appointmentNumber" value="59369030"></td>
+                    <th class="field-label">Отделение</th>
+                    <td><input type="text" id="department" value="Отделение анестезиологии и реанимации"></td>
+                </tr>
+                <tr class="section-header">
+                    <th colspan="2">Обоснование и цель</th>
                 </tr>
                 <tr>
                     <th class="field-label">Обоснование назначения</th>
@@ -167,21 +173,27 @@
                     <th class="field-label">С целью</th>
                     <td><input type="text" id="purpose" value="проведения общей анестезии"></td>
                 </tr>
+                <tr class="section-header">
+                    <th colspan="2">Реквизиты назначения</th>
+                </tr>
+                <tr>
+                    <th class="field-label">Назначено</th>
+                    <td><input type="text" id="appointmentNumber" value="59369030"></td>
+                </tr>
+                <tr>
+                <th class="field-label">Количество (ампулы/флаконы/таблетки)</th>
+                <td><input type="text" id="quantity" value="15"></td>
+                </tr>
+                <tr>
+                <th class="field-label">Номер документа</th>
+                <td><input type="text" id="documentNumber" value="623963"></td>
+                </tr>
+                <tr class="section-header">
+                    <th colspan="2">Препарат</th>
+                </tr>
                 <tr>
                     <th class="field-label">Назначение наркотических средств, психотропных веществ, сильнодействующих лекарственных средств</th>
                     <td><textarea id="drugDetails" rows="3">наименование, дозировка: Фентанил р-р для в/в и в/м введ., 50 мкг/мл, 2 мл</textarea></td>
-                </tr>
-                <tr>
-                    <th class="field-label">Количество (ампулы/флаконы/таблетки)</th>
-                    <td><input type="text" id="quantity" value="15"></td>
-                </tr>
-                <tr>
-                    <th class="field-label">Номер документа</th>
-                    <td><input type="text" id="documentNumber" value="623963"></td>
-                </tr>
-                <tr>
-                    <th class="field-label">Отделение</th>
-                    <td><input type="text" id="department" value="Отделение анестезиологии и реанимации"></td>
                 </tr>
             </tbody>
         </table>

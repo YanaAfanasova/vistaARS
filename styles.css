@@ -912,6 +912,20 @@ body.page-consents .main-container {
 .text-danger { color: var(--danger); }
 .hidden { display: none !important; }
 
+.constructor-table th {
+    text-align: left !important;
+}
+
+.section-header th {
+    background-color: #e9ecef;
+    font-weight: 700;
+    font-size: 1.1em;
+    text-align: left;
+    padding: 8px 12px;
+    border-top: 2px solid #adb5bd;
+    border-bottom: 1px solid #ced4da;
+}
+
 @media print {
     body * { visibility: hidden; }
     #real-print-area,

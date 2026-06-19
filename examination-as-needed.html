@@ -130,6 +130,9 @@
     <div class="constructor-table" id="examForm">
         <table>
             <tbody>
+                <tr class="section-header">
+                    <th colspan="2">Общие сведения</th>
+                </tr>
                 <tr>
                     <th class="field-label">Дата выполнения</th>
                     <td><input type="datetime-local" id="examDate" value="2026-05-28T08:00"></td>
@@ -155,18 +158,36 @@
                         </select>
                     </td>
                 </tr>
+                <tr class="section-header">
+                    <th colspan="2">Жалобы и анамнез</th>
+                </tr>
                 <tr>
                     <th class="field-label">Жалобы</th>
                     <td><input type="text" id="complaints" value="Жалоб нет"></td>
                 </tr>
                 <tr>
-                    <th class="field-label">Кожные покровы, видимые слизистые</th>
-                    <td><input type="text" id="skinMucous" value="обычной окраски"></td>
+                    <th class="field-label">Трансфузионный анамнез</th>
+                    <td><input type="text" id="transfusion" value="нет"></td>
+                </tr>
+                <tr>
+                    <th class="field-label">Аллергоанамнез</th>
+                    <td><input type="text" id="allergy" value="не отягощён"></td>
+                </tr>
+                <tr class="section-header">
+                    <th colspan="2">Диагноз</th>
                 </tr>
                 <tr>
                     <th class="field-label">Диагноз</th>
                     <td><textarea id="diagnosis" rows="3">ИБС. Стенокардия напряжения III ФК. Постинфарктный кардиосклероз неуточненной давности. Гипертоническая болезнь III ст., риск - 4. Целевой уровень АД не достигнут. ХСН с умеренно сниженной ФВ (48%) I ст., ФК III.</textarea></td>
                 </tr>
+                <tr class="section-header">
+                    <th colspan="2">Физикально обследование</th>
+                </tr>
+                <tr>
+                    <th class="field-label">Кожные покровы, видимые слизистые</th>
+                    <td><input type="text" id="skinMucous" value="обычной окраски"></td>
+                </tr>
+
                 <tr>
                     <th class="field-label">Телосложение</th>
                     <td><input type="text" id="bodyBuild" value="правильное"></td>
@@ -180,32 +201,25 @@
                     <td><input type="text" id="respiratory" value="проводится во все отделы"></td>
                 </tr>
                 <tr>
-                    <th class="field-label">ЧДД</th>
-                    <td><input type="number" id="respRate" value="18"></td>
-                </tr>
-                <tr>
                     <th class="field-label">Тоны сердца</th>
                     <td><input type="text" id="heartSounds" value="ритмичные"></td>
                 </tr>
-                <tr>
-                    <th class="field-label">АД справа</th>
-                    <td><input type="text" id="bpRight" value="180/110"></td>
+                <tr class="section-header">
+                    <th colspan="2">Витальные параметры</th>
                 </tr>
                 <tr>
-                    <th class="field-label">АД слева</th>
-                    <td><input type="text" id="bpLeft" value="170/100"></td>
+                    <th class="field-label">Витальные параметры</th>
+                    <td>
+                        <div class="inline-fields">
+                            <label>ЧДД: <input type="number" id="respRate" value="18" style="width:60px;"></label>
+                            <label>АД справа: <input type="text" id="bpRight" value="180/110" style="width:70px;"></label>
+                            <label>АД слева: <input type="text" id="bpLeft" value="170/100" style="width:70px;"></label>
+                            <label>ЧСС: <input type="number" id="heartRate" value="72" style="width:60px;"></label>
+                        </div>
+                    </td>
                 </tr>
-                <tr>
-                    <th class="field-label">ЧСС</th>
-                    <td><input type="number" id="heartRate" value="72"></td>
-                </tr>
-                <tr>
-                    <th class="field-label">Трансфузионный анамнез</th>
-                    <td><input type="text" id="transfusion" value="нет"></td>
-                </tr>
-                <tr>
-                    <th class="field-label">Аллергоанамнез</th>
-                    <td><input type="text" id="allergy" value="не отягощён"></td>
+                <tr class="section-header">
+                    <th colspan="2">Планируемое вмешательство и анестезиологический риск</th>
                 </tr>
                 <tr>
                     <th class="field-label">Планируется оперативное вмешательство</th>
@@ -246,7 +260,7 @@
                 </tr>
 				<tr>
                     <th class="field-label">Особенности</th>
-                    <td><input type="text" id="plannedSurgery" value=""></td>
+                    <td><input type="text" id="peculiarities" value=""></td>
                 </tr>
             </tbody>
         </table>
