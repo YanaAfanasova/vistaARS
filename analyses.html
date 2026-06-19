@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -60,5 +61,863 @@
 </main>
 
 <script src="common.js"></script>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторный мониторинг - VISTAMED</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ===== Специфичные стили для страницы анализов ===== */
+        .analyses-container {
+            padding: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .view-toggle .btn {
+            flex: 1;
+            max-width: 250px;
+        }
+        .btn-active {
+            background: var(--primary-green) !important;
+            color: #fff !important;
+            border-color: var(--primary-green) !important;
+        }
+
+        /* Сетка блоков (для дашборда) */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary-green);
+            padding-left: 10px;
+        }
+
+        /* ===== Таблица анализов (режим "во время операции") ===== */
+        .lab-table-wrap {
+            overflow-x: auto;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .lab-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .lab-table th, .lab-table td {
+            border: 1px solid var(--border-color);
+            padding: 6px 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .lab-table th {
+            background: #f8f9fc;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .lab-table .row-label {
+            text-align: left;
+            font-weight: 600;
+            background: #fafcfc;
+        }
+        .lab-table .value-normal {
+            color: var(--primary-green);
+        }
+        .lab-table .value-high {
+            color: var(--danger);
+        }
+        .lab-table .value-low {
+            color: #f0ad4e;
+        }
+        .lab-table .row-hidden {
+            display: none;
+        }
+
+        /* Time Machine (календарь) */
+        .time-machine {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .time-machine label {
+            font-weight: 500;
+            font-size: 13px;
+        }
+        .time-machine input, .time-machine select {
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        /* Urgent – спидометры */
+        .urgent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .meter {
+            text-align: center;
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 8px 4px;
+        }
+        .meter .value {
+            font-size: 18px;
+            font-weight: 700;
+            display: block;
+        }
+        .meter .label {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .meter .scale {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 4px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .meter .scale .fill {
+            height: 100%;
+            border-radius: 3px;
+            background: var(--primary-green);
+        }
+        .meter .scale .fill.danger {
+            background: var(--danger);
+        }
+        .meter .scale .fill.warning {
+            background: #f0ad4e;
+        }
+        .meter.critical .value {
+            color: var(--danger);
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* Гемостаз */
+        .hemostasis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .hemo-item {
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .hemo-item .big-number {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .hemo-item .trend {
+            font-size: 12px;
+            margin-left: 6px;
+        }
+        .trend.down { color: #d9534f; }
+        .trend.up { color: #5cb85c; }
+
+        .bleeding-risk {
+            background: #fff5f5;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 8px;
+        }
+        .bleeding-risk.critical {
+            background: #f8d7da;
+            border-color: #d9534f;
+            animation: pulse-bg 1.5s infinite;
+        }
+        @keyframes pulse-bg {
+            0% { background: #f8d7da; }
+            50% { background: #fce4e4; }
+            100% { background: #f8d7da; }
+        }
+
+        /* Органотоксичность */
+        .organ-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .organ-card {
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .organ-card .param {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 3px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .organ-card .param:last-child { border-bottom: none; }
+        .organ-card .param .val {
+            font-weight: 600;
+        }
+        .val.high { color: var(--danger); }
+        .val.normal { color: var(--primary-green); }
+        .val.low { color: #f0ad4e; }
+
+        /* Инфекционный статус – дерево культур */
+        .culture-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .culture-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .culture-item .badge {
+            background: var(--primary-green);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .culture-item .badge.neg {
+            background: #6c757d;
+        }
+
+        /* Матрица чувствительности */
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid var(--border-color);
+            padding: 5px 6px;
+            text-align: center;
+        }
+        .matrix-table th {
+            background: #f8f9fc;
+            font-weight: 600;
+        }
+        .matrix-table .s { background: #d4edda; color: #155724; }
+        .matrix-table .i { background: #fff3cd; color: #856404; }
+        .matrix-table .r { background: #f8d7da; color: #721c24; }
+
+        /* Мониторинг мочи */
+        .urine-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        .urine-item {
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .urine-item .label {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .urine-item .value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .urine-item .value.danger {
+            color: var(--danger);
+        }
+
+        /* Smart-фильтр и Time Machine */
+        .controls-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        .controls-row .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .controls-row .filter-group label {
+            font-weight: 500;
+            font-size: 13px;
+        }
+        .slider-value {
+            font-weight: 600;
+            color: var(--primary-green);
+            min-width: 70px;
+        }
+
+        /* Скрытие нормы */
+        .hide-normal .normal-range {
+            display: none;
+        }
+
+        /* Адаптив */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .hemostasis-grid, .organ-grid, .urine-grid {
+                grid-template-columns: 1fr;
+            }
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .time-machine {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== ШАПКА ===== -->
+<header class="top-nav">
+    <div class="logo-section">
+        <span class="logo-text">VISTAMED</span>
+        <span class="logo-tag">АРС</span>
+    </div>
+    <div class="user-section">
+        <div class="doctor-meta">
+            <div class="doctor-name">Турчанинов А.Ю.</div>
+            <div class="doctor-specialty">анестезиолог-реаниматолог</div>
+        </div>
+        <div class="user-avatar">АЮ</div>
+        <button class="btn-back" onclick="alert('Переход к истории болезни...')">⟲ Вернуться в историю болезни</button>
+    </div>
+</header>
+
+<!-- ===== ПАНЕЛЬ ПАЦИЕНТА ===== -->
+<div class="patient-bar" id="patientBar">
+    <div class="patient-data">
+        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (48 лет)</strong></div>
+        <div class="param"><span>Антропометрия:</span><strong>178 см / 82 кг</strong></div>
+        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+        <div class="param"><span>№ ИБ:</span><strong style="color:var(--primary-green);">#4859-26</strong></div>
+        <div class="param"><span>Диагноз:</span><strong>ИБС. Стеноз аортального клапана</strong></div>
+        <div class="param danger"><span>Аллергоанамнез:</span><strong>Лидокаин (сыпь), Пенициллин (отёк)</strong></div>
+    </div>
+    <button class="btn-toggle-patient" id="togglePatientBtn">▲ Свернуть</button>
+</div>
+
+<!-- ===== ВКЛАДКИ ===== -->
+<nav class="tabs-nav">
+    <a href="consents.html" class="tab-item">Согласия</a>
+    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
+    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+    <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
+    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
+    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
+    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
+    <a href="analyses.html" class="tab-item active">Анализы</a>
+</nav>
+
+<!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
+<div class="analyses-container">
+
+    <!-- Переключатель режимов -->
+    <div class="view-toggle">
+        <button class="btn btn-green btn-active" id="btnOpMode">Анализы во время операции</button>
+        <button class="btn btn-outline" id="btnHospMode">Анализы за период госпитализации</button>
+    </div>
+
+    <!-- Панель управления: Time Machine + Smart-фильтр -->
+    <div class="controls-row" id="controlsRow">
+        <div class="filter-group time-machine" id="timeMachineGroup">
+            <label>📅 Time Machine:</label>
+            <!-- Для режима операции – календарь + время -->
+            <span id="opTimeControls">
+                <input type="date" id="opDate" value="2026-06-15">
+                <input type="time" id="opTime" value="12:30">
+            </span>
+            <!-- Для режима госпитализации – выпадающий список дат -->
+            <span id="hospTimeControls" style="display:none;">
+                <select id="hospDateSelect">
+                    <option value="2026-06-12">12.06.2026</option>
+                    <option value="2026-06-13">13.06.2026</option>
+                    <option value="2026-06-14">14.06.2026</option>
+                    <option value="2026-06-15" selected>15.06.2026</option>
+                    <option value="2026-06-16">16.06.2026</option>
+                    <option value="2026-06-17">17.06.2026</option>
+                    <option value="2026-06-18">18.06.2026</option>
+                    <option value="2026-06-19">19.06.2026</option>
+                    <option value="2026-06-20">20.06.2026</option>
+                    <option value="2026-06-21">21.06.2026</option>
+                    <option value="2026-06-22">22.06.2026</option>
+                </select>
+            </span>
+        </div>
+        <div class="filter-group">
+            <label>🔍 Фильтр:</label>
+            <button class="btn btn-outline" id="btnFilterPathology">Только патология</button>
+        </div>
+    </div>
+
+    <!-- ===== РЕЖИМ 1: Анализы во время операции (таблица) ===== -->
+    <div id="opModeView">
+        <div class="card" style="margin-bottom:15px;">
+            <div class="card-title">📋 Лабораторный мониторинг проведения анестезиологического пособия</div>
+            <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:10px;">
+                <div><strong>Пациент:</strong> Петров Иван Сергеевич</div>
+                <div><strong>Начало операции:</strong> 15.06.2026 09:15</div>
+                <div><strong>Конец операции:</strong> 15.06.2026 12:45</div>
+                <div><strong>Выбранный момент:</strong> <span id="selectedOpMoment">15.06.2026 12:30</span></div>
+            </div>
+        </div>
+        <div class="lab-table-wrap">
+            <table class="lab-table" id="opLabTable">
+                <thead>
+                    <tr>
+                        <th>Параметры</th>
+                        <th>12:00</th>
+                        <th>12:30</th>
+                        <th>13:00</th>
+                        <th>13:30</th>
+                        <th>14:00</th>
+                    </tr>
+                </thead>
+                <tbody id="opLabBody">
+                    <!-- заполняется скриптом -->
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top:10px; font-size:11px; color:var(--text-muted);">
+            * Значения выделены цветом: <span style="color:var(--danger);">красным</span> – отклонение от нормы, <span style="color:var(--primary-green);">зелёным</span> – норма.
+        </div>
+    </div>
+
+    <!-- ===== РЕЖИМ 2: Анализы за период госпитализации (дашборд) ===== -->
+    <div id="hospModeView" style="display:none;">
+        <div class="dashboard-grid" id="dashboard">
+
+            <!-- Блок 1: Urgent / КЩС -->
+            <div class="card full-width">
+                <div class="card-title">⚡ Urgent / КЩС (газы крови и электролиты)</div>
+                <div class="urgent-grid" id="urgentGrid">
+                    <!-- заполняется скриптом -->
+                </div>
+            </div>
+
+            <!-- Блок 2: Гемостаз и кровь -->
+            <div class="card">
+                <div class="card-title">🩸 Гемостаз и кровь</div>
+                <div class="hemostasis-grid" id="hemoGrid">
+                    <!-- заполняется скриптом -->
+                </div>
+                <div class="bleeding-risk critical" id="bleedingRisk">
+                    ⚠️ ВЫСОКИЙ РИСК КРОВОТЕЧЕНИЯ (МНО &gt; 3.0)
+                </div>
+            </div>
+
+            <!-- Блок 3: Органотоксичность и метаболизм -->
+            <div class="card">
+                <div class="card-title">🧪 Органотоксичность и метаболизм</div>
+                <div class="organ-grid" id="organGrid">
+                    <!-- заполняется скриптом -->
+                </div>
+            </div>
+
+            <!-- Блок 4: Инфекционный статус и антибиотикограмма -->
+            <div class="card full-width">
+                <div class="card-title">🦠 Инфекционный статус и антибиотикограмма</div>
+                <div style="display:grid; grid-template-columns: 1fr 2fr; gap:20px;">
+                    <div>
+                        <div style="font-weight:600; margin-bottom:6px;">Дерево культур</div>
+                        <div class="culture-tree">
+                            <div class="culture-item"><span>Кровь (15.06)</span> <span class="badge">Staphylococcus epidermidis</span></div>
+                            <div class="culture-item"><span>Мокрота (15.06)</span> <span class="badge">Citrobacter freundii</span> <span class="badge" style="background:#f0ad4e;">+ Candida glabrata</span></div>
+                            <div class="culture-item"><span>Моча (15.06)</span> <span class="badge neg">Роста нет</span></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-weight:600; margin-bottom:6px;">Матрица чувствительности</div>
+                        <table class="matrix-table">
+                            <thead>
+                                <tr><th>Антибиотик</th><th>Staph. epidermidis</th><th>Citrobacter freundii</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Ванкомицин</td><td class="s">S</td><td class="i">I</td></tr>
+                                <tr><td>Линезолид</td><td class="s">S</td><td class="r">R</td></tr>
+                                <tr><td>Оксациллин</td><td class="r">R</td><td class="r">R</td></tr>
+                                <tr><td>Меропенем</td><td class="i">I</td><td class="s">S</td></tr>
+                                <tr><td>Эртапенем</td><td class="r">R</td><td class="s">S</td></tr>
+                                <tr><td>Цефалоспорины</td><td class="r">R</td><td class="r">R</td></tr>
+                            </tbody>
+                        </table>
+                        <div style="font-size:11px; margin-top:4px; color:var(--text-muted);">S – чувствительный, I – промежуточный, R – резистентный</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок 5: Мониторинг мочи -->
+            <div class="card full-width">
+                <div class="card-title">🧻 Мониторинг мочи</div>
+                <div class="urine-grid" id="urineGrid">
+                    <!-- заполняется скриптом -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== СКРИПТЫ ===== -->
+<script>
+    (function() {
+        // -------------------- Данные для режима "во время операции" (таблица) --------------------
+        const labData = {
+            headers: ['12:00', '12:30', '13:00', '13:30', '14:00'],
+            rows: [
+                { param: 'pH', unit: '', values: ['7.45', '7.549', '7.52', '7.48', '7.50'], ref: [7.35, 7.45] },
+                { param: 'pCO₂', unit: 'мм рт.ст.', values: ['35', '31.5', '33', '34', '32'], ref: [35, 45] },
+                { param: 'pO₂', unit: 'мм рт.ст.', values: ['98', '122', '105', '110', '115'], ref: [80, 100] },
+                { param: 'Лактат', unit: 'ммоль/л', values: ['1.2', '2.0', '1.8', '1.5', '1.3'], ref: [0.5, 2.2] },
+                { param: 'K⁺', unit: 'ммоль/л', values: ['4.0', '3.8', '4.2', '3.9', '4.1'], ref: [3.5, 5.0] },
+                { param: 'Na⁺', unit: 'ммоль/л', values: ['142', '147', '145', '143', '146'], ref: [135, 145] },
+                { param: 'Ca²⁺', unit: 'ммоль/л', values: ['1.15', '0.67', '1.10', '1.05', '1.12'], ref: [1.0, 1.3] },
+                { param: 'Hb', unit: 'г/л', values: ['137', '94', '98', '102', '110'], ref: [120, 160] },
+                { param: 'Hct', unit: '%', values: ['42.1', '28.5', '30.2', '33.0', '35.5'], ref: [36, 48] },
+                { param: 'Тромбоциты', unit: '×10⁹/л', values: ['233', '181', '190', '195', '200'], ref: [180, 320] },
+                { param: 'МНО', unit: '', values: ['1.1', '3.475', '3.2', '2.8', '2.5'], ref: [0.8, 1.2] },
+                { param: 'Креатинин', unit: 'мкмоль/л', values: ['117', '97', '105', '110', '115'], ref: [44, 104] },
+                { param: 'Мочевина', unit: 'ммоль/л', values: ['24.4', '20.2', '21.5', '22.0', '23.0'], ref: [2.8, 8.3] },
+                { param: 'АСТ', unit: 'Ед/л', values: ['130.2', '125.9', '128.0', '132.0', '135.0'], ref: [0, 40] },
+                { param: 'АЛТ', unit: 'Ед/л', values: ['125.9', '120.0', '122.0', '126.0', '130.0'], ref: [0, 40] },
+                { param: 'Билирубин общий', unit: 'мкмоль/л', values: ['13.9', '12.5', '13.0', '14.0', '14.5'], ref: [3.4, 20.5] },
+                { param: 'Билирубин прямой', unit: 'мкмоль/л', values: ['9.6', '8.5', '9.0', '9.5', '10.0'], ref: [0, 6.8] }
+            ]
+        };
+
+        // Данные для дашборда (госпитализация) по датам
+        const hospData = {
+            '2026-06-12': {
+                urgent: { pH: '7.45', pCO2: '35', pO2: '98', lactate: '1.2', K: '4.0', Na: '142', Ca: '1.15' },
+                hemo: { Hb: '137', Hct: '42.1', MHO: '1.1', Platelets: '233', PTI: '98%' },
+                organ: { Creatinine: '117', Urea: '24.4', AST: '130.2', ALT: '125.9', BiliTotal: '13.9', BiliDirect: '9.6' },
+                urine: { RBC: 'Neg', Bacteria: '-', Protein: '-' }
+            },
+            '2026-06-13': {
+                urgent: { pH: '7.48', pCO2: '33', pO2: '105', lactate: '1.5', K: '4.2', Na: '145', Ca: '1.10' },
+                hemo: { Hb: '130', Hct: '39.5', MHO: '1.2', Platelets: '210', PTI: '95%' },
+                organ: { Creatinine: '120', Urea: '23.0', AST: '128.0', ALT: '122.0', BiliTotal: '14.0', BiliDirect: '9.0' },
+                urine: { RBC: 'Neg', Bacteria: '-', Protein: '1+' }
+            },
+            '2026-06-14': {
+                urgent: { pH: '7.50', pCO2: '32', pO2: '115', lactate: '1.8', K: '3.9', Na: '143', Ca: '1.05' },
+                hemo: { Hb: '110', Hct: '33.0', MHO: '1.5', Platelets: '190', PTI: '85%' },
+                organ: { Creatinine: '100', Urea: '21.0', AST: '125.0', ALT: '120.0', BiliTotal: '13.0', BiliDirect: '8.5' },
+                urine: { RBC: 'Neg', Bacteria: '(+)-', Protein: '1+' }
+            },
+            '2026-06-15': {
+                urgent: { pH: '7.549', pCO2: '31.5', pO2: '122', lactate: '2.0', K: '3.8', Na: '147', Ca: '0.67' },
+                hemo: { Hb: '94', Hct: '28.5', MHO: '3.475', Platelets: '181', PTI: '25.5%' },
+                organ: { Creatinine: '97', Urea: '20.2', AST: '130.2', ALT: '125.9', BiliTotal: '13.9', BiliDirect: '9.6' },
+                urine: { RBC: '40-50', Bacteria: '(+)', Protein: '2+' }
+            },
+            '2026-06-16': {
+                urgent: { pH: '7.48', pCO2: '34', pO2: '110', lactate: '1.6', K: '4.1', Na: '146', Ca: '1.12' },
+                hemo: { Hb: '102', Hct: '30.2', MHO: '2.8', Platelets: '195', PTI: '45%' },
+                organ: { Creatinine: '105', Urea: '22.0', AST: '132.0', ALT: '126.0', BiliTotal: '14.5', BiliDirect: '10.0' },
+                urine: { RBC: '20-30', Bacteria: '(+)-', Protein: '1+' }
+            },
+            '2026-06-17': {
+                urgent: { pH: '7.46', pCO2: '36', pO2: '100', lactate: '1.4', K: '4.3', Na: '144', Ca: '1.15' },
+                hemo: { Hb: '115', Hct: '34.5', MHO: '1.8', Platelets: '205', PTI: '78%' },
+                organ: { Creatinine: '110', Urea: '23.5', AST: '135.0', ALT: '130.0', BiliTotal: '15.0', BiliDirect: '11.0' },
+                urine: { RBC: '15-20', Bacteria: '(+)-', Protein: '2+' }
+            },
+            '2026-06-18': {
+                urgent: { pH: '7.44', pCO2: '37', pO2: '95', lactate: '1.1', K: '4.5', Na: '141', Ca: '1.20' },
+                hemo: { Hb: '120', Hct: '36.0', MHO: '1.3', Platelets: '215', PTI: '92%' },
+                organ: { Creatinine: '108', Urea: '22.5', AST: '128.0', ALT: '122.0', BiliTotal: '14.0', BiliDirect: '9.5' },
+                urine: { RBC: 'Neg', Bacteria: '-', Protein: '1+' }
+            },
+            '2026-06-19': {
+                urgent: { pH: '7.42', pCO2: '38', pO2: '90', lactate: '1.0', K: '4.2', Na: '140', Ca: '1.18' },
+                hemo: { Hb: '125', Hct: '37.5', MHO: '1.2', Platelets: '220', PTI: '96%' },
+                organ: { Creatinine: '112', Urea: '21.0', AST: '126.0', ALT: '120.0', BiliTotal: '13.5', BiliDirect: '9.0' },
+                urine: { RBC: 'Neg', Bacteria: '-', Protein: '-' }
+            }
+        };
+
+        // -------------------- DOM-ссылки --------------------
+        const btnOp = document.getElementById('btnOpMode');
+        const btnHosp = document.getElementById('btnHospMode');
+        const opView = document.getElementById('opModeView');
+        const hospView = document.getElementById('hospModeView');
+        const opLabBody = document.getElementById('opLabBody');
+        const urgentGrid = document.getElementById('urgentGrid');
+        const hemoGrid = document.getElementById('hemoGrid');
+        const organGrid = document.getElementById('organGrid');
+        const urineGrid = document.getElementById('urineGrid');
+        const bleedingRisk = document.getElementById('bleedingRisk');
+        const filterBtn = document.getElementById('btnFilterPathology');
+        const opDateInput = document.getElementById('opDate');
+        const opTimeInput = document.getElementById('opTime');
+        const hospSelect = document.getElementById('hospDateSelect');
+        const selectedOpMoment = document.getElementById('selectedOpMoment');
+        const opTimeControls = document.getElementById('opTimeControls');
+        const hospTimeControls = document.getElementById('hospTimeControls');
+
+        // -------------------- Функции для таблицы (режим операции) --------------------
+        function renderOpTable() {
+            const tbody = opLabBody;
+            tbody.innerHTML = '';
+            const headers = labData.headers;
+            labData.rows.forEach(row => {
+                const tr = document.createElement('tr');
+                // Ячейка с названием параметра
+                const tdLabel = document.createElement('td');
+                tdLabel.className = 'row-label';
+                tdLabel.textContent = `${row.param} (${row.unit})`;
+                tr.appendChild(tdLabel);
+
+                // Ячейки со значениями
+                row.values.forEach((val, idx) => {
+                    const td = document.createElement('td');
+                    const numVal = parseFloat(val);
+                    const refLow = row.ref[0];
+                    const refHigh = row.ref[1];
+                    let cssClass = 'value-normal';
+                    if (!isNaN(numVal) && refLow !== undefined && refHigh !== undefined) {
+                        if (numVal < refLow || numVal > refHigh) {
+                            cssClass = 'value-high';
+                        }
+                    }
+                    td.className = cssClass;
+                    td.textContent = val;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            // Обновить выбранный момент
+            const dateVal = opDateInput.value;
+            const timeVal = opTimeInput.value;
+            const displayDate = dateVal ? new Date(dateVal).toLocaleDateString('ru-RU') : '--.--.----';
+            selectedOpMoment.textContent = `${displayDate} ${timeVal || '--:--'}`;
+        }
+
+        // -------------------- Функции для дашборда (режим госпитализации) --------------------
+        function renderHospDashboard(dateKey) {
+            const data = hospData[dateKey];
+            if (!data) return;
+
+            // Urgent
+            urgentGrid.innerHTML = `
+                <div class="meter"><span class="value">${data.urgent.pH}</span><span class="label">pH</span><div class="scale"><div class="fill" style="width:85%; background:#5bc0de;"></div></div></div>
+                <div class="meter"><span class="value">${data.urgent.pCO2}</span><span class="label">pCO₂ (мм рт.ст.)</span><div class="scale"><div class="fill" style="width:45%;"></div></div></div>
+                <div class="meter"><span class="value">${data.urgent.pO2}</span><span class="label">pO₂ (мм рт.ст.)</span><div class="scale"><div class="fill" style="width:90%;"></div></div></div>
+                <div class="meter"><span class="value">${data.urgent.lactate}</span><span class="label">Лактат (ммоль/л)</span><div class="scale"><div class="fill" style="width:40%;"></div></div></div>
+                <div class="meter"><span class="value">${data.urgent.K}</span><span class="label">K⁺ (ммоль/л)</span><div class="scale"><div class="fill" style="width:60%;"></div></div></div>
+                <div class="meter"><span class="value">${data.urgent.Na}</span><span class="label">Na⁺ (ммоль/л)</span><div class="scale"><div class="fill" style="width:75%;"></div></div></div>
+                <div class="meter ${parseFloat(data.urgent.Ca) < 1.0 ? 'critical' : ''}">
+                    <span class="value">${data.urgent.Ca}</span>
+                    <span class="label">Ca²⁺ (ммоль/л) ${parseFloat(data.urgent.Ca) < 1.0 ? '⚠️' : ''}</span>
+                    <div class="scale"><div class="fill ${parseFloat(data.urgent.Ca) < 1.0 ? 'danger' : ''}" style="width:${parseFloat(data.urgent.Ca) * 100 / 1.3}%;"></div></div>
+                </div>
+            `;
+
+            // Гемостаз
+            hemoGrid.innerHTML = `
+                <div class="hemo-item"><div>Hb <span class="trend down">↓</span></div><div class="big-number">${data.hemo.Hb}</div><div style="font-size:11px; color:var(--text-muted);">было 137</div></div>
+                <div class="hemo-item"><div>Hct <span class="trend down">↓</span></div><div class="big-number">${data.hemo.Hct}</div><div style="font-size:11px; color:var(--text-muted);">было 42.1</div></div>
+                <div class="hemo-item"><div>МНО</div><div class="big-number" style="color:${parseFloat(data.hemo.MHO) > 3.0 ? '#d9534f' : '#333'};">${data.hemo.MHO}</div><div style="font-size:11px;">ПТИ ${data.hemo.PTI}</div></div>
+                <div class="hemo-item"><div>Тромбоциты <span class="trend down">↓</span></div><div class="big-number">${data.hemo.Platelets}</div><div style="font-size:11px; color:var(--text-muted);">было 233</div></div>
+            `;
+
+            // Риск кровотечения
+            const mno = parseFloat(data.hemo.MHO);
+            if (mno > 3.0) {
+                bleedingRisk.className = 'bleeding-risk critical';
+                bleedingRisk.innerHTML = `⚠️ ВЫСОКИЙ РИСК КРОВОТЕЧЕНИЯ (МНО ${data.hemo.MHO} > 3.0)`;
+            } else {
+                bleedingRisk.className = 'bleeding-risk';
+                bleedingRisk.innerHTML = `Риск кровотечения умеренный (МНО ${data.hemo.MHO})`;
+            }
+
+            // Органотоксичность
+            organGrid.innerHTML = `
+                <div class="organ-card">
+                    <div style="font-weight:600; margin-bottom:4px;">Почечный профиль</div>
+                    <div class="param"><span>Креатинин</span><span class="val ${parseFloat(data.organ.Creatinine) > 104 ? 'high' : 'normal'}">${data.organ.Creatinine} мкмоль/л</span></div>
+                    <div class="param"><span>Мочевина</span><span class="val ${parseFloat(data.organ.Urea) > 8.3 ? 'high' : 'normal'}">${data.organ.Urea} ммоль/л</span></div>
+                </div>
+                <div class="organ-card">
+                    <div style="font-weight:600; margin-bottom:4px;">Печеночный профиль</div>
+                    <div class="param"><span>АСТ</span><span class="val ${parseFloat(data.organ.AST) > 40 ? 'high' : 'normal'}">${data.organ.AST} Ед/л</span></div>
+                    <div class="param"><span>АЛТ</span><span class="val ${parseFloat(data.organ.ALT) > 40 ? 'high' : 'normal'}">${data.organ.ALT} Ед/л</span></div>
+                    <div class="param"><span>Билирубин общий</span><span class="val ${parseFloat(data.organ.BiliTotal) > 20.5 ? 'high' : 'normal'}">${data.organ.BiliTotal} мкмоль/л</span></div>
+                    <div class="param"><span>Билирубин прямой</span><span class="val ${parseFloat(data.organ.BiliDirect) > 6.8 ? 'high' : 'normal'}">${data.organ.BiliDirect} мкмоль/л</span></div>
+                </div>
+            `;
+
+            // Мониторинг мочи
+            urineGrid.innerHTML = `
+                <div class="urine-item"><div class="label">Эритроциты</div><div class="value ${data.urine.RBC !== 'Neg' ? 'danger' : ''}">${data.urine.RBC}</div><div style="font-size:10px; color:var(--text-muted);">${data.urine.RBC !== 'Neg' ? 'было Neg' : ''}</div></div>
+                <div class="urine-item"><div class="label">Бактериурия</div><div class="value ${data.urine.Bacteria !== '-' ? 'danger' : ''}">${data.urine.Bacteria}</div></div>
+                <div class="urine-item"><div class="label">Белок</div><div class="value ${data.urine.Protein !== '-' ? 'danger' : ''}">${data.urine.Protein}</div></div>
+            `;
+        }
+
+        // -------------------- Переключение режимов --------------------
+        function setMode(mode) {
+            if (mode === 'op') {
+                btnOp.classList.add('btn-active');
+                btnOp.classList.remove('btn-outline');
+                btnHosp.classList.remove('btn-active');
+                btnHosp.classList.add('btn-outline');
+                opView.style.display = 'block';
+                hospView.style.display = 'none';
+                opTimeControls.style.display = 'inline';
+                hospTimeControls.style.display = 'none';
+                renderOpTable();
+            } else {
+                btnHosp.classList.add('btn-active');
+                btnHosp.classList.remove('btn-outline');
+                btnOp.classList.remove('btn-active');
+                btnOp.classList.add('btn-outline');
+                opView.style.display = 'none';
+                hospView.style.display = 'block';
+                opTimeControls.style.display = 'none';
+                hospTimeControls.style.display = 'inline';
+                const selectedDate = hospSelect.value;
+                renderHospDashboard(selectedDate);
+            }
+        }
+
+        btnOp.addEventListener('click', () => setMode('op'));
+        btnHosp.addEventListener('click', () => setMode('hosp'));
+
+        // -------------------- Time Machine (операция) --------------------
+        opDateInput.addEventListener('change', renderOpTable);
+        opTimeInput.addEventListener('change', renderOpTable);
+
+        // -------------------- Time Machine (госпитализация) --------------------
+        hospSelect.addEventListener('change', function() {
+            renderHospDashboard(this.value);
+        });
+
+        // -------------------- Smart-фильтр "Только патология" --------------------
+        let filterActive = false;
+        filterBtn.addEventListener('click', function() {
+            filterActive = !filterActive;
+            this.classList.toggle('btn-active');
+            if (filterActive) {
+                this.textContent = 'Показать всё';
+                // Для таблицы: скрыть строки с нормальными значениями
+                if (opView.style.display !== 'none') {
+                    const rows = opLabBody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        let hasPathology = false;
+                        cells.forEach((td, idx) => {
+                            if (idx > 0 && td.classList.contains('value-high')) {
+                                hasPathology = true;
+                            }
+                        });
+                        if (!hasPathology) {
+                            row.classList.add('row-hidden');
+                        } else {
+                            row.classList.remove('row-hidden');
+                        }
+                    });
+                } else {
+                    // Для дашборда: скрыть блоки без критических значений
+                    document.querySelectorAll('.card').forEach(card => {
+                        const hasDanger = card.querySelector('.danger, .critical');
+                        if (!hasDanger) {
+                            card.style.display = 'none';
+                        }
+                    });
+                }
+            } else {
+                this.textContent = 'Только патология';
+                if (opView.style.display !== 'none') {
+                    opLabBody.querySelectorAll('tr').forEach(row => row.classList.remove('row-hidden'));
+                } else {
+                    document.querySelectorAll('.card').forEach(card => card.style.display = '');
+                }
+            }
+        });
+
+        // -------------------- Инициализация --------------------
+        // По умолчанию режим "во время операции"
+        setMode('op');
+
+        // Сворачивание панели пациента
+        const toggleBtn = document.getElementById('togglePatientBtn');
+        const patientBar = document.getElementById('patientBar');
+        toggleBtn.addEventListener('click', function() {
+            patientBar.classList.toggle('collapsed');
+            this.textContent = patientBar.classList.contains('collapsed') ? '▼ Показать' : '▲ Свернуть';
+        });
+
+        // Интеграция с листом назначений (клик по антибиотику)
+        document.querySelectorAll('.matrix-table tbody tr td:first-child').forEach(cell => {
+            cell.style.cursor = 'pointer';
+            cell.addEventListener('click', function() {
+                const antibiotic = this.textContent.trim();
+                alert(`Информация по антибиотику "${antibiotic}":\nЧувствительность к текущим штаммам отображается в таблице.`);
+            });
+        });
+    })();
+</script>
 </body>
 </html>
