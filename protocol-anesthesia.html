@@ -74,6 +74,42 @@
     <title>Протокол анестезии — VISTAMED</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+<!--Тест стиля для аккуратной адаптивной разметки полей-->
+<style>
+
+/* Основные стили для главной таблицы */
+table { width: 100%; border-collapse: collapse; }
+.field-label { width: 30%; text-align: left; vertical-align: top; padding: 8px; }
+td { padding: 8px; vertical-align: middle; }
+
+/* Стили для вложенной таблицы внутри ячеек */
+.inner-table { width: 100%; table-layout: fixed; }
+.inner-table td { padding: 2px 5px; }
+
+/* Обеспечиваем одинаковую ширину для всех 4-х колонок внутри */
+.col-1, .col-2, .col-3, .col-4 { width: 25%; }
+
+.inner-table label {
+    display: flex;
+    flex-direction: column; /* Подпись сверху, поле снизу - так аккуратнее */
+    font-size: 0.8rem;
+    color: #444;
+}
+.inner-table input, .inner-table select {
+    width: 100%;
+    padding: 4px;
+    box-sizing: border-box;
+}
+.col-33 { width: 33.33%; }
+.col-50 { width: 50%; }
+.col-100 { width: 100%; }
+.inner-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.inner-table td { padding: 4px; vertical-align: top; }
+.input-wrapper { display: flex; flex-direction: column; font-size: 0.85rem; }
+.input-wrapper label { margin-bottom: 2px; color: #555; }
+.input-wrapper input, .input-wrapper select, .input-wrapper textarea { width: 100%; padding: 4px; box-sizing: border-box; }
+</style>
+
 <body>
 
 <header class="top-nav">
@@ -131,84 +167,515 @@
     <div class="constructor-table" id="examForm">
         <table>
             <tbody>
-                <tr><th class="field-label">Дата выполнения</th><td><input type="datetime-local" id="examDate" value="2026-05-18T11:20"></td>
-                <tr><th class="field-label">Назначил</th><td><select id="assignedDoctor"><option value="В. А. Конашов" selected>А.Ю. Турчанинов</option><option value="А. И. Иванов">А. И. Иванов</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
-                <tr><th class="field-label">Исполнитель</th><td><select id="executorDoctor"><option value="В. А. Конашов" selected>А.Ю. Турчанинов</option><option value="А. И. Иванов">А. И. Иванов</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
-                <tr><th class="field-label">Уникальный номер</th><td><input type="text" id="uniqueNumber" value="1370"></td></tr>
-                <tr><th class="field-label">Операционная</th><td><input type="text" id="operationRoom" value="2"></td></tr>
-				
-				
-				
-				
-                <tr><th class="field-label">Хирург №1</th><td>
-				<select id="surgeon1"><option value="А. И. Иванов" selected>А. И. Иванов</option><option value="Е. Е. Петров">Е. Е. Петров</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
-                
-				<tr><th class="field-label">Хирург №2</th><td>
-				<select id="surgeon1"><option value="А. А. Другов" selected>А. А. Другов</option><option value="Е. Е. Петров">Е. Е. Петров</option><option value="М. П. Смирнова">М. П. Смирнова</option></select></td></tr>
-                <tr><th class="field-label">Операционная сестра</th><td><input type="text" id="operNurse" value="Ефремова Марина Николаевна"></td></tr>
-                <tr><th class="field-label">Анестезиолог №1</th><td><input type="text" id="anesthesiologist1" value="Конашов Владислав Алексеевич"></td></tr>
-                <tr><th class="field-label">Анестезиолог №2</th><td><input type="text" id="anesthesiologist2" value="Давыдов Сергей Николаевич"></td></tr>
-                <tr><th class="field-label">Медицинская сестра-анестезист №1</th><td><input type="text" id="nurseAnest1" value="Газизова Ирина Анатольевна"></td></tr>
-                <tr><th class="field-label">Медицинская сестра-анестезист №2</th><td><input type="text" id="nurseAnest2" value="Гайсина Лидия Рифовна"></td></tr>
-                <tr><th class="field-label">Премедикация</th><td><textarea id="premedication" rows="2">Накануне операции 22:00 Гидроксизина гидрохлорид 25 мг (аторакс) 1 таб внутрь, Пантопразол 20 мг 1 таб внутрь. В день операции: Морфин 10 мг/мл, 1 мл внутримышечно за 40 мин до операции</textarea></td></tr>
-                <tr><th class="field-label">Справочник операций для анестезиолога</th><td><input type="text" id="surgeryHandbook" value=""></td></tr>
-                <tr><th class="field-label">Вид анестезии</th><td><select id="anesthesiaType"><option value="эндотрахеальный наркоз" selected>эндотрахеальный наркоз</option><option value="внутривенный">внутривенный</option><option value="комбинированный">комбинированный</option></select></td></tr>
-                <tr><th class="field-label">Положение пациента на операционном столе</th><td><select id="patientPosition"><option value="горизонтально" selected>горизонтально</option><option value="Фовлера">Фовлера</option><option value="на боку">на боку</option></select></td></tr>
-                <tr><th class="field-label">Больной на столе (время)</th><td><input type="time" id="onTableTime" value="08:00"></td></tr>
-                <tr><th class="field-label">Начало анестезии (время)</th><td><input type="time" id="anesthesiaStart" value="08:20"></td></tr>
-                <tr><th class="field-label">Начало операции (время)</th><td><input type="time" id="operationStart" value="08:55"></td></tr>
-                <tr><th class="field-label">АД (начало)</th><td><input type="text" id="bpInitial" value="140\80"></td></tr>
-                <tr><th class="field-label">ЧСС (начало)</th><td><input type="number" id="hrInitial" value="88"></td></tr>
-                <tr><th class="field-label">SpO2</th><td><input type="number" id="spo2Initial" value="98"></td></tr>
-                <tr><th class="field-label">ЧП ЭХО</th><td><select id="echoCp"><option value="нет" selected>нет</option><option value="да">да</option></select></td></tr>
-                <tr><th class="field-label">Периф. доступ</th><td><input type="text" id="peripheralAccess" value="20 G справа"></td></tr>
-                <tr><th class="field-label">Внутренняя яремная вена</th><td><input type="text" id="ijvCannula" value="12\20 справа"></td></tr>
-                <tr><th class="field-label">Лучевая артерия</th><td><input type="text" id="radialArtery" value="22\80 справа"></td></tr>
-                <tr><th class="field-label">Индукция анестезии</th><td><input type="text" id="inductionDescription" value="плавная, преоксигенация"></td></tr>
-                <tr><th class="field-label">Индукция анестезии (гипнотик)</th><td><input type="text" id="inductionHypnotic" value="Пропофол 120 мг"></td></tr>
-                <tr><th class="field-label">Индукция анестезии (наркотический анальгетик)</th><td><input type="text" id="inductionOpioid" value="Фентанил 0,25 мг"></td></tr>
-                <tr><th class="field-label">Индукция анестезии (миоплегия)</th><td><input type="text" id="inductionMuscleRelax" value="Рокуроний 75 мг"></td></tr>
-                <tr><th class="field-label">Интубация трахеи</th><td><input type="text" id="intubation" value="оротрахеально, б/о"></td></tr>
-                <tr><th class="field-label">Класс по Маллампати</th><td><select id="mallampati"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select></td></tr>
-                <tr><th class="field-label">Интубация с попытки</th><td><input type="number" id="intubationAttempt" value="1"></td></tr>
-                <tr><th class="field-label">Эндотрахеальная трубка</th><td><input type="text" id="ettSize" value="8.0"></td></tr>
-                <tr><th class="field-label">ИВЛ</th><td><select id="ventilator"><option value="GE Avance" selected>GE Avance</option><option value="Drager">Drager</option></select></td></tr>
-                <tr><th class="field-label">Режим вентиляции</th><td><select id="ventilationMode"><option value="PCV VG" selected>PCV VG</option><option value="VCV">VCV</option><option value="SIMV">SIMV</option></select></td></tr>
-                <tr><th class="field-label">О2 (л/мин)</th><td><input type="text" id="o2Flow" value="1.4"></td></tr>
-                <tr><th class="field-label">Воздух (л/мин)</th><td><input type="text" id="airFlow" value="1.3"></td></tr>
-                <tr><th class="field-label">ДО</th><td><input type="number" id="tidalVolume" value="550"></td></tr>
-                <tr><th class="field-label">МОД</th><td><input type="text" id="minuteVolume" value="5.3"></td></tr>
-                <tr><th class="field-label">Пиковое давление, см. водяного столба</th><td><input type="number" id="peakPressure" value="14"></td></tr>
-                <tr><th class="field-label">FiO2</th><td><input type="number" id="fio2" value="70"></td></tr>
-                <tr><th class="field-label">I : E</th><td><input type="text" id="ieRatio" value="1:2"></td></tr>
-                <tr><th class="field-label">ПДКВ</th><td><input type="number" id="peep" value="5"></td></tr>
-                <tr><th class="field-label">Желудочный зонд</th><td><select id="gastricTube"><option value="да" selected>да</option><option value="нет">нет</option></select></td></tr>
-                <tr><th class="field-label">Поддержание анестезии (гипнотик)</th><td><input type="text" id="maintHypnotic" value="Пропофол 80 мг"></td></tr>
-                <tr><th class="field-label">Поддержание анестезии (ингаляционный анестетик)</th><td><input type="text" id="maintInhalation" value="Севофлюран 1-2% об."></td></tr>
-                <tr><th class="field-label">Поддержание анестезии (наркотический анальгетик)</th><td><input type="text" id="maintOpioid" value="Фентанил 1.25 мг"></td></tr>
-                <tr><th class="field-label">Поддержание анестезии (миоплегия)</th><td><input type="text" id="maintMuscleRelax" value="Рокуроний 75 мг"></td></tr>
-                <tr><th class="field-label">Течение анестезии</th><td><input type="text" id="anesthesiaCourse" value="См. особенности"></td></tr>
-                <tr><th class="field-label">Гемодинамика</th><td><textarea id="hemodynamics" rows="2">Гемодинамика стабильная, умеренная вазопрессорная поддержка норадреналином в дозировке 0,03-0,01 мкг*кг/мин. Ишемических явлений на кардиомониторе не выявлено. Ритм синусовый с частотой 62-88 уд/мин.</textarea></td></tr>
-                <tr><th class="field-label">АД</th><td><input type="text" id="bpIntra" value="126/72"></td></tr>
-                <tr><th class="field-label">ЧСС</th><td><input type="number" id="hrIntra" value="64"></td></tr>
-                <tr><th class="field-label">Поддержание гемодинамики</th><td><select id="hemodynamicSupport"><option value="БЕЗ ИНОТРОПНОЙ ПОДДЕРЖКИ" selected>БЕЗ ИНОТРОПНОЙ ПОДДЕРЖКИ</option><option value="норадреналин">норадреналин</option><option value="добутамин">добутамин</option></select></td></tr>
-                <tr><th class="field-label">Потребность</th><td><input type="number" id="fluidRequirement" value="550"></td></tr>
-                <tr><th class="field-label">Кровопотеря</th><td><input type="number" id="bloodLoss" value="200"></td></tr>
-                <tr><th class="field-label">Диурез</th><td><input type="number" id="diuresis" value="600"></td></tr>
-                <tr><th class="field-label">Всего потери</th><td><input type="number" id="totalLoss" value="1350"></td></tr>
-                <tr><th class="field-label">Солевые</th><td><input type="number" id="crystalloids" value="1500"></td></tr>
-                <tr><th class="field-label">Коллойдные</th><td><input type="number" id="colloids" value="500"></td></tr>
-                <tr><th class="field-label">Всего перелито</th><td><input type="number" id="totalInfused" value="2000"></td></tr>
-                <tr><th class="field-label">Баланс по протоколу</th><td><input type="number" id="balanceProtocol" value="650"></td></tr>
-                <tr><th class="field-label">Баланс по протоколу + Баланс за ИК</th><td><input type="number" id="balanceTotal" value="0"></td></tr>
-                <tr><th class="field-label">Особенности</th><td><input type="text" id="specialNotes" value="операция проводилась в условиях работающего сердца (off-pump)"></td></tr>
-                <tr><th class="field-label">Транспортирован в</th><td><select id="transferredTo"><option value="ОРиИТ" selected>ОРиИТ</option><option value="палата">палата</option></select></td></tr>
-                <tr><th class="field-label">Дыхание</th><td><select id="breathing"><option value="ПИВЛ" selected>ПИВЛ</option><option value="самостоятельное">самостоятельное</option></select></td></tr>
-                <tr><th class="field-label">Конец операции (время)</th><td><input type="time" id="operationEnd" value="11:10"></td></tr>
-                <tr><th class="field-label">Пробуждение</th><td><select id="awakening"><option value="в отделении реанимации и интенсивной терапии" selected>в отделении реанимации и интенсивной терапии</option><option value="в операционной">в операционной</option></select></td></tr>
-                <tr><th class="field-label">Особенности пробуждения</th><td><input type="text" id="awakeningDetails" value="пробуждения не проводилось"></td></tr>
-                <tr><th class="field-label">Декураризация</th><td><select id="decurarization"><option value="не проводилась" selected>не проводилась</option><option value="проведена">проведена</option></select></td></tr>
-            </tbody>
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 1. ОБЩИЕ СВЕДЕНИЯ -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Общие сведения</th>
+                </tr>
+                <!-- Дата выполнения (отдельно) -->
+                <tr>
+                    <th class="field-label">Дата выполнения</th>
+                    <td><input type="datetime-local" id="examDate" value="2026-05-18T11:20" style="width:100%;"></td>
+                </tr>
+                <!-- Назначил (отдельно) -->
+                <tr>
+                    <th class="field-label">Назначил</th>
+                    <td>
+                        <select id="assignedDoctor" style="width:100%;">
+                            <option value="А.Ю. Турчанинов" selected>А.Ю. Турчанинов</option>
+                            <option value="А. И. Иванов">А. И. Иванов</option>
+                            <option value="М. П. Смирнова">М. П. Смирнова</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- Исполнитель (отдельно) -->
+                <tr>
+                    <th class="field-label">Исполнитель</th>
+                    <td>
+                        <select id="executorDoctor" style="width:100%;">
+                            <option value="А.Ю. Турчанинов" selected>А.Ю. Турчанинов</option>
+                            <option value="А. И. Иванов">А. И. Иванов</option>
+                            <option value="М. П. Смирнова">М. П. Смирнова</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- Уникальный номер и Операционная (объединены) -->
+                <tr>
+                    <th class="field-label">Номер и операционная</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50"><div class="input-wrapper"><label>Уникальный номер</label><input type="text" id="uniqueNumber" value="1370"></div></td>
+                                <td class="col-50"><div class="input-wrapper"><label>Операционная</label><input type="text" id="operationRoom" value="2"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 2. ПЕРСОНАЛ (все поля – SELECT) -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Персонал</th>
+                </tr>
+                <!-- Хирурги (объединены) -->
+                <tr>
+                    <th class="field-label">Хирурги</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50"><div class="input-wrapper"><label>Хирург №1</label>
+                                    <select id="surgeon1">
+                                        <option value="А. И. Иванов" selected>А. И. Иванов</option>
+                                        <option value="Е. Е. Петров">Е. Е. Петров</option>
+                                        <option value="М. П. Смирнова">М. П. Смирнова</option>
+                                    </select>
+                                </div></td>
+                                <td class="col-50"><div class="input-wrapper"><label>Хирург №2</label>
+                                    <select id="surgeon2">
+                                        <option value="А. А. Другов" selected>А. А. Другов</option>
+                                        <option value="Е. Е. Петров">Е. Е. Петров</option>
+                                        <option value="М. П. Смирнова">М. П. Смирнова</option>
+                                    </select>
+                                </div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Операционная сестра (отдельно) -->
+                <tr>
+                    <th class="field-label">Операционная сестра</th>
+                    <td>
+                        <select id="operNurse" style="width:100%;">
+                            <option value="Ефремова Марина Николаевна" selected>Ефремова Марина Николаевна</option>
+                            <option value="Петрова Анна Ивановна">Петрова Анна Ивановна</option>
+                            <option value="Сидорова Ольга Петровна">Сидорова Ольга Петровна</option>
+                        </select>
+                    </td>
+                </tr>
+                <!-- Анестезиологи (объединены) -->
+                <tr>
+                    <th class="field-label">Анестезиологи</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50"><div class="input-wrapper"><label>Анестезиолог №1</label>
+                                    <select id="anesthesiologist1">
+                                        <option value="Конашов Владислав Алексеевич" selected>Конашов В.А.</option>
+                                        <option value="Давыдов Сергей Николаевич">Давыдов С.Н.</option>
+                                        <option value="Иванов Петр Сергеевич">Иванов П.С.</option>
+                                    </select>
+                                </div></td>
+                                <td class="col-50"><div class="input-wrapper"><label>Анестезиолог №2</label>
+                                    <select id="anesthesiologist2">
+                                        <option value="Давыдов Сергей Николаевич" selected>Давыдов С.Н.</option>
+                                        <option value="Конашов Владислав Алексеевич">Конашов В.А.</option>
+                                        <option value="Иванов Петр Сергеевич">Иванов П.С.</option>
+                                    </select>
+                                </div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Медицинские сёстры-анестезисты (объединены) -->
+                <tr>
+                    <th class="field-label">Медсёстры-анестезисты</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50"><div class="input-wrapper"><label>Медсестра-анестезист №1</label>
+                                    <select id="nurseAnest1">
+                                        <option value="Газизова Ирина Анатольевна" selected>Газизова И.А.</option>
+                                        <option value="Гайсина Лидия Рифовна">Гайсина Л.Р.</option>
+                                        <option value="Кузнецова Елена Викторовна">Кузнецова Е.В.</option>
+                                    </select>
+                                </div></td>
+                                <td class="col-50"><div class="input-wrapper"><label>Медсестра-анестезист №2</label>
+                                    <select id="nurseAnest2">
+                                        <option value="Гайсина Лидия Рифовна" selected>Гайсина Л.Р.</option>
+                                        <option value="Газизова Ирина Анатольевна">Газизова И.А.</option>
+                                        <option value="Кузнецова Елена Викторовна">Кузнецова Е.В.</option>
+                                    </select>
+                                </div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 3. ПРЕМЕДИКАЦИЯ И ОПЕРАЦИЯ -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Премедикация и операция</th>
+                </tr>
+                <!-- Премедикация (textarea, отдельно) -->
+                <tr>
+                    <th class="field-label">Премедикация</th>
+                    <td><textarea id="premedication" rows="2" style="width:100%;">Накануне операции 22:00 Гидроксизина гидрохлорид 25 мг (аторакс) 1 таб внутрь, Пантопразол 20 мг 1 таб внутрь. В день операции: Морфин 10 мг/мл, 1 мл внутримышечно за 40 мин до операции</textarea></td>
+                </tr>
+                <!-- Справочник операций (input, отдельно) -->
+                <tr>
+                    <th class="field-label">Справочник операций для анестезиолога</th>
+                    <td><input type="text" id="surgeryHandbook" value="" style="width:100%;"></td>
+                </tr>
+            
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 4. НАЧАЛО АНЕСТЕЗИИ -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Начало анестезии</th>
+                </tr>
+                <!-- Вид анестезии + Положение (оба select) -->
+                <tr>
+                    <th class="field-label">Вид и положение</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50"><div class="input-wrapper"><label>Вид анестезии</label>
+                                    <select id="anesthesiaType">
+                                        <option value="эндотрахеальный наркоз" selected>эндотрахеальный наркоз</option>
+                                        <option value="внутривенный">внутривенный</option>
+                                        <option value="комбинированный">комбинированный</option>
+                                    </select>
+                                </div></td>
+                                <td class="col-50"><div class="input-wrapper"><label>Положение пациента</label>
+                                    <select id="patientPosition">
+                                        <option value="горизонтально" selected>горизонтально</option>
+                                        <option value="Фовлера">Фовлера</option>
+                                        <option value="на боку">на боку</option>
+                                    </select>
+                                </div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Время (три time) -->
+                <tr>
+                    <th class="field-label">Время начальных этапов</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-33"><div class="input-wrapper"><label>Больной на столе</label><input type="time" id="onTableTime" value="08:00"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Начало анестезии</label><input type="time" id="anesthesiaStart" value="08:20"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Начало операции</label><input type="time" id="operationStart" value="08:55"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- АД + ЧСС + SpO2 + ЧП ЭХО -->
+                <tr>
+                    <th class="field-label">Витальные параметры (начало)</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-25"><div class="input-wrapper"><label>АД (начало)</label><input type="text" id="bpInitial" value="140\80"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>ЧСС (начало)</label><input type="number" id="hrInitial" value="88"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>SpO₂</label><input type="number" id="spo2Initial" value="98"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>ЧП ЭХО</label>
+                                    <select id="echoCp">
+                                        <option value="нет" selected>нет</option>
+                                        <option value="да">да</option>
+                                    </select>
+                                </div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 5. ДОСТУПЫ И ИНДУКЦИЯ -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Доступы и индукция</th>
+                </tr>
+                <!-- Доступы (три поля) -->
+                <tr>
+                    <th class="field-label">Сосудистые доступы</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-33"><div class="input-wrapper"><label>Периф. доступ</label><input type="text" id="peripheralAccess" value="20 G справа"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Внутренняя яремная вена</label><input type="text" id="ijvCannula" value="12\20 справа"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Лучевая артерия</label><input type="text" id="radialArtery" value="22\80 справа"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Индукция (описание) – отдельно -->
+                <tr>
+                    <th class="field-label">Индукция (описание)</th>
+                    <td><input type="text" id="inductionDescription" value="плавная, преоксигенация" style="width:100%;"></td>
+                </tr>
+                <!-- Индукция (препараты) – три поля -->
+                <tr>
+                    <th class="field-label">Индукция (препараты)</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-33"><div class="input-wrapper"><label>Гипнотик</label><input type="text" id="inductionHypnotic" value="Пропофол 120 мг"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Наркотический анальгетик</label><input type="text" id="inductionOpioid" value="Фентанил 0,25 мг"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Миоплегия</label><input type="text" id="inductionMuscleRelax" value="Рокуроний 75 мг"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 6. ИНТУБАЦИЯ И ИВЛ -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Интубация и ИВЛ</th>
+                </tr>
+                <!-- Интубация (описание, Маллампати, попытка, трубка) -->
+                <tr>
+                    <th class="field-label">Интубация</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-25"><div class="input-wrapper"><label>Интубация трахеи</label><input type="text" id="intubation" value="оротрахеально, б/о"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>Класс по Маллампати</label>
+                                    <select id="mallampati">
+                                        <option value="1">1</option>
+                                        <option value="2" selected>2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>Интубация с попытки</label><input type="number" id="intubationAttempt" value="1"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>Эндотрахеальная трубка</label><input type="text" id="ettSize" value="8.0"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- ИВЛ: аппарат + режим -->
+                <tr>
+                    <th class="field-label">ИВЛ (аппарат и режим)</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50"><div class="input-wrapper"><label>ИВЛ (аппарат)</label>
+                                    <select id="ventilator">
+                                        <option value="GE Avance" selected>GE Avance</option>
+                                        <option value="Drager">Drager</option>
+                                    </select>
+                                </div></td>
+                                <td class="col-50"><div class="input-wrapper"><label>Режим вентиляции</label>
+                                    <select id="ventilationMode">
+                                        <option value="PCV VG" selected>PCV VG</option>
+                                        <option value="VCV">VCV</option>
+                                        <option value="SIMV">SIMV</option>
+                                    </select>
+                                </div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Параметры вентиляции: О2, Воздух, ДО, МОД -->
+                <tr>
+                    <th class="field-label">ИВЛ (газы и объёмы)</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-25"><div class="input-wrapper"><label>О₂ (л/мин)</label><input type="text" id="o2Flow" value="1.4"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>Воздух (л/мин)</label><input type="text" id="airFlow" value="1.3"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>ДО</label><input type="number" id="tidalVolume" value="550"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>МОД</label><input type="text" id="minuteVolume" value="5.3"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Давление + FiO2 + I:E + ПДКВ -->
+                <tr>
+                    <th class="field-label">ИВЛ (давление и соотношения)</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-25"><div class="input-wrapper"><label>Пиковое давление (см вод. ст.)</label><input type="number" id="peakPressure" value="14"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>FiO₂</label><input type="number" id="fio2" value="70"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>I : E</label><input type="text" id="ieRatio" value="1:2"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>ПДКВ</label><input type="number" id="peep" value="5"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Желудочный зонд (select, отдельно) -->
+                <tr>
+                    <th class="field-label">Желудочный зонд</th>
+                    <td>
+                        <select id="gastricTube" style="width:100%;">
+                            <option value="да" selected>да</option>
+                            <option value="нет">нет</option>
+                        </select>
+                    </td>
+                </tr>
+            
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 7. ПОДДЕРЖАНИЕ АНЕСТЕЗИИ -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Поддержание анестезии</th>
+                </tr>
+                <!-- Препараты (4 поля) -->
+                <tr>
+                    <th class="field-label">Поддержание (препараты)</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-25"><div class="input-wrapper"><label>Гипнотик</label><input type="text" id="maintHypnotic" value="Пропофол 80 мг"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>Ингаляционный</label><input type="text" id="maintInhalation" value="Севофлюран 1-2% об."></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>Наркотический анальгетик</label><input type="text" id="maintOpioid" value="Фентанил 1.25 мг"></div></td>
+                                <td class="col-25"><div class="input-wrapper"><label>Миоплегия</label><input type="text" id="maintMuscleRelax" value="Рокуроний 75 мг"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Течение анестезии (отдельно) -->
+                <tr>
+                    <th class="field-label">Течение анестезии</th>
+                    <td><input type="text" id="anesthesiaCourse" value="См. особенности" style="width:100%;"></td>
+                </tr>
+            
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 8. ГЕМОДИНАМИКА И ИНФУЗИЯ -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Гемодинамика и инфузия</th>
+                </tr>
+                <!-- Гемодинамика (textarea, отдельно) -->
+                <tr>
+                    <th class="field-label">Гемодинамика</th>
+                    <td><textarea id="hemodynamics" rows="2" style="width:100%;">Гемодинамика стабильная, умеренная вазопрессорная поддержка норадреналином в дозировке 0,03-0,01 мкг*кг/мин. Ишемических явлений на кардиомониторе не выявлено. Ритм синусовый с частотой 62-88 уд/мин.</textarea></td>
+                </tr>
+                <!-- АД + ЧСС + Поддержание гемодинамики -->
+                <tr>
+                    <th class="field-label">Гемодинамика (интраоперационная)</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-33"><div class="input-wrapper"><label>АД</label><input type="text" id="bpIntra" value="126/72"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>ЧСС</label><input type="number" id="hrIntra" value="64"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Поддержание гемодинамики</label>
+                                    <select id="hemodynamicSupport">
+                                        <option value="БЕЗ ИНОТРОПНОЙ ПОДДЕРЖКИ" selected>БЕЗ ИНОТРОПНОЙ ПОДДЕРЖКИ</option>
+                                        <option value="норадреналин">норадреналин</option>
+                                        <option value="добутамин">добутамин</option>
+                                    </select>
+                                </div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Потребность (отдельно) -->
+                <tr>
+                    <th class="field-label">Потребность (жидкость)</th>
+                    <td><input type="number" id="fluidRequirement" value="550" style="width:100%;"></td>
+                </tr>
+                <!-- Потери: Кровопотеря + Диурез + Всего потери -->
+                <tr>
+                    <th class="field-label">Потери</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-33"><div class="input-wrapper"><label>Кровопотеря</label><input type="number" id="bloodLoss" value="200"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Диурез</label><input type="number" id="diuresis" value="600"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Всего потери</label><input type="number" id="totalLoss" value="1350"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Введение: Солевые + Коллойдные + Всего перелито -->
+                <tr>
+                    <th class="field-label">Инфузия (введение)</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-33"><div class="input-wrapper"><label>Солевые</label><input type="number" id="crystalloids" value="1500"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Коллойдные</label><input type="number" id="colloids" value="500"></div></td>
+                                <td class="col-33"><div class="input-wrapper"><label>Всего перелито</label><input type="number" id="totalInfused" value="2000"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Балансы: Баланс по протоколу + Баланс общий -->
+                <tr>
+                    <th class="field-label">Баланс</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50"><div class="input-wrapper"><label>Баланс по протоколу</label><input type="number" id="balanceProtocol" value="650"></div></td>
+                                <td class="col-50"><div class="input-wrapper"><label>Баланс общий (с ИК)</label><input type="number" id="balanceTotal" value="0"></div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Особенности (отдельно) -->
+                <tr>
+                    <th class="field-label">Особенности</th>
+                    <td><input type="text" id="specialNotes" value="операция проводилась в условиях работающего сердца (off-pump)" style="width:100%;"></td>
+                </tr>
+            
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 9. ОКОНЧАНИЕ АНЕСТЕЗИИ -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Окончание анестезии</th>
+                </tr>
+                <!-- Транспортирован в + Дыхание -->
+                <tr>
+                    <th class="field-label">Транспортировка и дыхание</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50"><div class="input-wrapper"><label>Транспортирован в</label>
+                                    <select id="transferredTo">
+                                        <option value="ОРиИТ" selected>ОРиИТ</option>
+                                        <option value="палата">палата</option>
+                                    </select>
+                                </div></td>
+                                <td class="col-50"><div class="input-wrapper"><label>Дыхание</label>
+                                    <select id="breathing">
+                                        <option value="ПИВЛ" selected>ПИВЛ</option>
+                                        <option value="самостоятельное">самостоятельное</option>
+                                    </select>
+                                </div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Конец операции + Пробуждение -->
+                <tr>
+                    <th class="field-label">Окончание операции и пробуждение</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50"><div class="input-wrapper"><label>Конец операции (время)</label><input type="time" id="operationEnd" value="11:10"></div></td>
+                                <td class="col-50"><div class="input-wrapper"><label>Пробуждение</label>
+                                    <select id="awakening">
+                                        <option value="в отделении реанимации и интенсивной терапии" selected>в ОРИТ</option>
+                                        <option value="в операционной">в операционной</option>
+                                    </select>
+                                </div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- Особенности пробуждения (отдельно) -->
+                <tr>
+                    <th class="field-label">Особенности пробуждения</th>
+                    <td><input type="text" id="awakeningDetails" value="пробуждения не проводилось" style="width:100%;"></td>
+                </tr>
+                <!-- Декураризация (отдельно) -->
+                <tr>
+                    <th class="field-label">Декураризация</th>
+                    <td>
+                        <select id="decurarization" style="width:100%;">
+                            <option value="не проводилась" selected>не проводилась</option>
+                            <option value="проведена">проведена</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody> 
         </table>
     </div>
 
