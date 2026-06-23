@@ -65,8 +65,8 @@
         <button class="scale-btn" data-scale="30">30 мин</button>
         <button class="scale-btn" data-scale="60">1 час</button>
     </div>
-    <div class="param"><span>Операция:</span><strong> Аортокоронарное шунтирование</strong></div>
-    <div class="param"><span>Операционная:</span><strong> № 3</strong></div>
+    <div class="param"><span>Операция:</span><strong>Аортокоронарное шунтирование</strong></div>
+    <div class="param"><span>Операционная:</span><strong>№ 3</strong></div>
     <div class="time-status">
         <div><label>Начало операции:</label><br><strong>09:15 18.05.2026, вт</strong></div>
         <div style="margin-left:20px;"><label style="color:var(--primary-green);">Идет операция:</label><br><strong style="color:var(--primary-green);" id="currentOperationTime">01:31:24</strong></div>
@@ -147,8 +147,6 @@
 <!-- Модальные окна -->
 <div id="stageModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить этап операции</span><span class="close-modal" data-modal="stageModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Этап</label><select id="stageSelect"></select></div><div class="form-field"><label>Время (ЧЧ:ММ)</label><input type="text" id="stageTime"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelStageBtn">Отмена</button><button class="btn btn-green" id="saveStageBtn">Сохранить</button></div></div></div>
 <div id="vitalModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Ввод показателя</span><span class="close-modal" data-modal="vitalModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Показатель</label><input type="text" id="vitalParam" readonly></div><div class="form-field"><label>Время</label><input type="text" id="vitalTime" readonly></div><div class="form-field"><label>Значение</label><input type="text" id="vitalValue"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelVitalBtn">Отмена</button><button class="btn btn-green" id="saveVitalBtn">Сохранить</button></div></div></div>
-
-<!-- ОБНОВЛЁННОЕ МОДАЛЬНОЕ ОКНО ДЛЯ ИМН (списание со склада) -->
 <div id="imnModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -192,7 +190,6 @@
         </div>
     </div>
 </div>
-
 <div id="drugRegisterModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Зарегистрировать введение</span><span class="close-modal" data-modal="drugRegisterModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Препарат</label><input type="text" id="regDrugName" readonly></div><div class="form-field"><label>Формат</label><select id="regFormat"><option>разовое</option><option>непрерывное</option></select></div><div class="form-field"><label>Доза</label><input type="text" id="regDose"> <select id="regUnit" style="width:80px;"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div><div class="form-field"><label>Время (мин от 09:00) / Start-End</label><input type="text" id="regTime"></div><div class="form-field" id="regSpeedRow"><label>Скорость (мл/ч)</label><input type="text" id="regSpeed"></div><div class="form-field"><label>Способ введения</label><select id="regRoute"><option>в/в</option><option>в/м</option><option>эпидурально</option><option>ингаляционно</option><option>подкожно</option></select></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelDrugRegBtn">Отмена</button><button class="btn btn-green" id="confirmDrugRegBtn">Зарегистрировать</button></div></div></div>
 <div id="addPlanModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить в план</span><span class="close-modal" data-modal="addPlanModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Название препарата</label><input type="text" id="planName"></div><div class="form-field"><label>Формат</label><select id="planFormat"><option value="single">Разовое</option><option value="continuous">Непрерывное</option></select></div><div class="form-field"><label>Доза</label><input type="text" id="planDose"></div><div class="form-field"><label>Единица</label><select id="planUnit"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div><div class="form-field"><label>Время / Start-End</label><input type="text" id="planTime" placeholder="например 30 или 30-150"></div><div class="form-field" id="planSpeedRow"><label>Скорость (мл/ч)</label><input type="text" id="planSpeed"></div><div class="form-field"><label>Способ введения</label><select id="planRoute"><option>в/в</option><option>в/м</option><option>эпидурально</option><option>ингаляционно</option><option>подкожно</option></select></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelPlanModalBtn">Отмена</button><button class="btn btn-green" id="savePlanModalBtn">Сохранить в план</button></div></div></div>
 
@@ -418,7 +415,7 @@
                     openVitalModal(param, minutesToTime(minutes), minutes);
                 });
             });
-            // ИМН - теперь открывает окно списания
+            // ИМН
             document.querySelectorAll('.imn-row .time-slot').forEach(slot=>{
                 slot.addEventListener('click',()=>{
                     let idx=slot.closest('.imn-row').getAttribute('data-imn-idx');
@@ -465,7 +462,6 @@
             window._vitalCallback=(val)=>{ if(val?.trim()){ if(!vitalData[param]) vitalData[param]={}; vitalData[param][minutes]=val; buildTable(); } };
         }
         function openImnModal(idx, timeStr, minutes){
-            // Заполняем select и количество
             document.getElementById('imnSelect').selectedIndex = 0;
             document.getElementById('imnQuantity').value = 1;
             document.getElementById('imnTime').value = timeStr;
@@ -475,7 +471,6 @@
                     if(!imnData[idx]) imnData[idx]={};
                     imnData[idx][minutes]=displayStr;
                     buildTable();
-                    // Симуляция списания со склада
                     console.log(`Списано со склада: ${displayStr}`);
                     alert(`Списано со склада: ${displayStr}`);
                 }
@@ -670,11 +665,16 @@
                     if(view==='anesthesia'){
                         anesthesiaView.style.display='block';
                         planView.style.display='none';
+                        document.querySelector('.right-panel').style.display = 'block';  // показать правую панель
                         buildTable(); addCurrentLine();
                     }else if(view==='plan'){
                         anesthesiaView.style.display='none';
                         planView.style.display='block';
+                        document.querySelector('.right-panel').style.display = 'none';   // скрыть правую панель
                         renderPlanTable();
+                    }else{
+                        // для других вкладок (если они есть) показываем правую панель по умолчанию
+                        document.querySelector('.right-panel').style.display = 'block';
                     }
                 });
             });
