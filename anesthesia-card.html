@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карта анестезии — VISTAMED</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .icd-code {
+            font-weight: 700;
+            color: #0056b3;
+            background: #e9ecef;
+            padding: 0 4px;
+            border-radius: 3px;
+            margin-right: 6px;
+        }
+        .diagnosis-short {
+            font-weight: 400;
+        }
+        .expand-diagnosis {
+            cursor: help;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
 
@@ -36,7 +53,7 @@
             <strong title="ИБС: Безболевая ишемия миокарда. Бинодальная болезнь: синдром слабости синусового узла: хронотропная некомпетентность САУ, синусовая брадикардия, ранзиторная АВ блокады 2 степени Мобитц 1. Транзиторная АВ-блокада 1 степени. Имплантация двухкамерного ЭКС Medtronic Attesta DR MRI (S/N FNB327276G) от 23/04/2026. Гипертоническая болезнь III стадии, неконтролируемая артериальная гипертензия, целевые значения АД менее 130/80 мм.рт.ст. Сердечный риск 4 (очень высокий дополнительный). Пароксизмальная атриовентрикулярная узловая ре-ентри тахикардия, вариант slow-fast. Радиочастотная катетерная аблация &quot;медленных путей&quot; атриовентрикулярного соединения (04.10.2017г). СКФ 74,1 мл/мин/1,73 м2 по CKD-EPI. Осложнение основного заболевания: ХСН предстадия ФВЛЖ 57%.">
                 <span class="icd-code">I20.8</span>
                 <span class="diagnosis-short">ИБС: Безболевая ишемия миокарда.</span>
-                <span class="expand-diagnosis" style="cursor:help; color:#888;">ⓘ</span>
+                <span class="expand-diagnosis">ⓘ</span>
             </strong>
         </div>
         <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
@@ -47,21 +64,16 @@
     <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
 </div>
 
-
-
 <nav class="tabs-nav">
-
     <a href="consents.html" class="tab-item">Согласия</a>
     <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
     <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
     <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
-    <a href="anesthesia-card.html" class="tab-item active">Карта анестезии</a>
+    <a href="anesthesia-card.html" class="tab-item active" data-tab="anesthesia">Карта анестезии</a>
     <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
     <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
     <a href="analyses.html" class="tab-item">Анализы</a>
-
     <div class="tab-item" data-tab="plan">План лекарственного сопровождения</div>
-
 </nav>
 
 <div class="control-bar">
@@ -73,7 +85,7 @@
         <button class="scale-btn" data-scale="60">1 час</button>
     </div>
     <div class="param"><span>Операция:</span><strong> КАГ</strong></div>
-    <div class="param"><span>Операционная:</span><strong> № 2</strong></div>
+    <div class="param"><span>Операционная:</span><strong>№ 2</strong></div>
     <div class="time-status">
         <div><label>Начало операции:</label><br><strong>09:15 18.05.2026, вт</strong></div>
         <div style="margin-left:20px;"><label style="color:var(--primary-green);">Идет операция:</label><br><strong style="color:var(--primary-green);" id="currentOperationTime">01:31:24</strong></div>
@@ -120,25 +132,17 @@
             <h4>Установка катетеров</h4>
             <div class="person-schema" id="catheterSchema">
                 <svg class="person-svg" viewBox="0 0 200 300">
-                    <!-- Голова -->
                     <circle cx="100" cy="40" r="20" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
-                    <!-- Шея/ключица (центральный катетер) -->
                     <circle cx="100" cy="75" r="12" class="catheter-point" data-catheter="central" data-name="Центральный катетер"/>
-                    <!-- Туловище -->
                     <rect x="70" y="90" width="60" height="100" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
-                    <!-- Рука левая (периферический) -->
                     <line x1="70" y1="100" x2="35" y2="120" stroke="#999" stroke-width="3"/>
                     <circle cx="35" cy="120" r="8" class="catheter-point" data-catheter="peripheral" data-name="Периферический катетер (левая рука)"/>
-                    <!-- Рука правая (периферический) -->
                     <line x1="130" y1="100" x2="165" y2="120" stroke="#999" stroke-width="3"/>
                     <circle cx="165" cy="120" r="8" class="catheter-point" data-catheter="peripheral" data-name="Периферический катетер (правая рука)"/>
-                    <!-- Нога левая (артериальный) -->
                     <line x1="85" y1="190" x2="70" y2="240" stroke="#999" stroke-width="3"/>
                     <circle cx="70" cy="240" r="8" class="catheter-point" data-catheter="arterial" data-name="Артериальный катетер (левая нога)"/>
-                    <!-- Нога правая (артериальный) -->
                     <line x1="115" y1="190" x2="130" y2="240" stroke="#999" stroke-width="3"/>
                     <circle cx="130" cy="240" r="8" class="catheter-point" data-catheter="arterial" data-name="Артериальный катетер (правая нога)"/>
-                    <!-- Пах (доп. центральный/артериальный) -->
                     <circle cx="100" cy="170" r="8" class="catheter-point" data-catheter="femoral" data-name="Бедренный катетер"/>
                 </svg>
             </div>
@@ -149,72 +153,37 @@
     </div>
 </div>
 
-<div id="planView" style="display:none;">
-    <!-- Блок выбора шаблона -->
-<div class="template-section" style="margin-bottom: 16px; padding: 12px; background: #f0f4f8; border-radius: 6px;">
-    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-        <label for="templateSelect" style="font-weight: 600;">Шаблон пособия:</label>
-        <select id="templateSelect" style="padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; flex: 1; min-width: 200px;">
-            <option value="">-- Выберите шаблон --</option>
-            <option value="general">Общая анестезия с ИВЛ</option>
-            <option value="spinal">Спинальная анестезия</option>
-            <option value="epidural">Эпидуральная анестезия</option>
-            <option value="sedation">Седация (пропофол+фентанил)</option>
-            <option value="regional">Регионарная блокада</option>
-        </select>
-        <button class="btn btn-green" id="applyTemplateBtn">Применить шаблон</button>
-        <button class="btn btn-outline" id="saveTemplateBtn">Сохранить текущий план как шаблон</button>
-    </div>
-    <div style="margin-top: 6px; font-size: 0.9rem; color: #555;">
-        <span id="templateStatus">Выберите шаблон и нажмите «Применить» – он заменит текущий план.</span>
-    </div>
-</div>
-</div>
+<div id="planView" style="display:none;"></div>
 
 <!-- Модальные окна -->
 <div id="stageModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить этап операции</span><span class="close-modal" data-modal="stageModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Этап</label><select id="stageSelect"></select></div><div class="form-field"><label>Время (ЧЧ:ММ)</label><input type="text" id="stageTime"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelStageBtn">Отмена</button><button class="btn btn-green" id="saveStageBtn">Сохранить</button></div></div></div>
 <div id="vitalModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Ввод показателя</span><span class="close-modal" data-modal="vitalModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Показатель</label><input type="text" id="vitalParam" readonly></div><div class="form-field"><label>Время</label><input type="text" id="vitalTime" readonly></div><div class="form-field"><label>Значение</label><input type="text" id="vitalValue"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelVitalBtn">Отмена</button><button class="btn btn-green" id="saveVitalBtn">Сохранить</button></div></div></div>
 <div id="imnModal" class="modal">
     <div class="modal-content">
-        <div class="modal-header">
-            <span>Списание ИМН со склада</span>
-            <span class="close-modal" data-modal="imnModal">&times;</span>
-        </div>
+        <div class="modal-header"><span>Списание ИМН со склада</span><span class="close-modal" data-modal="imnModal">&times;</span></div>
         <div class="modal-body">
-            <div class="form-field">
-                <label>Инструмент / расходник</label>
-                <select id="imnSelect">
-                    <option value="Скальпель №10">Скальпель №10</option>
-                    <option value="Скальпель №15">Скальпель №15</option>
-                    <option value="Зажим Кохера">Зажим Кохера</option>
-                    <option value="Зажим Бильрота">Зажим Бильрота</option>
-                    <option value="Иглодержатель">Иглодержатель</option>
-                    <option value="Пинцет анатомический">Пинцет анатомический</option>
-                    <option value="Пинцет хирургический">Пинцет хирургический</option>
-                    <option value="Ножницы">Ножницы</option>
-                    <option value="Кровоостанавливающий зажим">Кровоостанавливающий зажим</option>
-                    <option value="Троакар">Троакар</option>
-                    <option value="Эндоскопические ножницы">Эндоскопические ножницы</option>
-                    <option value="Эндоскопический зажим">Эндоскопический зажим</option>
-                    <option value="Шовный материал (викрил)">Шовный материал (викрил)</option>
-                    <option value="Шовный материал (пролен)">Шовный материал (пролен)</option>
-                    <option value="Марлевые салфетки">Марлевые салфетки</option>
-                    <option value="Дренажная трубка">Дренажная трубка</option>
-                </select>
-            </div>
-            <div class="form-field">
-                <label>Количество</label>
-                <input type="number" id="imnQuantity" value="1" min="1" step="1">
-            </div>
-            <div class="form-field">
-                <label>Время</label>
-                <input type="text" id="imnTime" readonly>
-            </div>
+            <div class="form-field"><label>Инструмент / расходник</label><select id="imnSelect">
+                <option value="Скальпель №10">Скальпель №10</option>
+                <option value="Скальпель №15">Скальпель №15</option>
+                <option value="Зажим Кохера">Зажим Кохера</option>
+                <option value="Зажим Бильрота">Зажим Бильрота</option>
+                <option value="Иглодержатель">Иглодержатель</option>
+                <option value="Пинцет анатомический">Пинцет анатомический</option>
+                <option value="Пинцет хирургический">Пинцет хирургический</option>
+                <option value="Ножницы">Ножницы</option>
+                <option value="Кровоостанавливающий зажим">Кровоостанавливающий зажим</option>
+                <option value="Троакар">Троакар</option>
+                <option value="Эндоскопические ножницы">Эндоскопические ножницы</option>
+                <option value="Эндоскопический зажим">Эндоскопический зажим</option>
+                <option value="Шовный материал (викрил)">Шовный материал (викрил)</option>
+                <option value="Шовный материал (пролен)">Шовный материал (пролен)</option>
+                <option value="Марлевые салфетки">Марлевые салфетки</option>
+                <option value="Дренажная трубка">Дренажная трубка</option>
+            </select></div>
+            <div class="form-field"><label>Количество</label><input type="number" id="imnQuantity" value="1" min="1" step="1"></div>
+            <div class="form-field"><label>Время</label><input type="text" id="imnTime" readonly></div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" id="cancelImnBtn">Отмена</button>
-            <button class="btn btn-green" id="saveImnBtn">Списать</button>
-        </div>
+        <div class="modal-footer"><button class="btn btn-outline" id="cancelImnBtn">Отмена</button><button class="btn btn-green" id="saveImnBtn">Списать</button></div>
     </div>
 </div>
 <div id="drugRegisterModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Зарегистрировать введение</span><span class="close-modal" data-modal="drugRegisterModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Препарат</label><input type="text" id="regDrugName" readonly></div><div class="form-field"><label>Формат</label><select id="regFormat"><option>разовое</option><option>непрерывное</option></select></div><div class="form-field"><label>Доза</label><input type="text" id="regDose"> <select id="regUnit" style="width:80px;"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div><div class="form-field"><label>Время (мин от 09:00) / Start-End</label><input type="text" id="regTime"></div><div class="form-field" id="regSpeedRow"><label>Скорость (мл/ч)</label><input type="text" id="regSpeed"></div><div class="form-field"><label>Способ введения</label><select id="regRoute"><option>в/в</option><option>в/м</option><option>эпидурально</option><option>ингаляционно</option><option>подкожно</option></select></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelDrugRegBtn">Отмена</button><button class="btn btn-green" id="confirmDrugRegBtn">Зарегистрировать</button></div></div></div>
@@ -251,7 +220,8 @@
         let imnData = {};
         let plannedDrugsList = [];
         let nextPlanId = 1;
-        // Шаблоны анестезиологического пособия
+
+        // Шаблоны
         const TEMPLATES = {
             general: {
                 name: 'Общая анестезия с ИВЛ',
@@ -294,6 +264,7 @@
                 ]
             }
         };
+
         let timelineTable, anesthesiaView, planView;
         
         const stageOptions = [
@@ -617,7 +588,6 @@
                 container = planView.querySelector('.plan-container');
             }
 
-            // --- Блок шаблонов ---
             let templateHtml = `
                 <div class="template-section" style="margin-bottom: 16px; padding: 12px; background: #f0f4f8; border-radius: 6px;">
                     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
@@ -639,7 +609,6 @@
                 </div>
             `;
 
-            // --- Таблица с препаратами ---
             let tableHtml = `
                 <div style="margin-bottom:10px;">
                     <button class="btn btn-green" id="addPlanRowBtn">+ Добавить в план</button>
@@ -655,7 +624,6 @@
 
             container.innerHTML = templateHtml + tableHtml;
 
-            // Заполняем таблицу
             let tbody = document.getElementById('planTbody');
             tbody.innerHTML = '';
             plannedDrugsList.forEach((p, idx) => {
@@ -675,39 +643,23 @@
                 row.insertCell(7).appendChild(delBtn);
             });
 
-            // --- Обработчики событий для шаблонов ---
+            // Обработчики шаблонов
             document.getElementById('applyTemplateBtn')?.addEventListener('click', function() {
                 let select = document.getElementById('templateSelect');
                 let key = select.value;
-                if (!key) {
-                    alert('Выберите шаблон из списка.');
-                    return;
-                }
-                if (!TEMPLATES[key]) {
-                    alert('Шаблон не найден.');
-                    return;
-                }
-                if (plannedDrugsList.length > 0) {
-                    if (!confirm('Текущий план будет заменён. Продолжить?')) return;
-                }
-                // Заменяем план
+                if (!key) { alert('Выберите шаблон из списка.'); return; }
+                if (!TEMPLATES[key]) { alert('Шаблон не найден.'); return; }
+                if (plannedDrugsList.length > 0 && !confirm('Текущий план будет заменён. Продолжить?')) return;
                 let template = TEMPLATES[key];
-                plannedDrugsList = template.drugs.map(d => ({
-                    id: nextPlanId++,
-                    ...d
-                }));
+                plannedDrugsList = template.drugs.map(d => ({ id: nextPlanId++, ...d }));
                 renderPlanTable();
                 document.getElementById('templateStatus').innerText = `✅ Применён шаблон «${template.name}» (${plannedDrugsList.length} препаратов).`;
             });
 
             document.getElementById('saveTemplateBtn')?.addEventListener('click', function() {
-                if (plannedDrugsList.length === 0) {
-                    alert('План пуст. Добавьте препараты.');
-                    return;
-                }
+                if (plannedDrugsList.length === 0) { alert('План пуст. Добавьте препараты.'); return; }
                 let name = prompt('Введите название нового шаблона:');
                 if (!name) return;
-                // Сохраняем как пользовательский шаблон (в localStorage или в переменную)
                 let customKey = 'custom_' + Date.now();
                 TEMPLATES[customKey] = {
                     name: name,
@@ -721,36 +673,48 @@
                         route: p.route
                     }))
                 };
-                // Добавляем в выпадающий список
                 let select = document.getElementById('templateSelect');
                 let option = document.createElement('option');
                 option.value = customKey;
                 option.textContent = '📁 ' + name;
                 select.appendChild(option);
                 document.getElementById('templateStatus').innerText = `✅ Шаблон «${name}» сохранён.`;
-                alert(`Шаблон «${name}» сохранён. Вы можете выбрать его из списка.`);
+                alert(`Шаблон «${name}» сохранён.`);
             });
 
-            // Кнопка "Добавить в план"
             document.getElementById('addPlanRowBtn')?.addEventListener('click', openAddPlanModal);
         }
         
+        // ИСПРАВЛЕННАЯ ФУНКЦИЯ ПРИМЕНЕНИЯ ПЛАНА
         function applyPlanToCard(){
-            let newPlanned=[];
-            plannedDrugsList.forEach(p=>{
-                if(p.format==='single'){
-                    let minutes=parseInt(p.timeOrStartEnd);
-                    if(!isNaN(minutes)) newPlanned.push({ id:p.id, name:p.name, format:'single', minutes, dose:p.dose, unit:p.unit, route:p.route });
-                }else{
-                    let parts=p.timeOrStartEnd.split('-');
-                    if(parts.length===2){
-                        let start=parseInt(parts[0]), end=parseInt(parts[1]);
-                        if(!isNaN(start)&&!isNaN(end)) newPlanned.push({ id:p.id, name:p.name, format:'continuous', start, end, dose:p.dose, unit:p.unit, speed:p.speed, route:p.route });
+            let newPlanned = [];
+            plannedDrugsList.forEach(p => {
+                if(p.format === 'single'){
+                    let minutes = parseInt(p.timeOrStartEnd);
+                    if(!isNaN(minutes)) newPlanned.push({ id: p.id, name: p.name, format: 'single', minutes, dose: p.dose, unit: p.unit, route: p.route });
+                } else {
+                    let parts = p.timeOrStartEnd.split('-');
+                    if(parts.length === 2){
+                        let start = parseInt(parts[0]), end = parseInt(parts[1]);
+                        if(!isNaN(start) && !isNaN(end)) newPlanned.push({ id: p.id, name: p.name, format: 'continuous', start, end, dose: p.dose, unit: p.unit, speed: p.speed, route: p.route });
                     }
                 }
             });
-            plannedElements=newPlanned;
-            buildTable();
+            plannedElements = newPlanned;
+            
+            // Автоматически переключаемся на вкладку "Карта анестезии"
+            const cardTab = Array.from(document.querySelectorAll('.tab-item')).find(t => t.textContent.trim() === 'Карта анестезии');
+            if (cardTab) {
+                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                cardTab.classList.add('active');
+                anesthesiaView.style.display = 'block';
+                planView.style.display = 'none';
+                document.querySelector('.right-panel').style.display = 'block';
+                buildTable();
+                addCurrentLine();
+            } else {
+                buildTable();
+            }
             alert(`План применён: ${newPlanned.length} препаратов`);
         }
         
@@ -820,29 +784,30 @@
                 });
             });
             document.getElementById('addStageBtn')?.addEventListener('click',()=>openStageModal(minutesToTime(106)));
-            document.getElementById('applyPlanBtn')?.addEventListener('click',applyPlanToCard);
+            document.getElementById('applyPlanBtn')?.addEventListener('click', applyPlanToCard);
             document.getElementById('addDrugBtn')?.addEventListener('click',()=>alert('Окно ввода препарата (можно расширить)'));
+            
             document.querySelectorAll('.tab-item').forEach(tab=>{
                 tab.addEventListener('click',()=>{
                     document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
                     tab.classList.add('active');
                     let view=tab.getAttribute('data-tab');
-                    if(view==='anesthesia'){
+                    if(view==='anesthesia' || tab.textContent.trim() === 'Карта анестезии'){
                         anesthesiaView.style.display='block';
                         planView.style.display='none';
-                        document.querySelector('.right-panel').style.display = 'block';  // показать правую панель
+                        document.querySelector('.right-panel').style.display = 'block';
                         buildTable(); addCurrentLine();
-                    }else if(view==='plan'){
+                    }else if(view==='plan' || tab.textContent.trim() === 'План лекарственного сопровождения'){
                         anesthesiaView.style.display='none';
                         planView.style.display='block';
-                        document.querySelector('.right-panel').style.display = 'none';   // скрыть правую панель
+                        document.querySelector('.right-panel').style.display = 'none';
                         renderPlanTable();
                     }else{
-                        // для других вкладок (если они есть) показываем правую панель по умолчанию
                         document.querySelector('.right-panel').style.display = 'block';
                     }
                 });
             });
+            
             // Закрытие модальных окон
             document.querySelectorAll('.close-modal').forEach(btn=>{
                 btn.addEventListener('click',()=>{
