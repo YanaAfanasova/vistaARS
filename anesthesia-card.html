@@ -56,6 +56,7 @@
                 <span class="expand-diagnosis">ⓘ</span>
             </strong>
         </div>
+
         <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
     </div>
     <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
@@ -85,7 +86,7 @@
         <button class="scale-btn" data-scale="60">1 час</button>
     </div>
     <div class="param"><span>Операция:</span><strong> КАГ</strong></div>
-    <div class="param"><span>Операционная:</span><strong>№ 2</strong></div>
+    <div class="param"><span>Операционная:</span><strong> № 2</strong></div>
     <div class="time-status">
         <div><label>Начало операции:</label><br><strong>09:15 18.05.2026, вт</strong></div>
         <div style="margin-left:20px;"><label style="color:var(--primary-green);">Идет операция:</label><br><strong style="color:var(--primary-green);" id="currentOperationTime">01:31:24</strong></div>
@@ -100,7 +101,7 @@
 
 <div class="main-layout">
     <div id="anesthesiaView" class="timeline-wrapper">
-        <div class="timeline-table" id="timelineTable"></div>
+        <div class="timeline-table" id="timelineTable" style="position:relative;"></div>
     </div>
     <div class="right-panel">
         <!-- Форма моментального добавления показателя -->
@@ -215,7 +216,7 @@
             { id: "nacl", name: "Натрия хлорид 0.9%", detail: "100 мл/ч", segments: [{ start: 30, end: 195, height: 12, css: "nacl-seg", tooltip: "100 мл/ч" }] }
         ];
         let plannedElements = [];
-        let stages = [];
+        let stages = [];  // будет заполнен в init статичными этапами
         let vitalData = {};
         let imnData = {};
         let plannedDrugsList = [];
@@ -288,7 +289,7 @@
         function timeToMinutes(timeStr) { let [h,m]=timeStr.split(':'); if(isNaN(h)||isNaN(m)) return null; return (h-9)*60 + +m; }
         function minutesToTime(minutes) { let h=Math.floor(minutes/60)+9, m=minutes%60; return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; }
         
-        // Отрисовка
+        // Отрисовка инфузионных сегментов
         function drawInfusionSegments() {
             const wrapper = anesthesiaView?.querySelector('.timeline-table');
             if (!wrapper) return;
@@ -358,7 +359,65 @@
                 }
             });
         }
-        
+
+        // ----- НОВАЯ ФУНКЦИЯ ДЛЯ ОТРИСОВКИ ЛИНИЙ ЭТАПОВ -----
+        function drawStageLines() {
+            const table = document.getElementById('timelineTable');
+            if (!table) return;
+            // Удаляем старый контейнер, если есть
+            const oldContainer = table.querySelector('.stage-lines-container');
+            if (oldContainer) oldContainer.remove();
+
+            // Создаём контейнер для линий
+            const container = document.createElement('div');
+            container.className = 'stage-lines-container';
+            container.style.position = 'absolute';
+            container.style.top = '0';
+            container.style.left = '0';
+            container.style.width = '100%';
+            container.style.height = '100%';
+            container.style.pointerEvents = 'none'; // чтобы клики проходили сквозь
+            table.appendChild(container);
+
+            const leftColWidth = 260;
+            const tableWidth = table.getBoundingClientRect().width;
+            const timeAreaWidth = tableWidth - leftColWidth;
+            if (timeAreaWidth <= 0) return;
+
+            // Находим строку этапов, чтобы определить смещение сверху
+            const stagesRow = document.querySelector('.stages-row');
+            let topOffset = 0;
+            if (stagesRow) {
+                const rowRect = stagesRow.getBoundingClientRect();
+                const tableRect = table.getBoundingClientRect();
+                topOffset = rowRect.top - tableRect.top;
+                // небольшая корректировка, чтобы линия начиналась от середины строки
+                topOffset += 4; // чуть ниже верхней границы
+            } else {
+                topOffset = 30; // запасное значение
+            }
+
+            stages.forEach(stage => {
+                const minutes = stage.minutes;
+                if (minutes < 0 || minutes > TOTAL_MIN) return;
+                const left = leftColWidth + (minutes / TOTAL_MIN) * timeAreaWidth;
+                const line = document.createElement('div');
+                line.className = 'stage-line';
+                line.style.position = 'absolute';
+                line.style.left = left + 'px';
+                line.style.top = topOffset + 'px';
+                line.style.bottom = '0';
+                line.style.width = '2px';
+                line.style.borderLeft = '2px dashed #90EE90';
+                line.style.pointerEvents = 'auto';
+                line.style.cursor = 'default';
+                line.style.zIndex = '10';
+                line.title = stage.text; // всплывающая подсказка
+                container.appendChild(line);
+            });
+        }
+        // ---------------------------------------------
+
         function buildTable() {
             let labels = getTimeLabels(currentScale);
             let cols = labels.length;
@@ -435,6 +494,8 @@
             attachEvents();
             drawInfusionSegments();
             drawPlannedElements();
+            // Рисуем линии этапов после обновления таблицы
+            drawStageLines();
         }
         
         function attachEvents(){
@@ -685,7 +746,6 @@
             document.getElementById('addPlanRowBtn')?.addEventListener('click', openAddPlanModal);
         }
         
-        // ИСПРАВЛЕННАЯ ФУНКЦИЯ ПРИМЕНЕНИЯ ПЛАНА
         function applyPlanToCard(){
             let newPlanned = [];
             plannedDrugsList.forEach(p => {
@@ -702,7 +762,6 @@
             });
             plannedElements = newPlanned;
             
-            // Автоматически переключаемся на вкладку "Карта анестезии"
             const cardTab = Array.from(document.querySelectorAll('.tab-item')).find(t => t.textContent.trim() === 'Карта анестезии');
             if (cardTab) {
                 document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
@@ -774,6 +833,19 @@
             anesthesiaView=document.getElementById('anesthesiaView');
             planView=document.getElementById('planView');
             if(!timelineTable) return;
+
+            // --- Добавляем статичные этапы (логически до красной линии) ---
+            stages = [
+                { minutes: 0, text: "Больной на столе" },
+                { minutes: 5, text: "Индукция анестезии" },
+                { minutes: 10, text: "Интубация трахеи" },
+                { minutes: 20, text: "Кожный разрез" },
+                { minutes: 60, text: "Начало ИК" },
+                { minutes: 90, text: "Конец ИК" },
+                { minutes: 120, text: "Конец операции" }
+            ];
+            // -------------------------------------------------
+
             buildTable(); addCurrentLine();
             document.querySelectorAll('.scale-btn').forEach(btn=>{
                 btn.addEventListener('click',()=>{
