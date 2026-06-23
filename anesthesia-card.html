@@ -145,7 +145,52 @@
 <!-- Модальные окна -->
 <div id="stageModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить этап операции</span><span class="close-modal" data-modal="stageModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Этап</label><select id="stageSelect"></select></div><div class="form-field"><label>Время (ЧЧ:ММ)</label><input type="text" id="stageTime"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelStageBtn">Отмена</button><button class="btn btn-green" id="saveStageBtn">Сохранить</button></div></div></div>
 <div id="vitalModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Ввод показателя</span><span class="close-modal" data-modal="vitalModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Показатель</label><input type="text" id="vitalParam" readonly></div><div class="form-field"><label>Время</label><input type="text" id="vitalTime" readonly></div><div class="form-field"><label>Значение</label><input type="text" id="vitalValue"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelVitalBtn">Отмена</button><button class="btn btn-green" id="saveVitalBtn">Сохранить</button></div></div></div>
-<div id="imnModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Инструмент / расходник</span><span class="close-modal" data-modal="imnModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Инструмент</label><input type="text" id="imnText"></div><div class="form-field"><label>Время</label><input type="text" id="imnTime" readonly></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelImnBtn">Отмена</button><button class="btn btn-green" id="saveImnBtn">Сохранить</button></div></div></div>
+
+<!-- ОБНОВЛЁННОЕ МОДАЛЬНОЕ ОКНО ДЛЯ ИМН (списание со склада) -->
+<div id="imnModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Списание ИМН со склада</span>
+            <span class="close-modal" data-modal="imnModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-field">
+                <label>Инструмент / расходник</label>
+                <select id="imnSelect">
+                    <option value="Скальпель №10">Скальпель №10</option>
+                    <option value="Скальпель №15">Скальпель №15</option>
+                    <option value="Зажим Кохера">Зажим Кохера</option>
+                    <option value="Зажим Бильрота">Зажим Бильрота</option>
+                    <option value="Иглодержатель">Иглодержатель</option>
+                    <option value="Пинцет анатомический">Пинцет анатомический</option>
+                    <option value="Пинцет хирургический">Пинцет хирургический</option>
+                    <option value="Ножницы">Ножницы</option>
+                    <option value="Кровоостанавливающий зажим">Кровоостанавливающий зажим</option>
+                    <option value="Троакар">Троакар</option>
+                    <option value="Эндоскопические ножницы">Эндоскопические ножницы</option>
+                    <option value="Эндоскопический зажим">Эндоскопический зажим</option>
+                    <option value="Шовный материал (викрил)">Шовный материал (викрил)</option>
+                    <option value="Шовный материал (пролен)">Шовный материал (пролен)</option>
+                    <option value="Марлевые салфетки">Марлевые салфетки</option>
+                    <option value="Дренажная трубка">Дренажная трубка</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>Количество</label>
+                <input type="number" id="imnQuantity" value="1" min="1" step="1">
+            </div>
+            <div class="form-field">
+                <label>Время</label>
+                <input type="text" id="imnTime" readonly>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="cancelImnBtn">Отмена</button>
+            <button class="btn btn-green" id="saveImnBtn">Списать</button>
+        </div>
+    </div>
+</div>
+
 <div id="drugRegisterModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Зарегистрировать введение</span><span class="close-modal" data-modal="drugRegisterModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Препарат</label><input type="text" id="regDrugName" readonly></div><div class="form-field"><label>Формат</label><select id="regFormat"><option>разовое</option><option>непрерывное</option></select></div><div class="form-field"><label>Доза</label><input type="text" id="regDose"> <select id="regUnit" style="width:80px;"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div><div class="form-field"><label>Время (мин от 09:00) / Start-End</label><input type="text" id="regTime"></div><div class="form-field" id="regSpeedRow"><label>Скорость (мл/ч)</label><input type="text" id="regSpeed"></div><div class="form-field"><label>Способ введения</label><select id="regRoute"><option>в/в</option><option>в/м</option><option>эпидурально</option><option>ингаляционно</option><option>подкожно</option></select></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelDrugRegBtn">Отмена</button><button class="btn btn-green" id="confirmDrugRegBtn">Зарегистрировать</button></div></div></div>
 <div id="addPlanModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить в план</span><span class="close-modal" data-modal="addPlanModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Название препарата</label><input type="text" id="planName"></div><div class="form-field"><label>Формат</label><select id="planFormat"><option value="single">Разовое</option><option value="continuous">Непрерывное</option></select></div><div class="form-field"><label>Доза</label><input type="text" id="planDose"></div><div class="form-field"><label>Единица</label><select id="planUnit"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div><div class="form-field"><label>Время / Start-End</label><input type="text" id="planTime" placeholder="например 30 или 30-150"></div><div class="form-field" id="planSpeedRow"><label>Скорость (мл/ч)</label><input type="text" id="planSpeed"></div><div class="form-field"><label>Способ введения</label><select id="planRoute"><option>в/в</option><option>в/м</option><option>эпидурально</option><option>ингаляционно</option><option>подкожно</option></select></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelPlanModalBtn">Отмена</button><button class="btn btn-green" id="savePlanModalBtn">Сохранить в план</button></div></div></div>
 
@@ -333,7 +378,7 @@
             });
             // ИМН
             let imns=['Лапароскопические инструменты','Зажимы, иглодержатели'];
-            html+=`<div style="background:#f8f9fc; padding:4px 12px;">ИМН</div>`;
+            html+=`<div style="background:#f8f9fc; padding:4px 12px;">ИМН (списание со склада)</div>`;
             imns.forEach((imn,idx)=>{
                 html+=`<div class="data-row imn-row" data-imn-idx="${idx}"><div class="row-label">${imn}</div>`;
                 for(let i=0;i<cols;i++){
@@ -371,7 +416,7 @@
                     openVitalModal(param, minutesToTime(minutes), minutes);
                 });
             });
-            // ИМН
+            // ИМН - теперь открывает окно списания
             document.querySelectorAll('.imn-row .time-slot').forEach(slot=>{
                 slot.addEventListener('click',()=>{
                     let idx=slot.closest('.imn-row').getAttribute('data-imn-idx');
@@ -418,10 +463,21 @@
             window._vitalCallback=(val)=>{ if(val?.trim()){ if(!vitalData[param]) vitalData[param]={}; vitalData[param][minutes]=val; buildTable(); } };
         }
         function openImnModal(idx, timeStr, minutes){
-            document.getElementById('imnText').value='';
-            document.getElementById('imnTime').value=timeStr;
+            // Заполняем select и количество
+            document.getElementById('imnSelect').selectedIndex = 0;
+            document.getElementById('imnQuantity').value = 1;
+            document.getElementById('imnTime').value = timeStr;
             document.getElementById('imnModal').style.display='flex';
-            window._imnCallback=(txt)=>{ if(txt?.trim()){ if(!imnData[idx]) imnData[idx]={}; imnData[idx][minutes]=txt; buildTable(); } };
+            window._imnCallback=(displayStr)=>{
+                if(displayStr?.trim()){
+                    if(!imnData[idx]) imnData[idx]={};
+                    imnData[idx][minutes]=displayStr;
+                    buildTable();
+                    // Симуляция списания со склада
+                    console.log(`Списано со склада: ${displayStr}`);
+                    alert(`Списано со склада: ${displayStr}`);
+                }
+            };
         }
         function openDrugRegisterFromPlan(plan){
             document.getElementById('regDrugName').value=plan.name;
@@ -642,8 +698,10 @@
             });
             document.getElementById('cancelImnBtn')?.addEventListener('click',()=>document.getElementById('imnModal').style.display='none');
             document.getElementById('saveImnBtn')?.addEventListener('click',()=>{
-                let txt=document.getElementById('imnText').value;
-                if(window._imnCallback) window._imnCallback(txt);
+                let tool = document.getElementById('imnSelect').value;
+                let qty = document.getElementById('imnQuantity').value;
+                let displayStr = `${tool} x${qty}`;
+                if(window._imnCallback) window._imnCallback(displayStr);
                 document.getElementById('imnModal').style.display='none';
             });
             document.getElementById('cancelDrugRegBtn')?.addEventListener('click',()=>document.getElementById('drugRegisterModal').style.display='none');
