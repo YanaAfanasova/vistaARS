@@ -149,7 +149,27 @@
     </div>
 </div>
 
-<div id="planView" style="display:none;"></div>
+<div id="planView" style="display:none;">
+    <!-- Блок выбора шаблона -->
+<div class="template-section" style="margin-bottom: 16px; padding: 12px; background: #f0f4f8; border-radius: 6px;">
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <label for="templateSelect" style="font-weight: 600;">Шаблон пособия:</label>
+        <select id="templateSelect" style="padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; flex: 1; min-width: 200px;">
+            <option value="">-- Выберите шаблон --</option>
+            <option value="general">Общая анестезия с ИВЛ</option>
+            <option value="spinal">Спинальная анестезия</option>
+            <option value="epidural">Эпидуральная анестезия</option>
+            <option value="sedation">Седация (пропофол+фентанил)</option>
+            <option value="regional">Регионарная блокада</option>
+        </select>
+        <button class="btn btn-green" id="applyTemplateBtn">Применить шаблон</button>
+        <button class="btn btn-outline" id="saveTemplateBtn">Сохранить текущий план как шаблон</button>
+    </div>
+    <div style="margin-top: 6px; font-size: 0.9rem; color: #555;">
+        <span id="templateStatus">Выберите шаблон и нажмите «Применить» – он заменит текущий план.</span>
+    </div>
+</div>
+</div>
 
 <!-- Модальные окна -->
 <div id="stageModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить этап операции</span><span class="close-modal" data-modal="stageModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Этап</label><select id="stageSelect"></select></div><div class="form-field"><label>Время (ЧЧ:ММ)</label><input type="text" id="stageTime"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelStageBtn">Отмена</button><button class="btn btn-green" id="saveStageBtn">Сохранить</button></div></div></div>
@@ -231,7 +251,49 @@
         let imnData = {};
         let plannedDrugsList = [];
         let nextPlanId = 1;
-        
+        // Шаблоны анестезиологического пособия
+        const TEMPLATES = {
+            general: {
+                name: 'Общая анестезия с ИВЛ',
+                drugs: [
+                    { name: 'Пропофол', format: 'single', dose: '200', unit: 'мг', timeOrStartEnd: '5', route: 'в/в' },
+                    { name: 'Фентанил', format: 'single', dose: '0.1', unit: 'мг', timeOrStartEnd: '5', route: 'в/в' },
+                    { name: 'Рокуроний', format: 'single', dose: '50', unit: 'мг', timeOrStartEnd: '7', route: 'в/в' },
+                    { name: 'Севафлуран', format: 'continuous', dose: '2', unit: 'об.%', timeOrStartEnd: '10-180', speed: '2', route: 'ингаляционно' },
+                    { name: 'Ремифентанил', format: 'continuous', dose: '0.2', unit: 'мкг/кг/мин', timeOrStartEnd: '15-180', speed: '0.2', route: 'в/в' }
+                ]
+            },
+            spinal: {
+                name: 'Спинальная анестезия',
+                drugs: [
+                    { name: 'Маркаин 0.5% гипербарический', format: 'single', dose: '15', unit: 'мг', timeOrStartEnd: '0', route: 'субарахноидально' },
+                    { name: 'Фентанил', format: 'single', dose: '0.025', unit: 'мг', timeOrStartEnd: '0', route: 'субарахноидально' },
+                    { name: 'Натрия хлорид 0.9%', format: 'continuous', dose: '100', unit: 'мл/ч', timeOrStartEnd: '0-180', speed: '100', route: 'в/в' }
+                ]
+            },
+            epidural: {
+                name: 'Эпидуральная анестезия',
+                drugs: [
+                    { name: 'Ропивакаин 0.2%', format: 'continuous', dose: '10', unit: 'мл/ч', timeOrStartEnd: '10-180', speed: '10', route: 'эпидурально' },
+                    { name: 'Фентанил', format: 'continuous', dose: '2', unit: 'мкг/мл', timeOrStartEnd: '10-180', speed: '2', route: 'эпидурально' }
+                ]
+            },
+            sedation: {
+                name: 'Седация (пропофол+фентанил)',
+                drugs: [
+                    { name: 'Пропофол', format: 'continuous', dose: '100', unit: 'мг/ч', timeOrStartEnd: '5-180', speed: '100', route: 'в/в' },
+                    { name: 'Фентанил', format: 'single', dose: '0.05', unit: 'мг', timeOrStartEnd: '5', route: 'в/в' }
+                ]
+            },
+            regional: {
+                name: 'Регионарная блокада (плечевое сплетение)',
+                drugs: [
+                    { name: 'Лидокаин 2%', format: 'single', dose: '400', unit: 'мг', timeOrStartEnd: '0', route: 'периневрально' },
+                    { name: 'Маркаин 0.5%', format: 'single', dose: '150', unit: 'мг', timeOrStartEnd: '0', route: 'периневрально' },
+                    { name: 'Натрия хлорид 0.9%', format: 'continuous', dose: '80', unit: 'мл/ч', timeOrStartEnd: '0-180', speed: '80', route: 'в/в' }
+                ]
+            }
+        };
         let timelineTable, anesthesiaView, planView;
         
         const stageOptions = [
@@ -549,31 +611,127 @@
         
         function renderPlanTable(){
             if(!planView) return;
-            let container=planView.querySelector('.plan-container');
-            if(!container){ planView.innerHTML=`<div class="plan-container"></div>`; container=planView.querySelector('.plan-container'); }
-            container.innerHTML=`
+            let container = planView.querySelector('.plan-container');
+            if(!container){ 
+                planView.innerHTML = `<div class="plan-container"></div>`;
+                container = planView.querySelector('.plan-container');
+            }
+
+            // --- Блок шаблонов ---
+            let templateHtml = `
+                <div class="template-section" style="margin-bottom: 16px; padding: 12px; background: #f0f4f8; border-radius: 6px;">
+                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                        <label for="templateSelect" style="font-weight: 600;">Шаблон пособия:</label>
+                        <select id="templateSelect" style="padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; flex: 1; min-width: 200px;">
+                            <option value="">-- Выберите шаблон --</option>
+                            <option value="general">Общая анестезия с ИВЛ</option>
+                            <option value="spinal">Спинальная анестезия</option>
+                            <option value="epidural">Эпидуральная анестезия</option>
+                            <option value="sedation">Седация (пропофол+фентанил)</option>
+                            <option value="regional">Регионарная блокада</option>
+                        </select>
+                        <button class="btn btn-green" id="applyTemplateBtn">Применить шаблон</button>
+                        <button class="btn btn-outline" id="saveTemplateBtn">Сохранить текущий план как шаблон</button>
+                    </div>
+                    <div style="margin-top: 6px; font-size: 0.9rem; color: #555;">
+                        <span id="templateStatus">Выберите шаблон и нажмите «Применить» – он заменит текущий план.</span>
+                    </div>
+                </div>
+            `;
+
+            // --- Таблица с препаратами ---
+            let tableHtml = `
                 <div style="margin-bottom:10px;">
                     <button class="btn btn-green" id="addPlanRowBtn">+ Добавить в план</button>
                     <span class="sub-text" style="margin-left:10px;">Запланируйте препараты, затем нажмите "Применить план в карту"</span>
                 </div>
-                <div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse;"><thead><tr><th>Название</th><th>Формат</th><th>Доза</th><th>Ед.</th><th>Время / Start-End</th><th>Скорость</th><th>Способ</th><th></th></tr></thead><tbody id="planTbody"></tbody></table></div>
+                <div style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead><tr><th>Название</th><th>Формат</th><th>Доза</th><th>Ед.</th><th>Время / Start-End</th><th>Скорость</th><th>Способ</th><th></th></tr></thead>
+                        <tbody id="planTbody"></tbody>
+                    </table>
+                </div>
             `;
-            let tbody=document.getElementById('planTbody');
-            tbody.innerHTML='';
-            plannedDrugsList.forEach((p,idx)=>{
-                let row=tbody.insertRow();
-                row.insertCell(0).innerText=p.name;
-                row.insertCell(1).innerText=p.format;
-                row.insertCell(2).innerText=p.dose;
-                row.insertCell(3).innerText=p.unit;
-                row.insertCell(4).innerText=p.timeOrStartEnd;
-                row.insertCell(5).innerText=p.speed||'';
-                row.insertCell(6).innerText=p.route;
-                let delBtn=document.createElement('button');
-                delBtn.innerText='Удалить'; delBtn.className='btn-outline'; delBtn.style.padding='2px 6px';
-                delBtn.onclick=()=>{ plannedDrugsList.splice(idx,1); renderPlanTable(); };
+
+            container.innerHTML = templateHtml + tableHtml;
+
+            // Заполняем таблицу
+            let tbody = document.getElementById('planTbody');
+            tbody.innerHTML = '';
+            plannedDrugsList.forEach((p, idx) => {
+                let row = tbody.insertRow();
+                row.insertCell(0).innerText = p.name;
+                row.insertCell(1).innerText = p.format;
+                row.insertCell(2).innerText = p.dose;
+                row.insertCell(3).innerText = p.unit;
+                row.insertCell(4).innerText = p.timeOrStartEnd;
+                row.insertCell(5).innerText = p.speed || '';
+                row.insertCell(6).innerText = p.route;
+                let delBtn = document.createElement('button');
+                delBtn.innerText = 'Удалить';
+                delBtn.className = 'btn-outline';
+                delBtn.style.padding = '2px 6px';
+                delBtn.onclick = () => { plannedDrugsList.splice(idx, 1); renderPlanTable(); };
                 row.insertCell(7).appendChild(delBtn);
             });
+
+            // --- Обработчики событий для шаблонов ---
+            document.getElementById('applyTemplateBtn')?.addEventListener('click', function() {
+                let select = document.getElementById('templateSelect');
+                let key = select.value;
+                if (!key) {
+                    alert('Выберите шаблон из списка.');
+                    return;
+                }
+                if (!TEMPLATES[key]) {
+                    alert('Шаблон не найден.');
+                    return;
+                }
+                if (plannedDrugsList.length > 0) {
+                    if (!confirm('Текущий план будет заменён. Продолжить?')) return;
+                }
+                // Заменяем план
+                let template = TEMPLATES[key];
+                plannedDrugsList = template.drugs.map(d => ({
+                    id: nextPlanId++,
+                    ...d
+                }));
+                renderPlanTable();
+                document.getElementById('templateStatus').innerText = `✅ Применён шаблон «${template.name}» (${plannedDrugsList.length} препаратов).`;
+            });
+
+            document.getElementById('saveTemplateBtn')?.addEventListener('click', function() {
+                if (plannedDrugsList.length === 0) {
+                    alert('План пуст. Добавьте препараты.');
+                    return;
+                }
+                let name = prompt('Введите название нового шаблона:');
+                if (!name) return;
+                // Сохраняем как пользовательский шаблон (в localStorage или в переменную)
+                let customKey = 'custom_' + Date.now();
+                TEMPLATES[customKey] = {
+                    name: name,
+                    drugs: plannedDrugsList.map(p => ({
+                        name: p.name,
+                        format: p.format,
+                        dose: p.dose,
+                        unit: p.unit,
+                        timeOrStartEnd: p.timeOrStartEnd,
+                        speed: p.speed || '',
+                        route: p.route
+                    }))
+                };
+                // Добавляем в выпадающий список
+                let select = document.getElementById('templateSelect');
+                let option = document.createElement('option');
+                option.value = customKey;
+                option.textContent = '📁 ' + name;
+                select.appendChild(option);
+                document.getElementById('templateStatus').innerText = `✅ Шаблон «${name}» сохранён.`;
+                alert(`Шаблон «${name}» сохранён. Вы можете выбрать его из списка.`);
+            });
+
+            // Кнопка "Добавить в план"
             document.getElementById('addPlanRowBtn')?.addEventListener('click', openAddPlanModal);
         }
         
