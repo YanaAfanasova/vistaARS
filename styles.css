@@ -963,6 +963,8 @@ td { padding: 8px; vertical-align: middle; }
     color: #333;
 }
 
+
+
 @media print {
     body * { visibility: hidden; }
     #real-print-area,
