@@ -1,70 +1,3 @@
-<!--
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Получение НС и ПВ — VISTAMED</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
-<header class="top-nav">
-    <div class="logo-section">
-        <span class="logo-text">Виста-МЕД</span>
-        <span class="logo-tag">АРС</span>
-        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
-    </div>
-    <div class="user-section">
-        <div class="doctor-meta">
-            <div class="doctor-name">Турчанинов А.Ю.</div>
-            <div class="doctor-specialty">Анестезиолог</div>
-        </div>
-        <div class="user-avatar">АЮ</div>
-    </div>
-</header>
-
-<div class="patient-bar" id="patientBar">
-    <div class="patient-data">
-        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
-        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
-        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
-        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
-        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
-        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
-        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
-        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
-    </div>
-    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
-</div>
-<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
-    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
-</div>
-
-<nav class="tabs-nav">
-    <a href="consents.html" class="tab-item">Согласия</a>
-    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
-    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
-    <a href="ns-and-pv.html" class="tab-item active">Получение НС и ПВ</a>
-    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
-    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
-    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
-    <a href="analyses.html" class="tab-item">Анализы</a>
-</nav>
-
-<main class="main-content">
-    <h1 class="page-title">Получение наркотических средств и психотропных веществ</h1>
-    <div class="page-placeholder">
-        <p>Учёт получения и расходования НС и ПВ в периоперационном периоде.</p>
-        <p class="text-muted" style="margin-top:8px;">Страница в разработке.</p>
-    </div>
-</main>
-
-<script src="common.js"></script>
-</body>
-</html>
--->
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -72,19 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Протокол назначения НСПВ — VISTAMED</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Дополнительные стили для выпадающих списков с "Прочее" */
+        .select-with-other {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .select-with-other select {
+            width: 100%;
+            padding: 4px 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 13px;
+            background: #fff;
+        }
+        .select-with-other .other-input {
+            display: none;
+            width: 100%;
+            padding: 4px 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 13px;
+            background: #fff;
+        }
+        .select-with-other .other-input.visible {
+            display: block;
+        }
+
+        /* Скрываем блок реквизитов */
+        #requisitesBlock {
+            display: none;
+        }
+
+        /* Стили для таблицы препаратов */
+        .drugs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+        }
+        .drugs-table th {
+            background: #f0f3f7;
+            padding: 6px 8px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .drugs-table td {
+            padding: 4px 6px;
+            border-bottom: 1px solid #f0f2f5;
+            vertical-align: middle;
+        }
+        .drugs-table tr:hover {
+            background: #f8faff;
+        }
+        .btn-del-row {
+            background: none;
+            border: none;
+            color: #d9534f;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        .btn-del-row:hover {
+            background: #fee8e8;
+        }
+        .drugs-table tr[data-selected="true"] {
+            background: #fdebd0 !important;
+        }
+        .drugs-table input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .drugs-table input[type="number"]::-webkit-outer-spin-button,
+        .drugs-table input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Модалка выбора препарата */
+        #drugSelectModal .modal-content {
+            max-height: 90vh;
+        }
+        #drugSelectModal .modal-body {
+            overflow: hidden;
+        }
+        #drugListTbody tr {
+            cursor: pointer;
+        }
+        #drugListTbody tr:hover {
+            background: #f0f7ff;
+        }
+
+        /* Подсветка ошибок */
+        .highlight-missing select,
+        .highlight-missing .other-input,
+        .highlight-missing input,
+        .highlight-missing textarea {
+            border-color: var(--danger) !important;
+            background-color: #fff0f0 !important;
+        }
+        .highlight-missing td {
+            background-color: #fff5f5;
+        }
+    </style>
 </head>
 <body>
 
 <header class="top-nav">
     <div class="logo-section">
-         <span class="logo-text">Виста-МЕД</span>
+        <span class="logo-text">Виста-МЕД</span>
         <span class="logo-tag">АРС</span>
     </div>
     <div class="user-section">
         <div class="doctor-meta">
             <div class="doctor-name">Турчанинов А.Ю.</div>
-          <div class="doctor-specialty">анестезиолог-реаниматолог</div>
-       </div>
+            <div class="doctor-specialty">анестезиолог-реаниматолог</div>
+        </div>
         <div class="user-avatar">АЮ</div>
         <button class="btn-back" onclick="alert('Переход к истории болезни...')">⟲ Вернуться в историю болезни</button>
     </div>
@@ -167,40 +205,92 @@
                 </tr>
                 <tr>
                     <th class="field-label">Отделение</th>
-                    <td><input type="text" id="department" value="Отделение анестезиологии и реанимации"></td>
+                    <td>
+                        <div class="select-with-other" id="departmentContainer">
+                            <select id="departmentSelect">
+                                <option value="Отделение анестезиологии и реанимации" selected>Отделение анестезиологии и реанимации</option>
+                                <option value="Кардиохирургическое отделение №1">Кардиохирургическое отделение №1</option>
+                                <option value="Кардиохирургическое отделение №2">Кардиохирургическое отделение №2</option>
+                                <option value="Отделение хирургии">Отделение хирургии</option>
+                                <option value="__other__">Прочее</option>
+                            </select>
+                            <input type="text" id="departmentOther" class="other-input" placeholder="Введите отделение">
+                        </div>
+                    </td>
                 </tr>
                 <tr class="section-header">
                     <th colspan="2">Обоснование и цель</th>
                 </tr>
                 <tr>
                     <th class="field-label">Обоснование назначения</th>
-                    <td><input type="text" id="justification" value="Планируемый объем оперативного вмешательства"></td>
+                    <td>
+                        <div class="select-with-other" id="justificationContainer">
+                            <select id="justificationSelect">
+                                <option value="Планируемый объем оперативного вмешательства" selected>Планируемый объем оперативного вмешательства</option>
+                                <option value="В связи с увеличением объема оперативного вмешательства">В связи с увеличением объема оперативного вмешательства</option>
+                                <option value="__other__">Прочее</option>
+                            </select>
+                            <input type="text" id="justificationOther" class="other-input" placeholder="Введите обоснование">
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <th class="field-label">С целью</th>
-                    <td><input type="text" id="purpose" value="проведения общей анестезии"></td>
+                    <td>
+                        <div class="select-with-other" id="purposeContainer">
+                            <select id="purposeSelect">
+                                <option value="проведения общей анестезии" selected>проведения общей анестезии</option>
+                                <option value="седоанальгезии">седоанальгезии</option>
+                                <option value="седации">седации</option>
+                                <option value="поддержания анестезии">поддержания анестезии</option>
+                                <option value="__other__">Прочее</option>
+                            </select>
+                            <input type="text" id="purposeOther" class="other-input" placeholder="Введите цель">
+                        </div>
+                    </td>
                 </tr>
+
+                <!-- ===== СКРЫТЫЙ БЛОК РЕКВИЗИТОВ ===== -->
+                <tbody id="requisitesBlock">
+                    <tr class="section-header">
+                        <th colspan="2">Реквизиты назначения</th>
+                    </tr>
+                    <tr>
+                        <th class="field-label">Назначено (номер)</th>
+                        <td><input type="text" id="appointmentNumber"></td>
+                    </tr>
+                    <tr>
+                        <th class="field-label">Номер документа</th>
+                        <td><input type="text" id="documentNumber"></td>
+                    </tr>
+                </tbody>
+
                 <tr class="section-header">
-                    <th colspan="2">Реквизиты назначения</th>
-                </tr>
-                <tr>
-                    <th class="field-label">Назначено</th>
-                    <td><input type="text" id="appointmentNumber" value="59369030"></td>
-                </tr>
-                <tr>
-                <th class="field-label">Количество (ампулы/флаконы/таблетки)</th>
-                <td><input type="text" id="quantity" value="15"></td>
-                </tr>
-                <tr>
-                <th class="field-label">Номер документа</th>
-                <td><input type="text" id="documentNumber" value="623963"></td>
-                </tr>
-                <tr class="section-header">
-                    <th colspan="2">Препарат</th>
+                    <th colspan="2">Препараты</th>
                 </tr>
                 <tr>
                     <th class="field-label">Назначение наркотических средств, психотропных веществ, сильнодействующих лекарственных средств</th>
-                    <td><textarea id="drugDetails" rows="3">наименование, дозировка: Фентанил р-р для в/в и в/м введ., 50 мкг/мл, 2 мл</textarea></td>
+                    <td>
+                        <div class="drugs-table-wrapper">
+                            <div style="display:flex; gap:10px; margin-bottom:8px;">
+                                <button class="btn btn-green" id="addDrugBtn">➕ Создать</button>
+                                <button class="btn btn-danger" id="deleteDrugBtn" disabled>🗑️ Удалить</button>
+                            </div>
+                            <table class="inner-table drugs-table" id="drugsTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width:70%; text-align:left;">Наименование, дозировка</th>
+                                        <th style="width:20%; text-align:left;">Количество (ампулы/флаконы/таблетки)</th>
+                                        <th style="width:10%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="drugsTbody">
+                                    <!-- строки генерируются JS -->
+                                </tbody>
+                            </table>
+                            <div id="drugsEmptyMsg" style="padding:8px; color:#999; text-align:center; font-size:13px;">Нет назначенных препаратов. Нажмите «Создать».</div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -213,6 +303,34 @@
     </div>
 </main>
 
+<!-- ===== МОДАЛЬНОЕ ОКНО ВЫБОРА ПРЕПАРАТА ===== -->
+<div id="drugSelectModal" class="modal">
+    <div class="modal-content" style="width: 600px; max-width: 95%;">
+        <div class="modal-header" style="background: #1a3b34; color: #fff; margin: -20px -20px 15px -20px; padding: 12px 20px; border-radius: 8px 8px 0 0;">
+            <span>Выберите значение:</span>
+            <button type="button" class="close-modal" data-modal="drugSelectModal" style="color:#fff; font-size:24px;">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="display:flex; align-items:center; border:1px solid var(--border-color); border-radius:4px; padding:4px 8px; margin-bottom:12px;">
+                <span style="font-size:16px; color:#999; margin-right:8px;">🔍</span>
+                <input type="text" id="drugSearchInput" placeholder="Поиск..." style="border:none; outline:none; width:100%; padding:6px 0; font-size:14px;">
+            </div>
+            <div style="max-height: 350px; overflow-y: auto; border:1px solid #eee; border-radius:4px;">
+                <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                    <tbody id="drugListTbody">
+                        <!-- генерируется JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer" style="padding-top:12px; border-top:1px solid var(--border-color);">
+            <button class="btn btn-green" id="drugSelectOk">Ок</button>
+            <button class="btn btn-outline" id="drugSelectCancel">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== МОДАЛЬНЫЕ ОКНА (существующие) ===== -->
 <div id="confirmSignModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -264,6 +382,264 @@
 <script src="common.js"></script>
 <script>
     (function(){
+        'use strict';
+
+        // ============================================================
+        // АВТОГЕНЕРАЦИЯ НОМЕРОВ (счётчики)
+        // ============================================================
+        function initCounters() {
+            // Начальные значения (если в localStorage ничего нет)
+            let lastAppointment = parseInt(localStorage.getItem('lastAppointmentNumber')) || 59369029;
+            let lastDocument = parseInt(localStorage.getItem('lastDocumentNumber')) || 623962;
+
+            // Увеличиваем на 1
+            const newAppointment = lastAppointment + 1;
+            const newDocument = lastDocument + 1;
+
+            document.getElementById('appointmentNumber').value = newAppointment;
+            document.getElementById('documentNumber').value = newDocument;
+
+            // Сохраняем обновлённые значения в localStorage
+            localStorage.setItem('lastAppointmentNumber', newAppointment);
+            localStorage.setItem('lastDocumentNumber', newDocument);
+        }
+
+        // ============================================================
+        // СПРАВОЧНИК ПРЕПАРАТОВ (из ТЗ)
+        // ============================================================
+        const DRUGS_CATALOG = [
+            "Диазепам р-р для в/в и в/м введ. 5 мг/мл, 2 мл",
+            "Долутегравир табл. 50 мг",
+            "Кетамин р-р для в/в и в/м введ.,50 мг/мл, 2 мл",
+            "Кодеин + Натрия гидрокарбонат + Солодки корни + Термопсиса ланцетного трава табл. 8 мг + 200 мг + 200 мг + 20 мг",
+            "Ламивудин табл. 300 мг",
+            "Мидазолам р-р д/ин., 5 мг/мл, 1 мл",
+            "Мидазолам р-р д/ин., 5 мг/мл, 3 мл",
+            "Морфин р-р д/ин., 10 мг/мл, 1 мл",
+            "Набор реагентов для иммунохроматографического выявления антител к вирусу иммунодефицита человека ИммуноХром-антиВИЧ-1/2-Экспресс (20тестов/шт)",
+            "Налоксон р-р д/ин., 0,4 мг/мл, 1 мл",
+            "Натрия оксибутират р-р для в/в и в/м введ., 200 мг/мл, 5мл",
+            "Тенофовир табл. 300 мг",
+            "Тест для определения беременности FEMITEST чувствительность 20 мМЕ/мл №1",
+            "Трамадол р-р д/ин. 50 мг/мл, 2 мл",
+            "Трамадол табл. 100 мг",
+            "Тримеперидин р-р д/ин., 20 мг/мл, 1 мл",
+            "Фентанил р-р для в/в и в/м введ., 50 мкг/мл, 2 мл",
+            "Флумазенил р-р для в/в введ., 0,0005 г/5 мл, амп"
+        ];
+
+        // ============================================================
+        // СОСТОЯНИЕ ТАБЛИЦЫ ПРЕПАРАТОВ
+        // ============================================================
+        let drugs = [];
+        let selectedRowIndex = -1;
+
+        // ============================================================
+        // DOM-ССЫЛКИ
+        // ============================================================
+        const drugsTbody = document.getElementById('drugsTbody');
+        const drugsEmptyMsg = document.getElementById('drugsEmptyMsg');
+        const addDrugBtn = document.getElementById('addDrugBtn');
+        const deleteDrugBtn = document.getElementById('deleteDrugBtn');
+
+        const drugSelectModal = document.getElementById('drugSelectModal');
+        const drugSearchInput = document.getElementById('drugSearchInput');
+        const drugListTbody = document.getElementById('drugListTbody');
+        const drugSelectOk = document.getElementById('drugSelectOk');
+        const drugSelectCancel = document.getElementById('drugSelectCancel');
+
+        // ============================================================
+        // УПРАВЛЕНИЕ ПОЛЯМИ С "ПРОЧЕЕ"
+        // ============================================================
+        function setupSelectWithOther(selectId, otherInputId) {
+            const select = document.getElementById(selectId);
+            const otherInput = document.getElementById(otherInputId);
+            if (!select || !otherInput) return;
+
+            function updateVisibility() {
+                if (select.value === '__other__') {
+                    otherInput.classList.add('visible');
+                    otherInput.required = true;
+                    otherInput.focus();
+                } else {
+                    otherInput.classList.remove('visible');
+                    otherInput.required = false;
+                    otherInput.value = '';
+                }
+            }
+
+            select.addEventListener('change', updateVisibility);
+            updateVisibility();
+
+            otherInput.addEventListener('input', function() {
+                this.classList.remove('highlight-missing');
+                const cell = this.closest('td');
+                if (cell) cell.classList.remove('highlight-missing');
+            });
+
+            return function getValue() {
+                if (select.value === '__other__') {
+                    return otherInput.value.trim();
+                }
+                return select.value;
+            };
+        }
+
+        const getDepartment = setupSelectWithOther('departmentSelect', 'departmentOther');
+        const getJustification = setupSelectWithOther('justificationSelect', 'justificationOther');
+        const getPurpose = setupSelectWithOther('purposeSelect', 'purposeOther');
+
+        // ============================================================
+        // РЕНДЕРИНГ ТАБЛИЦЫ ПРЕПАРАТОВ
+        // ============================================================
+        function renderDrugs() {
+            const tbody = drugsTbody;
+            const emptyMsg = drugsEmptyMsg;
+
+            if (drugs.length === 0) {
+                tbody.innerHTML = '';
+                emptyMsg.style.display = 'block';
+                deleteDrugBtn.disabled = true;
+                selectedRowIndex = -1;
+                return;
+            }
+            emptyMsg.style.display = 'none';
+
+            let html = '';
+            drugs.forEach((item, idx) => {
+                const isSelected = (idx === selectedRowIndex);
+                html += `
+                    <tr data-index="${idx}" style="cursor:pointer; ${isSelected ? 'background:#fdebd0;' : ''}" onclick="selectDrugRow(${idx})">
+                        <td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">${escHtml(item.name)}</td>
+                        <td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">
+                            <input type="number" min="1" step="1" value="${escHtml(item.quantity)}" 
+                                   style="width:80px; padding:4px 6px; border:1px solid var(--border-color); border-radius:3px;"
+                                   onchange="updateDrugQuantity(${idx}, this.value)" onclick="event.stopPropagation();">
+                        </td>
+                        <td style="padding:6px 8px; border-bottom:1px solid #f0f0f0; text-align:center;">
+                            <button class="btn-del-row" onclick="removeDrugRow(${idx})" style="background:none; border:none; color:#d9534f; font-size:16px; cursor:pointer;">✕</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+
+            deleteDrugBtn.disabled = (selectedRowIndex === -1);
+        }
+
+        window.selectDrugRow = function(idx) {
+            if (selectedRowIndex === idx) {
+                selectedRowIndex = -1;
+            } else {
+                selectedRowIndex = idx;
+            }
+            renderDrugs();
+        };
+
+        window.updateDrugQuantity = function(idx, value) {
+            if (idx >= 0 && idx < drugs.length) {
+                drugs[idx].quantity = value.trim() || '';
+                renderDrugs();
+            }
+        };
+
+        window.removeDrugRow = function(idx) {
+            if (idx >= 0 && idx < drugs.length) {
+                drugs.splice(idx, 1);
+                if (selectedRowIndex === idx) selectedRowIndex = -1;
+                else if (selectedRowIndex > idx) selectedRowIndex--;
+                renderDrugs();
+            }
+        };
+
+        deleteDrugBtn.addEventListener('click', function() {
+            if (selectedRowIndex !== -1 && selectedRowIndex < drugs.length) {
+                if (confirm('Удалить выбранный препарат?')) {
+                    drugs.splice(selectedRowIndex, 1);
+                    selectedRowIndex = -1;
+                    renderDrugs();
+                }
+            }
+        });
+
+        addDrugBtn.addEventListener('click', function() {
+            drugSearchInput.value = '';
+            renderDrugCatalog('');
+            drugSelectModal.style.display = 'flex';
+            setTimeout(() => drugSearchInput.focus(), 100);
+        });
+
+        // ============================================================
+        // МОДАЛЬНОЕ ОКНО ВЫБОРА ПРЕПАРАТА
+        // ============================================================
+        function renderDrugCatalog(filter) {
+            const tbody = drugListTbody;
+            const filtered = DRUGS_CATALOG.filter(item => 
+                item.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td style="padding:20px; text-align:center; color:#999;">Ничего не найдено</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach((item) => {
+                html += `
+                    <tr style="cursor:pointer;" onclick="selectDrugFromCatalog('${escHtml(item)}')" 
+                        onmouseover="this.style.backgroundColor='#f0f7ff'" 
+                        onmouseout="this.style.backgroundColor=''">
+                        <td style="padding:8px 12px; border-bottom:1px solid #f0f0f0;">${escHtml(item)}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        drugSearchInput.addEventListener('input', function() {
+            renderDrugCatalog(this.value);
+        });
+
+        window.selectDrugFromCatalog = function(name) {
+            drugs.push({ name: name, quantity: '1' });
+            selectedRowIndex = drugs.length - 1;
+            renderDrugs();
+            drugSelectModal.style.display = 'none';
+            setTimeout(() => {
+                const rows = drugsTbody.querySelectorAll('tr');
+                if (rows.length > 0) {
+                    const lastRow = rows[rows.length - 1];
+                    const input = lastRow.querySelector('input[type="number"]');
+                    if (input) input.focus();
+                }
+            }, 50);
+        };
+
+        drugSelectOk.addEventListener('click', function() {
+            drugSelectModal.style.display = 'none';
+        });
+
+        drugSelectCancel.addEventListener('click', function() {
+            drugSelectModal.style.display = 'none';
+        });
+
+        drugSelectModal.addEventListener('click', function(e) {
+            if (e.target === drugSelectModal) {
+                drugSelectModal.style.display = 'none';
+            }
+        });
+
+        // ============================================================
+        // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+        // ============================================================
+        function escHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // ============================================================
+        // ВАЛИДАЦИЯ И ПОДПИСАНИЕ
+        // ============================================================
         function getFields() {
             const container = document.getElementById('examForm');
             return container.querySelectorAll('input, select, textarea');
@@ -273,9 +649,39 @@
             let missing = [];
             const fields = getFields();
             fields.forEach(el => {
+                // Пропускаем поля, которые являются частью таблицы препаратов
+                if (el.closest('.drugs-table')) return;
+                // Пропускаем скрытые поля реквизитов (они всегда заполнены автоматически)
+                if (el.id === 'appointmentNumber' || el.id === 'documentNumber') return;
+                // Пропускаем поля "Прочее", они проверяются отдельно
+                if (el.id === 'departmentOther' || el.id === 'justificationOther' || el.id === 'purposeOther') return;
                 if (el.value.trim() === '') missing.push(el);
             });
+
+            // Проверяем поля "Прочее"
+            const deptVal = document.getElementById('departmentSelect').value;
+            if (deptVal === '__other__' && document.getElementById('departmentOther').value.trim() === '') {
+                missing.push(document.getElementById('departmentOther'));
+            }
+            const justVal = document.getElementById('justificationSelect').value;
+            if (justVal === '__other__' && document.getElementById('justificationOther').value.trim() === '') {
+                missing.push(document.getElementById('justificationOther'));
+            }
+            const purpVal = document.getElementById('purposeSelect').value;
+            if (purpVal === '__other__' && document.getElementById('purposeOther').value.trim() === '') {
+                missing.push(document.getElementById('purposeOther'));
+            }
+
             return missing;
+        }
+
+        function validateDrugs() {
+            if (drugs.length === 0) return false;
+            for (let drug of drugs) {
+                const q = parseInt(drug.quantity, 10);
+                if (isNaN(q) || q <= 0) return false;
+            }
+            return true;
         }
 
         function highlightMissing(missing) {
@@ -289,18 +695,45 @@
 
         document.getElementById('signBtn').addEventListener('click', function() {
             const missing = checkFields();
-            if (missing.length === 0) {
+            let errorList = [];
+
+            if (drugs.length === 0) {
+                errorList.push('Назначение препаратов (добавьте хотя бы один препарат)');
+            } else if (!validateDrugs()) {
+                errorList.push('В строках препаратов укажите корректное количество (целое число > 0)');
+            }
+
+            if (missing.length === 0 && errorList.length === 0) {
                 document.getElementById('confirmSignModal').style.display = 'flex';
             } else {
                 highlightMissing(missing);
                 const list = document.getElementById('missingFieldsList');
                 list.innerHTML = '';
                 missing.forEach(el => {
-                    let row = el.closest('tr');
-                    let label = row ? row.querySelector('th') : null;
-                    let labelText = label ? label.innerText.trim() : 'неизвестное поле';
+                    let labelText = '';
+                    const wrapper = el.closest('.select-with-other');
+                    if (wrapper) {
+                        const label = wrapper.querySelector('select')?.previousElementSibling;
+                        if (label && label.tagName === 'LABEL') {
+                            labelText = label.innerText.trim();
+                        } else {
+                            const row = el.closest('tr');
+                            const th = row ? row.querySelector('th.field-label') : null;
+                            labelText = th ? th.innerText.trim() : 'неизвестное поле';
+                        }
+                    } else {
+                        const row = el.closest('tr');
+                        const th = row ? row.querySelector('th.field-label') : null;
+                        labelText = th ? th.innerText.trim() : 'неизвестное поле';
+                    }
+                    labelText = labelText.replace(/[:*]/g, '').trim();
                     const li = document.createElement('li');
                     li.textContent = labelText;
+                    list.appendChild(li);
+                });
+                errorList.forEach(err => {
+                    const li = document.createElement('li');
+                    li.textContent = err;
                     list.appendChild(li);
                 });
                 document.getElementById('missingFieldsModal').style.display = 'flex';
@@ -330,7 +763,7 @@
             document.getElementById('confirmDeleteModal').style.display = 'none';
         });
 
-        // Заглушки для верхних кнопок
+        // Заглушки
         document.getElementById('copyPrevBtn').addEventListener('click', ()=>alert('Копирование из предыдущего протокола (заглушка)'));
         document.getElementById('saveTemplateBtn').addEventListener('click', ()=>alert('Сохранение шаблона (заглушка)'));
         document.getElementById('loadTemplateBtn').addEventListener('click', ()=>alert('Загрузка шаблона (заглушка)'));
@@ -338,7 +771,7 @@
         document.getElementById('printBtn').addEventListener('click', ()=>alert('Печать документа'));
 
         // Снятие подсветки при редактировании
-        getFields().forEach(el => {
+        document.querySelectorAll('#examForm input, #examForm select, #examForm textarea').forEach(el => {
             el.addEventListener('input', function() {
                 const cell = this.closest('td');
                 if (cell) cell.classList.remove('highlight-missing');
@@ -351,13 +784,26 @@
             });
         });
 
-        // Автозаполнение даты, если пусто
+        // Автозаполнение даты
         const dateField = document.getElementById('examDate');
         if (!dateField.value) {
             const now = new Date();
             const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             dateField.value = now.toLocaleDateString('ru-RU', options);
         }
+
+        // Инициализация счетчиков
+        initCounters();
+
+        // Инициализация рендера таблицы препаратов
+        renderDrugs();
+
+        // Закрытие модалки выбора по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && drugSelectModal.style.display === 'flex') {
+                drugSelectModal.style.display = 'none';
+            }
+        });
     })();
 </script>
 </body>
