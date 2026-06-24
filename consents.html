@@ -5,71 +5,488 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Согласия — VISTAMED</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ КОНСТРУКТОРА ===== */
+
+        /* увеличенная ширина панели формы */
+        .form-fields {
+            width: 1020px;
+            min-width: 380px;
+        }
+
+        /* таблица вмешательств в форме */
+        .interv-table-wrap {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .interv-table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        .interv-table-wrap th {
+            background: #f0f3f7;
+            font-weight: 600;
+            padding: 4px 6px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .interv-table-wrap td {
+            padding: 3px 4px;
+            border-bottom: 1px solid #f0f2f5;
+            vertical-align: middle;
+        }
+        .interv-table-wrap input {
+            width: 100%;
+            padding: 3px 4px;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            font-size: 11px;
+            background: #fff;
+            transition: border-color 0.15s;
+            box-sizing: border-box;
+        }
+        .interv-table-wrap input:focus {
+            border-color: var(--primary-green);
+            outline: none;
+            background: #fafffe;
+        }
+        .interv-table-wrap input:disabled {
+            background: #f5f7fa;
+            color: var(--text-muted);
+        }
+        .interv-row-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            justify-content: center;
+        }
+        .interv-row-actions button {
+            width: 22px;
+            height: 22px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--text-muted);
+            transition: background 0.15s, color 0.15s;
+        }
+        .interv-row-actions button:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .interv-row-actions .btn-del-row:hover {
+            background: #fee8e8;
+            color: var(--danger);
+        }
+        .interv-row-actions .btn-add-row {
+            background: var(--primary-green);
+            color: #fff;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: 14px;
+        }
+        .interv-row-actions .btn-add-row:hover {
+            background: #008f6b;
+        }
+        .interv-empty-msg {
+            padding: 8px 10px;
+            color: var(--text-muted);
+            font-size: 11px;
+            text-align: center;
+            background: #fafcfc;
+        }
+
+        /* таблица осложнений в форме — исправлена ширина */
+        .compl-table-wrap {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .compl-table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            table-layout: fixed;
+        }
+        .compl-table-wrap th {
+            background: #f0f3f7;
+            font-weight: 600;
+            padding: 4px 6px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+        .compl-table-wrap th:first-child { width: 18%; }
+        .compl-table-wrap th:nth-child(2) { width: 27%; }
+        .compl-table-wrap th:nth-child(3) { width: 27%; }
+        .compl-table-wrap th:nth-child(4) { width: 28%; }
+        .compl-table-wrap td {
+            padding: 3px 4px;
+            border-bottom: 1px solid #f0f2f5;
+            vertical-align: top;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        .compl-table-wrap .row-label-cell {
+            font-weight: 600;
+            font-size: 9px;
+            background: #fafbfc;
+            padding-right: 6px;
+            white-space: normal;
+        }
+        .compl-table-wrap .row-label-cell .sub {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 8px;
+        }
+        .compl-table-wrap textarea {
+            width: 100%;
+            padding: 2px 4px;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            font-size: 9px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 28px;
+            background: #fff;
+            transition: border-color 0.15s;
+            box-sizing: border-box;
+            line-height: 1.3;
+        }
+        .compl-table-wrap textarea:focus {
+            border-color: var(--primary-green);
+            outline: none;
+            background: #fafffe;
+        }
+        .compl-table-wrap textarea:disabled {
+            background: #f5f7fa;
+            color: var(--text-muted);
+        }
+
+        /* предпросмотр — динамические таблицы */
+        .a4-sheet .dyn-interv-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10pt;
+            margin: 10px 0;
+            table-layout: fixed;
+        }
+        .a4-sheet .dyn-interv-table th,
+        .a4-sheet .dyn-interv-table td {
+            border: 1px solid #000;
+            padding: 5px 6px;
+            vertical-align: middle;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        .a4-sheet .dyn-interv-table th {
+            font-weight: 700;
+            background: #f8f9fc;
+            text-align: center;
+        }
+        .a4-sheet .dyn-interv-table th:first-child { width: 30%; }
+        .a4-sheet .dyn-interv-table th:nth-child(2) { width: 30%; }
+        .a4-sheet .dyn-interv-table th:nth-child(3) { width: 20%; }
+        .a4-sheet .dyn-interv-table th:nth-child(4) { width: 20%; }
+
+        .a4-sheet .dyn-compl-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+            margin: 10px 0;
+            table-layout: fixed;
+        }
+        .a4-sheet .dyn-compl-table th,
+        .a4-sheet .dyn-compl-table td {
+            border: 1px solid #000;
+            padding: 4px 6px;
+            vertical-align: top;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        .a4-sheet .dyn-compl-table th {
+            font-weight: 700;
+            background: #f8f9fc;
+            text-align: center;
+        }
+        .a4-sheet .dyn-compl-table th:first-child { width: 18%; }
+        .a4-sheet .dyn-compl-table th:nth-child(2) { width: 27%; }
+        .a4-sheet .dyn-compl-table th:nth-child(3) { width: 27%; }
+        .a4-sheet .dyn-compl-table th:nth-child(4) { width: 28%; }
+        .a4-sheet .dyn-compl-table .row-label {
+            font-weight: 600;
+            white-space: normal;
+        }
+        .a4-sheet .dyn-compl-table .row-label .sub {
+            font-weight: 400;
+            font-size: 8pt;
+            color: #555;
+        }
+
+        /* блок управления согласиями на главном экране */
+        .consents-list {
+            margin: 15px 0;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+        }
+        .consents-list .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .consents-list .list-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .consent-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid #f0f2f5;
+        }
+        .consent-item:last-child {
+            border-bottom: none;
+        }
+        .consent-item .info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .consent-item .info .num {
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+        .consent-item .info .status {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .consent-item .info .status.draft {
+            background: #ffeaa7;
+            color: #d35400;
+        }
+        .consent-item .info .status.signed {
+            background: #badc58;
+            color: #27ae60;
+        }
+        .consent-item .info .date {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        .consent-item .actions {
+            display: flex;
+            gap: 6px;
+        }
+        .consent-item .actions .btn-sm {
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            cursor: pointer;
+        }
+        .consent-item .actions .btn-sm:hover {
+            background: #f0f3f7;
+        }
+        .consent-item .actions .btn-sm.primary {
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+        }
+        .consent-item .actions .btn-sm.primary:hover {
+            background: #e6f6f2;
+        }
+        .consent-item .actions .btn-sm.danger {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        .consent-item .actions .btn-sm.danger:hover {
+            background: #fde8e8;
+        }
+
+        /* селектор согласия в редакторе */
+        .consent-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        .consent-selector label {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .consent-selector select {
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 12px;
+            background: #fff;
+            flex: 1;
+        }
+        .consent-selector .btn-sm {
+            padding: 4px 12px;
+            font-size: 11px;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            background: #fff;
+            cursor: pointer;
+        }
+        .consent-selector .btn-sm:hover {
+            background: #f0f3f7;
+        }
+
+        /* адаптив */
+        @media (max-width: 900px) {
+            .form-fields {
+                width: 100%;
+                min-width: 0;
+            }
+            .compl-table-wrap table,
+            .compl-table-wrap th,
+            .compl-table-wrap td {
+                font-size: 9px;
+            }
+            .compl-table-wrap th:first-child { width: 16%; }
+            .compl-table-wrap th:nth-child(2) { width: 28%; }
+            .compl-table-wrap th:nth-child(3) { width: 28%; }
+            .compl-table-wrap th:nth-child(4) { width: 28%; }
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #real-print-area,
+            #real-print-area * { visibility: visible; }
+            #real-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+                padding: 20px;
+            }
+            .a4-sheet .dyn-compl-table {
+                font-size: 8pt;
+            }
+            .a4-sheet .dyn-compl-table th,
+            .a4-sheet .dyn-compl-table td {
+                padding: 3px 4px;
+            }
+        }
+    </style>
 </head>
 <body class="page-consents">
 
-<header class="top-nav">
-    <div class="logo-section">
-         <span class="logo-text">Виста-МЕД</span>
-        <span class="logo-tag">АРС</span>
-    </div>
-    <div class="user-section">
-        <div class="doctor-meta">
-            <div class="doctor-name">Турчанинов А.Ю.</div>
-          <div class="doctor-specialty">анестезиолог-реаниматолог</div>
-       </div>
-        <div class="user-avatar">АЮ</div>
-        <button class="btn-back" onclick="alert('Переход к истории болезни...')">⟲ Вернуться в историю болезни</button>
-    </div>
-</header>
-
-<div class="patient-bar" id="patientBar">
-    <div class="patient-data">
-        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
-        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
-        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
-        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
-        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
-        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
-        <div class="param">
-            <span>Диагноз:</span>
-            <strong title="ИБС: Безболевая ишемия миокарда. Бинодальная болезнь: синдром слабости синусового узла: хронотропная некомпетентность САУ, синусовая брадикардия, ранзиторная АВ блокады 2 степени Мобитц 1. Транзиторная АВ-блокада 1 степени. Имплантация двухкамерного ЭКС Medtronic Attesta DR MRI (S/N FNB327276G) от 23/04/2026. Гипертоническая болезнь III стадии, неконтролируемая артериальная гипертензия, целевые значения АД менее 130/80 мм.рт.ст. Сердечный риск 4 (очень высокий дополнительный). Пароксизмальная атриовентрикулярная узловая ре-ентри тахикардия, вариант slow-fast. Радиочастотная катетерная аблация &quot;медленных путей&quot; атриовентрикулярного соединения (04.10.2017г). СКФ 74,1 мл/мин/1,73 м2 по CKD-EPI. Осложнение основного заболевания: ХСН предстадия ФВЛЖ 57%.">
-                <span class="icd-code">I20.8</span>
-                <span class="diagnosis-short">ИБС: Безболевая ишемия миокарда.</span>
-                <span class="expand-diagnosis" style="cursor:help; color:#888;">ⓘ</span>
-            </strong>
+    <header class="top-nav">
+        <div class="logo-section">
+            <span class="logo-text">Виста-МЕД</span>
+            <span class="logo-tag">АРС</span>
         </div>
-        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+        <div class="user-section">
+            <div class="doctor-meta">
+                <div class="doctor-name" id="top-doctor-display">Турчанинов А.Ю.</div>
+                <div class="doctor-specialty">анестезиолог-реаниматолог</div>
+            </div>
+            <div class="user-avatar" id="top-doctor-avatar">АЮ</div>
+            <button class="btn-back" onclick="alert('Переход к истории болезни...')">⟲ Вернуться в историю болезни</button>
+        </div>
+    </header>
+
+    <!-- ===== ПАНЕЛЬ ПАЦИЕНТА ===== -->
+    <div class="patient-bar" id="patientBar">
+        <div class="patient-data">
+            <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
+            <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
+            <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
+            <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
+            <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
+            <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
+            <div class="param">
+                <span>Диагноз:</span>
+                <strong title="ИБС: Безболевая ишемия миокарда. Бинодальная болезнь: синдром слабости синусового узла: хронотропная некомпетентность САУ, синусовая брадикардия, ранзиторная АВ блокады 2 степени Мобитц 1. Транзиторная АВ-блокада 1 степени. Имплантация двухкамерного ЭКС Medtronic Attesta DR MRI (S/N FNB327276G) от 23/04/2026. Гипертоническая болезнь III стадии, неконтролируемая артериальная гипертензия, целевые значения АД менее 130/80 мм.рт.ст. Сердечный риск 4 (очень высокий дополнительный). Пароксизмальная атриовентрикулярная узловая ре-ентри тахикардия, вариант slow-fast. Радиочастотная катетерная аблация &quot;медленных путей&quot; атриовентрикулярного соединения (04.10.2017г). СКФ 74,1 мл/мин/1,73 м2 по CKD-EPI. Осложнение основного заболевания: ХСН предстадия ФВЛЖ 57%.">
+                    <span class="icd-code">I20.8</span>
+                    <span class="diagnosis-short">ИБС: Безболевая ишемия миокарда.</span>
+                    <span class="expand-diagnosis" style="cursor:help; color:#888;">ⓘ</span>
+                </strong>
+            </div>
+            <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
+        </div>
+        <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
     </div>
-    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
-</div>
-<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
-    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
-</div>
+    <div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
+        <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
+    </div>
 
-<nav class="tabs-nav">
-    <a href="consents.html" class="tab-item active">Согласия</a>
-    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
-    <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
-    <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
-    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
-    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
-    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
-    <a href="analyses.html" class="tab-item">Анализы</a>
-</nav>
+    <!-- ===== ВКЛАДКИ ===== -->
+    <nav class="tabs-nav">
+        <a href="consents.html" class="tab-item active">Согласия</a>
+        <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
+        <a href="examination-as-needed.html" class="tab-item">Осмотр по необходимости</a>
+        <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
+        <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
+        <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
+        <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
+        <a href="analyses.html" class="tab-item">Анализы</a>
+    </nav>
 
+    <!-- ===== ОСНОВНОЙ КОНТЕЙНЕР ===== -->
     <div class="main-container">
-        
+
+        <!-- ===== ЭКРАН: ГЛАВНЫЙ ===== -->
         <div id="screen-main" class="screen active">
             <div style="margin: 20px auto; max-width:1000px; width:100%;">
                 <h2 class="page-title">Управление информированными согласиями</h2>
-                
-                <div class="document-card">
+
+                <div class="document-card" style="margin-bottom:20px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                        <div class="doc-title-block" style="margin:0;">
+                            ИНФОРМИРОВАННОЕ ДОБРОВОЛЬНОЕ СОГЛАСИЕ
+                            <span style="font-weight:400; font-size:12px; color:var(--text-muted);">(для пациента)</span>
+                        </div>
+                        <button class="btn btn-green" onclick="createNewConsent()">➕ Создать новое согласие</button>
+                    </div>
+                </div>
+
+                <!-- Список согласий -->
+                <div class="consents-list" id="consents-list-container">
+                    <div class="list-header">
+                        <h3>Список согласий</h3>
+                        <span style="font-size:12px; color:var(--text-muted);" id="consents-count">0</span>
+                    </div>
+                    <div id="consents-list-items">
+                        <!-- рендерится JS -->
+                    </div>
+                </div>
+
+                <!-- Карточка текущего выбранного согласия для краткой информации -->
+                <div class="document-card" id="current-consent-card" style="display:none;">
                     <div class="doc-title-block">
-                        ИНФОРМИРОВАННОЕ ДОБРОВОЛЬНОЕ СОГЛАСИЕ НА АНЕСТЕЗИОЛОГИЧЕСКОЕ ОБЕСПЕЧЕНИЕ МЕДИЦИНСКОГО (ОПЕРАТИВНОГО) ВМЕШАТЕЛЬСТВА
+                        Текущее согласие: <span id="current-consent-label">—</span>
                         <span id="badge-doc-status" class="status-badge status-draft">Не сформировано</span>
                     </div>
-
                     <div class="meta-grid">
                         <div class="meta-item">
                             <span>Дата подписания:</span>
@@ -80,10 +497,9 @@
                             <strong id="meta-sign-time">—</strong>
                         </div>
                     </div>
-
                     <div class="btn-row">
-                        <button class="btn btn-green" onclick="openEditor()">📝 Сформировать согласие</button>
-                        <button class="btn btn-outline" id="btn-main-view" disabled onclick="openViewer()">👁️ Просмотр</button>
+                        <button class="btn btn-green" onclick="openEditorForCurrent()">📝 Редактировать</button>
+                        <button class="btn btn-outline" id="btn-main-view" disabled onclick="openViewerForCurrent()">👁️ Просмотр</button>
                         <button class="btn btn-outline" id="btn-main-download" disabled onclick="alert('Файл сохранен в PDF')">📥 Скачать</button>
                         <button class="btn btn-outline" id="btn-main-print" disabled onclick="triggerPrint()">🖨️ Печать</button>
                     </div>
@@ -91,14 +507,28 @@
             </div>
         </div>
 
+        <!-- ===== ЭКРАН: РЕДАКТОР / КОНСТРУКТОР ===== -->
         <div id="screen-editor" class="screen">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h2 id="editor-screen-title" style="font-size:15px; font-weight:600;">Формирование бланка согласия</h2>
-                <button class="btn btn-outline" onclick="handleCloseEditor()">❌ Закрыть</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap:wrap; gap:8px;">
+                <h2 id="editor-screen-title" style="font-size:15px; font-weight:600;">Редактор согласия</h2>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <button class="btn btn-outline" onclick="handleCloseEditor()">❌ Закрыть</button>
+                </div>
+            </div>
+
+            <!-- Селектор согласия -->
+            <div class="consent-selector">
+                <label for="consent-select">Согласие:</label>
+                <select id="consent-select" onchange="switchConsent(parseInt(this.value))"></select>
+                <button class="btn-sm" onclick="createNewConsentAndSwitch()">➕ Новое</button>
+                <button class="btn-sm danger" onclick="deleteCurrentConsent()">🗑️ Удалить</button>
             </div>
 
             <div class="editor-layout">
+                <!-- ===== ЛЕВАЯ ПАНЕЛЬ: ФОРМА ===== -->
                 <div class="form-fields" id="form-container">
+
+                    <!-- Субъект подписи -->
                     <div class="section-header">Субъект подписи</div>
                     <div class="form-group">
                         <div class="radio-box">
@@ -107,42 +537,47 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>ФИО Пациента <span class="required">*</span></label>
-                        <input type="text" id="f-client-name" class="form-control" value="Петров Иван Сергеевич" oninput="syncFields()">
-                    </div>
-                    <div class="row-2">
+                    <!-- Пациент — ТОЛЬКО ДЛЯ ЧТЕНИЯ -->
+                    <div class="patient-readonly">
+                        <div class="section-header">Данные пациента <span style="font-weight:400;color:var(--text-muted);font-size:10px;">(только просмотр)</span></div>
                         <div class="form-group">
-                            <label>Дата рождения пац.</label>
-                            <input type="text" id="f-client-birth" class="form-control" value="15.04.1978" oninput="syncFields()">
+                            <label>ФИО Пациента</label>
+                            <input type="text" id="f-client-name" class="form-control" value="Петров Иван Сергеевич" disabled>
                         </div>
-                        <div class="form-group">
-                            <label>Отделение КХО № <span class="required">*</span></label>
-                            <input type="text" id="f-kho-num" class="form-control" value="2" oninput="syncFields()">
-                        </div>
-                    </div>
-                    <div class="row-2">
-                        <div class="form-group">
-                            <label>Тип док. пациента</label>
-                            <input type="text" id="f-client-doc-type" class="form-control" value="Паспорт РФ" oninput="syncFields()">
-                        </div>
-                        <div class="form-group">
-                            <label>Серия / Номер</label>
-                            <div style="display:flex; gap:5px;">
-                                <input type="text" id="f-client-doc-ser" class="form-control" style="width:40%;" value="4510" oninput="syncFields()">
-                                <input type="text" id="f-client-doc-num" class="form-control" style="width:60%;" value="123456" oninput="syncFields()">
+                        <div class="row-2">
+                            <div class="form-group">
+                                <label>Дата рождения</label>
+                                <input type="text" id="f-client-birth" class="form-control" value="15.04.1978" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Отделение КХО №</label>
+                                <input type="text" id="f-kho-num" class="form-control" value="2" oninput="syncFields()">
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Выдан (Кем / Когда)</label>
-                        <input type="text" id="f-client-doc-origin" class="form-control" value="ТП №1 УФМС РОССИИ ПО ГОР. МОСКВЕ, 20.10.2018" oninput="syncFields()">
-                    </div>
-                    <div class="form-group">
-                        <label>Адрес регистрации/проживания</label>
-                        <input type="text" id="f-client-address" class="form-control" value="г. Москва, ул. Ленина, д. 15, кв. 42" oninput="syncFields()">
+                        <div class="row-2">
+                            <div class="form-group">
+                                <label>Тип док. пациента</label>
+                                <input type="text" id="f-client-doc-type" class="form-control" value="Паспорт РФ" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Серия / Номер</label>
+                                <div style="display:flex; gap:5px;">
+                                    <input type="text" id="f-client-doc-ser" class="form-control" style="width:40%;" value="4510" disabled>
+                                    <input type="text" id="f-client-doc-num" class="form-control" style="width:60%;" value="123456" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Выдан (Кем / Когда)</label>
+                            <input type="text" id="f-client-doc-origin" class="form-control" value="ТП №1 УФМС РОССИИ ПО ГОР. МОСКВЕ, 20.10.2018" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Адрес регистрации/проживания</label>
+                            <input type="text" id="f-client-address" class="form-control" value="г. Москва, ул. Ленина, д. 15, кв. 42" disabled>
+                        </div>
                     </div>
 
+                    <!-- Представитель -->
                     <div id="rep-form-block" class="rep-form-block">
                         <div class="section-header" style="margin:0;">Данные законного представителя</div>
                         <div class="form-group">
@@ -151,7 +586,7 @@
                         </div>
                         <div class="row-2">
                             <div class="form-group">
-                                <label>Дата рождения предст.</label>
+                                <label>Дата рождения</label>
                                 <input type="text" id="f-rep-birth" class="form-control" value="12.09.1982" oninput="syncFields()">
                             </div>
                             <div class="form-group">
@@ -170,7 +605,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Паспорт представителя (Данные)</label>
+                            <label>Паспорт представителя</label>
                             <input type="text" id="f-rep-passport" class="form-control" value="Паспорт РФ 4612 №987654 выдан ОВД Пресненского р-на 11.11.2012" oninput="syncFields()">
                         </div>
                         <div class="form-group">
@@ -179,12 +614,70 @@
                         </div>
                     </div>
 
+                    <!-- Врач -->
                     <div class="section-header">Врач</div>
                     <div class="form-group">
-                        <label>Врач анестезиолог-реаниматолог <span class="required">*</span></label>
+                        <label>Врач анестезиолог-реаниматолог</label>
                         <input type="text" id="f-doctor-name" class="form-control" value="Иванов Игорь Игоревич" oninput="syncFields(); updateDoctorTop();">
                     </div>
 
+                    <!-- ===== КОНСТРУКТОР: ТАБЛИЦА ВМЕШАТЕЛЬСТВ ===== -->
+                    <div class="table-editor-section">
+                        <div class="section-header">
+                            <span>Медицинские вмешательства</span>
+                            <span class="badge-count" id="interv-count-badge">0 записей</span>
+                        </div>
+                        <div class="interv-table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width:28%;">Мед. вмешательство</th>
+                                        <th style="width:28%;">Анестезиол. пособие</th>
+                                        <th style="width:17%;">Дата</th>
+                                        <th style="width:17%;">Подпись</th>
+                                        <th style="width:10%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="interv-tbody">
+                                    <!-- строки генерируются JS -->
+                                </tbody>
+                            </table>
+                            <div id="interv-empty-msg" class="interv-empty-msg">Нет записей. Добавьте строку ниже.</div>
+                        </div>
+                        <div class="table-toolbar">
+                            <button class="btn-sm btn-primary-sm" onclick="addIntervRow()">➕ Добавить строку</button>
+                            <button class="btn-sm btn-danger-sm" onclick="clearIntervRows()">🗑️ Очистить все</button>
+                        </div>
+                    </div>
+
+                    <!-- ===== КОНСТРУКТОР: ТАБЛИЦА ОСЛОЖНЕНИЙ ===== -->
+                    <div class="table-editor-section">
+                        <div class="section-header">
+                            <span>Осложнения и последствия</span>
+                            <span class="badge-count" id="compl-count-badge">6 разделов</span>
+                        </div>
+                        <div class="compl-table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Вид анестезии</th>
+                                        <th>Ожидаемый результат</th>
+                                        <th>Проводимые манипуляции</th>
+                                        <th>Наиболее вероятные осложнения</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="compl-tbody">
+                                    <!-- строки генерируются JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-toolbar" style="margin-top:4px;">
+                            <button class="btn-sm btn-primary-sm" onclick="addComplRow()">➕ Добавить раздел</button>
+                            <button class="btn-sm btn-danger-sm" onclick="removeLastComplRow()">🗑️ Удалить последний</button>
+                        </div>
+                    </div>
+
+                    <!-- ===== ДЕЙСТВИЯ ВНИЗУ ===== -->
                     <div style="margin-top: auto; padding-top:10px; border-top:1px solid var(--border-color); display:flex; flex-direction:column; gap:8px;">
                         <div class="btn-row">
                             <button class="btn btn-outline" id="btn-action-save" onclick="saveDraft(false)">Сохранить</button>
@@ -197,9 +690,10 @@
                     </div>
                 </div>
 
+                <!-- ===== ПРАВАЯ ПАНЕЛЬ: ПРЕДПРОСМОТР ===== -->
                 <div class="preview-pane">
                     <div class="a4-sheet" id="real-print-area">
-                        
+
                         <div class="print-title">
                             ИНФОРМИРОВАННОЕ ДОБРОВОЛЬНОЕ СОГЛАСИЕ НА АНЕСТЕЗИОЛОГИЧЕСКОЕ ОБЕСПЕЧЕНИЕ МЕДИЦИНСКОГО (ОПЕРАТИВНОГО) ВМЕШАТЕЛЬСТВА
                         </div>
@@ -208,7 +702,7 @@
 
                         <div class="print-p">
                             находясь на лечении (обследовании) в отделении КХО №<span id="p-kho-num" class="underline-field">2</span> информирован о следующем: <br>
-                            В соответствии со ст.20 Федерального закона Российской Федерации от 21 ноября 2011 г. № 323-ФЗ «Об основах охраны здоровья граждан в Российской Федерации» настоящим подтверждаю свое согласие на проведение мне анестезиологического пособия. 
+                            В соответствии со ст.20 Федерального закона Российской Федерации от 21 ноября 2011 г. № 323-ФЗ «Об основах охраны здоровья граждан в Российской Федерации» настоящим подтверждаю свое согласие на проведение мне анестезиологического пособия.
                             Я информирован (информирована) врачом в доступной мне форме о нижеследующем:
                         </div>
 
@@ -218,20 +712,19 @@
                             <li>о соблюдении режима перед операцией и после неё (воздержание от приема пищи, жидкости и отказа от курения за 6 часов до операции и в раннем послеоперационном периоде, соблюдении постельного режима) и возможных последствиях при его нарушении (развитие тошноты и рвоты, головокружения, коллапса, потери сознания, получение травм, аспирации и другие).</li>
                         </ul>
 
-                        <table border="1" cellspacing="0" cellpadding="0" style="width: 100%; border-collapse: collapse; font-size: 10pt; margin: 10px 0;">
-                            <tr>
-							
-                                <td style="font-weight:bold; width:35%;">Медицинское вмешательство</td>
-                                <td style="font-weight:bold; width:35%;">Анестезиологическое пособие</td>
-                                <td style="font-weight:bold; width:15%;">Дата</td>
-                                <td style="font-weight:bold; width:15%;">Подпись</td>
-                            </tr>
-                            <tr>
-                                <td><br><br></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                        <!-- ===== ДИНАМИЧЕСКАЯ ТАБЛИЦА ВМЕШАТЕЛЬСТВ ===== -->
+                        <table class="dyn-interv-table" id="preview-interv-table">
+                            <thead>
+                                <tr>
+                                    <th>Медицинское вмешательство</th>
+                                    <th>Анестезиологическое пособие</th>
+                                    <th>Дата</th>
+                                    <th>Подпись</th>
+                                </tr>
+                            </thead>
+                            <tbody id="preview-interv-tbody">
+                                <!-- генерируется JS -->
+                            </tbody>
                         </table>
 
                         <p style="font-weight:bold; margin-top:15px;" align="left">Мне даны разъяснения:</p>
@@ -242,97 +735,26 @@
                             <li>о возможных осложнениях и последствиях, которые могут возникнуть во время анестезиологического пособия и в послеоперационном периоде:</li>
                         </ul>
 
-                        <table border="1" cellspacing="0" cellpadding="5" style="width:100%; border-collapse: collapse; font-size:10pt;">
-                            <tr>
-                                <td rowspan="3" width="25%"><b>Общая анестезия:</b><br>- эндотрахеальная<br>- внутривенная<br>- ларингеальная маска</td>
-                                <td width="25%">Ожидаемый результат</td>
-                                <td>Полное выключение сознания, возможное размещение интубационной трубки в трахею или ларингеальной маски в ротоглотке</td>
-                            </tr>
-                            <tr>
-                                <td>Проводимые врачебные манипуляции</td>
-                                <td>Введение лекарственных препаратов в кровеносное русло, вдыхание легкими или введение другими путями</td>
-                            </tr>
-                            <tr>
-                                <td>Наиболее вероятные осложнения</td>
-                                <td>Боль во рту и горле, охриплость голоса, повреждение ротовой полости или зубов, эпизоды появления сознания, повреждение кровеносных сосудов, аспирация, пневмония</td>
-                            </tr>
-
-                            <tr>
-                                <td rowspan="3"><b>Проводниковая</b><br>блокада<br>нерва/сплетении</td>
-                                <td>Ожидаемый результат</td>
-                                <td>Временное отсутствие болевой чувствительности и уменьшение или потеря двигательной активности в нижней части тела</td>
-                            </tr>
-                            <tr>
-                                <td>Проводимые врачебные манипуляции</td>
-                                <td>Лекарственный препарат вводится вокруг нерва, обеспечивая потерю чувствительности в области операции</td>
-                            </tr>
-                            <tr>
-                                <td>Наиболее вероятные осложнения</td>
-                                <td>Воспалительные реакции, судороги, мышечная слабость, потеря чувствительности, повреждение кровеносных сосудов, преходящая остаточная боль</td>
-                            </tr>
-
-                            <tr>
-                                <td rowspan="3"><b>Управляемая</b><br>седоанальгезия</td>
-                                <td>Ожидаемый результат</td>
-                                <td>Уменьшение беспокойства и боли, частичная или полная анелгезия</td>
-                            </tr>
-                            <tr>
-                                <td>Проводимые врачебные манипуляции</td>
-                                <td>Введение лекарственных препаратов в кровеносное русло, вдыхание легкими или введение другими путями, вызывая полубессознательное состояние</td>
-                            </tr>
-                            <tr>
-                                <td>Наиболее вероятные осложнения</td>
-                                <td>Преходящая полная утрата сознания, ухудшение легочной вентиляции, ранение кровеносных сосудов</td>
-                            </tr>
-
-                            <tr>
-                                <td rowspan="3"><b>Интраоперационный</b><br>анестезиологический<br>мониторинг</td>
-                                <td>Ожидаемый результат</td>
-                                <td>Контроль жизненно важных функций организма во время операции, подготовка анестезиологической аппаратуры к проведению анестезии</td>
-                            </tr>
-                            <tr>
-                                <td>Проводимые врачебные манипуляции</td>
-                                <td>Нет</td>
-                            </tr>
-                            <tr>
-                                <td>Наиболее вероятные осложнения</td>
-                                <td>Страх, беспокойство и/или дискомфорт</td>
-                            </tr>
-
-                            <tr>
-                                <td rowspan="3"><b>Искусственное</b><br>кровообращение</td>
-                                <td>Ожидаемый результат</td>
-                                <td>Замещение работы сердечно-сосудистой и дыхательной систем на время оперативного вмешательства</td>
-                            </tr>
-                            <tr>
-                                <td>Проводимые врачебные манипуляции</td>
-                                <td>Канюляция аорты и полых вен, с замещением работы сердца и легких</td>
-                            </tr>
-                            <tr>
-                                <td>Наиболее вероятные осложнения</td>
-                                <td>Геморрагические осложнения. Когнитивные нарушения в раннем послеоперационном периоде.</td>
-                            </tr>
-
-                            <tr>
-                                <td rowspan="3"><b>Другие виды</b><br>анестезии</td>
-                                <td>Ожидаемый результат</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Проводимые врачебные манипуляции</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Наиболее вероятные осложнения</td>
-                                <td></td>
-                            </tr>
+                        <!-- ===== ДИНАМИЧЕСКАЯ ТАБЛИЦА ОСЛОЖНЕНИЙ ===== -->
+                        <table class="dyn-compl-table" id="preview-compl-table">
+                            <thead>
+                                <tr>
+                                    <th>Вид анестезии</th>
+                                    <th>Ожидаемый результат</th>
+                                    <th>Проводимые врачебные манипуляции</th>
+                                    <th>Наиболее вероятные осложнения</th>
+                                </tr>
+                            </thead>
+                            <tbody id="preview-compl-tbody">
+                                <!-- генерируется JS -->
+                            </tbody>
                         </table>
 
                         <div class="print-p" style="margin-top:15px;">
                             <b>Я проинформирован (а)</b> о том, что при всех видах анестезии возможны аллергические реакции, вплоть до анафилактического шока, некоторые из перечисленных осложнений могут привести к летальному исходу, что несоблюдение рекомендаций врача может привести к осложнениям или может быть не достигнут ожидаемый результат.
                         </div>
                         <div class="print-p">
-                            <b>Я поставил(а)</b> в известность врача обо всех проблемах, связанных со здоровьем, в том числе об аллергических проявлениях или индивидуальной непереносимости лекарственных препаратов, обо всех перенесенных мною (представляемым) и известных мне травмах, операциях, заболеваниях, в т.ч. ВИЧ-инфекции, вирусных гепатитах, туберкулезе, инфекциях передаваемых половым путем, об экологических и производственных факторах физической, химической или биологической природы, воздействующих на меня (представляемого) во время жиздеятельности принимаемых лекарственных средствах, проводившихся мне ранее переливаний крови и ее компонентов.
+                            <b>Я поставил(а)</b> в известность врача обо всех проблемах, связанных со здоровьем, в том числе об аллергических проявлениях или индивидуальной непереносимости лекарственных препаратов, обо всех перенесенных мною (представляемым) и известных мне травмах, операциях, заболеваниях, в т.ч. ВИЧ-инфекции, вирусных гепатитах, туберкулезе, инфекциях передаваемых половым путем, об экологических и производственных факторах физической, химической или биологической природы, воздействующих на меня (представляемого) во время жизнедеятельности принимаемых лекарственных средствах, проводившихся мне ранее переливаний крови и ее компонентов.
                         </div>
                         <div class="print-p">
                             <b>Я сообщил(а)</b> правдивые сведения о наследственности, употреблении алкоголя, наркотических и токсических средств.
@@ -355,7 +777,7 @@
 
                         <div class="print-signatures" style="margin-top: 35px;">
                             <div>
-                                <span id="p-sign-date" style="font-weight:bold; border-bottom:1px solid #000;">__.__.____</span> г. 
+                                <span id="p-sign-date" style="font-weight:bold; border-bottom:1px solid #000;">__.__.____</span> г.
                                 в <span id="p-sign-time" style="font-weight:bold; border-bottom:1px solid #000;">__ : __</span>
                             </div>
                             <div style="text-align: center; width: 55%;">
@@ -381,6 +803,8 @@
 
     </div>
 
+    <!-- ===== МОДАЛЬНЫЕ ОКНА ===== -->
+    <!-- Модалка подписания -->
     <div id="modal-sign" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -404,6 +828,7 @@
         </div>
     </div>
 
+    <!-- Модалка разблокировки -->
     <div id="modal-unlock" class="modal">
         <div class="modal-content" style="width: 340px;">
             <div class="modal-header">
@@ -418,6 +843,7 @@
         </div>
     </div>
 
+    <!-- Модалка несохранённых изменений -->
     <div id="modal-unsaved" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -435,6 +861,7 @@
         </div>
     </div>
 
+    <!-- Модалка обновления штампа -->
     <div id="modal-replace-date" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -451,12 +878,11 @@
 
     <script src="common.js"></script>
     <script>
+        // ============================================================
+        //  СОСТОЯНИЕ — МНОЖЕСТВЕННЫЕ СОГЛАСИЯ
+        // ============================================================
         let state = {
-            isFormed: false,
-            isSigned: false,
-            isDirty: false,
-            signatoryMode: 'patient',
-
+            // общие данные пациента (неизменяемые)
             clientName: "Петров Иван Сергеевич",
             clientBirth: "15.04.1978",
             khoNum: "2",
@@ -466,172 +892,634 @@
             clientDocOrigin: "ТП №1 УФМС РОССИИ ПО ГОР. МОСКВЕ, 20.10.2018",
             clientAddress: "г. Москва, ул. Ленина, д. 15, кв. 42",
 
+            // представитель (общий)
             repName: "Петрова Анна Владимировна",
             repBirth: "12.09.1982",
             repPassport: "Паспорт РФ 4612 №987654 выдан ОВД Пресненского р-на 11.11.2012",
             repAddress: "г. Москва, ул. Ленина, д. 15, кв. 42",
 
-            doctorName: "Иванов Игорь Игоревич",
-            signDate: "", signTime: ""
+            // Список согласий
+            consents: [],
+            currentConsentId: null,
+
+            // Текущий режим подписи
+            signatoryMode: 'patient',
+
+            // Флаг грязных изменений в редакторе
+            isDirty: false
         };
 
-        function updateDoctorTop() {
-            const docInput = document.getElementById('f-doctor-name').value.trim();
-            if (!docInput) {
-                document.getElementById('top-doctor-display').textContent = "Не указан";
-                document.getElementById('top-doctor-avatar').textContent = "??";
+        // Шаблон осложнений по умолчанию (используется при создании нового согласия)
+        const DEFAULT_COMPLICATIONS = {
+            general: {
+                label: 'Общая анестезия',
+                sub: 'эндотрахеальная, внутривенная, ларингеальная маска',
+                result: 'Полное выключение сознания, возможное размещение интубационной трубки в трахею или ларингеальной маски в ротоглотке',
+                manipulations: 'Введение лекарственных препаратов в кровеносное русло, вдыхание легкими или введение другими путями',
+                complications: 'Боль во рту и горле, охриплость голоса, повреждение ротовой полости или зубов, эпизоды появления сознания, повреждение кровеносных сосудов, аспирация, пневмония'
+            },
+            conduction: {
+                label: 'Проводниковая блокада нерва/сплетении',
+                sub: '',
+                result: 'Временное отсутствие болевой чувствительности и уменьшение или потеря двигательной активности в нижней части тела',
+                manipulations: 'Лекарственный препарат вводится вокруг нерва, обеспечивая потерю чувствительности в области операции',
+                complications: 'Воспалительные реакции, судороги, мышечная слабость, потеря чувствительности, повреждение кровеносных сосудов, преходящая остаточная боль'
+            },
+            sedation: {
+                label: 'Управляемая седоанальгезия',
+                sub: '',
+                result: 'Уменьшение беспокойства и боли, частичная или полная анелгезия',
+                manipulations: 'Введение лекарственных препаратов в кровеносное русло, вдыхание легкими или введение другими путями, вызывая полубессознательное состояние',
+                complications: 'Преходящая полная утрата сознания, ухудшение легочной вентиляции, ранение кровеносных сосудов'
+            },
+            monitoring: {
+                label: 'Интраоперационный анестезиологический мониторинг',
+                sub: '',
+                result: 'Контроль жизненно важных функций организма во время операции, подготовка анестезиологической аппаратуры к проведению анестезии',
+                manipulations: 'Нет',
+                complications: 'Страх, беспокойство и/или дискомфорт'
+            },
+            bypass: {
+                label: 'Искусственное кровообращение',
+                sub: '',
+                result: 'Замещение работы сердечно-сосудистой и дыхательной систем на время оперативного вмешательства',
+                manipulations: 'Канюляция аорты и полых вен, с замещением работы сердца и легких',
+                complications: 'Геморрагические осложнения. Когнитивные нарушения в раннем послеоперационном периоде.'
+            },
+            other: {
+                label: 'Другие виды анестезии',
+                sub: '',
+                result: '',
+                manipulations: '',
+                complications: ''
+            }
+        };
+
+        const COMPL_KEYS = ['general', 'conduction', 'sedation', 'monitoring', 'bypass', 'other'];
+
+        // ============================================================
+        //  ИНИЦИАЛИЗАЦИЯ
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function () {
+            // Создаём первое согласие по умолчанию
+            if (state.consents.length === 0) {
+                createNewConsentInternal(true);
+            }
+            renderConsentsList();
+            updateMainScreenMeta();
+            updateDoctorTop();
+
+            // Подписка на изменения полей вмешательств (делегирование)
+            document.getElementById('interv-tbody').addEventListener('input', function (e) {
+                const target = e.target;
+                if (target.classList.contains('interv-input')) {
+                    const row = target.closest('tr');
+                    if (!row) return;
+                    const idx = parseInt(row.dataset.idx, 10);
+                    if (isNaN(idx)) return;
+                    const field = target.dataset.field;
+                    if (field) {
+                        const consent = getCurrentConsent();
+                        if (consent) {
+                            consent.interventions[idx][field] = target.value;
+                            markDirty();
+                            updatePreviewInterv();
+                            updateConsentItemInList(state.currentConsentId);
+                        }
+                    }
+                }
+            });
+
+            // Подписка на изменения полей осложнений
+            document.getElementById('compl-tbody').addEventListener('input', function (e) {
+                const target = e.target;
+                if (target.classList.contains('compl-textarea')) {
+                    const key = target.dataset.key;
+                    const field = target.dataset.field;
+                    const consent = getCurrentConsent();
+                    if (consent && key && field && consent.complications[key]) {
+                        consent.complications[key][field] = target.value;
+                        markDirty();
+                        updatePreviewCompl();
+                        updateConsentItemInList(state.currentConsentId);
+                    }
+                }
+            });
+
+            // Инициализация селектора
+            populateConsentSelect();
+
+            // Выбираем первое согласие
+            if (state.consents.length > 0) {
+                switchConsent(state.consents[0].id);
+            }
+        });
+
+        // ============================================================
+        //  РАБОТА СО СПИСКОМ СОГЛАСИЙ
+        // ============================================================
+        function createNewConsentInternal(silent) {
+            const id = Date.now() + Math.random() * 1000;
+            const newConsent = {
+                id: id,
+                interventions: [{ intervention: '', anesthesia: '', date: '', signature: '' }],
+                complications: JSON.parse(JSON.stringify(DEFAULT_COMPLICATIONS)),
+                isFormed: false,
+                isSigned: false,
+                signDate: '',
+                signTime: '',
+                doctorName: document.getElementById('f-doctor-name')?.value || 'Иванов Игорь Игоревич',
+                khoNum: document.getElementById('f-kho-num')?.value || '2'
+            };
+            state.consents.push(newConsent);
+            state.currentConsentId = id;
+            if (!silent) {
+                renderConsentsList();
+                populateConsentSelect();
+                switchConsent(id);
+                markDirty();
+            }
+            return id;
+        }
+
+        function createNewConsent() {
+            createNewConsentInternal(false);
+            // Также обновляем главный экран
+            updateMainScreenMeta();
+        }
+
+        function createNewConsentAndSwitch() {
+            const id = createNewConsentInternal(false);
+            switchConsent(id);
+        }
+
+        function deleteCurrentConsent() {
+            if (state.consents.length <= 1) {
+                alert('Нельзя удалить единственное согласие.');
+                return;
+            }
+            if (!confirm('Удалить текущее согласие?')) return;
+            const idx = state.consents.findIndex(c => c.id === state.currentConsentId);
+            if (idx !== -1) {
+                state.consents.splice(idx, 1);
+                // Выбираем первое
+                state.currentConsentId = state.consents[0].id;
+                renderConsentsList();
+                populateConsentSelect();
+                switchConsent(state.currentConsentId);
+                updateMainScreenMeta();
+            }
+        }
+
+        function getCurrentConsent() {
+            return state.consents.find(c => c.id === state.currentConsentId) || null;
+        }
+
+        function switchConsent(id) {
+            state.currentConsentId = id;
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            // Обновляем форму
+            document.getElementById('f-kho-num').value = consent.khoNum || state.khoNum;
+            document.getElementById('f-doctor-name').value = consent.doctorName || state.doctorName;
+            // Обновляем селектор
+            document.getElementById('consent-select').value = id;
+            // Рендерим таблицы
+            renderIntervTable();
+            renderComplTable();
+            syncFields();
+            applyLockState();
+            updateMainScreenMeta();
+            state.isDirty = false;
+            // Обновляем заголовок
+            const idx = state.consents.indexOf(consent);
+            document.getElementById('editor-screen-title').textContent = 'Редактор согласия #' + (idx + 1);
+            // Обновляем превью
+            updatePreviewInterv();
+            updatePreviewCompl();
+            // Обновляем пункт в списке
+            renderConsentsList();
+            populateConsentSelect();
+        }
+
+        function populateConsentSelect() {
+            const select = document.getElementById('consent-select');
+            select.innerHTML = '';
+            state.consents.forEach((c, i) => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                const label = (c.isSigned ? '✅ ' : '📝 ') + 'Согласие #' + (i + 1);
+                opt.textContent = label;
+                if (c.id === state.currentConsentId) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+
+        function updateConsentItemInList(id) {
+            // обновляем только элемент списка на главном
+            renderConsentsList();
+        }
+
+        // ============================================================
+        //  РЕНДЕРИНГ СПИСКА СОГЛАСИЙ НА ГЛАВНОМ ЭКРАНЕ
+        // ============================================================
+        function renderConsentsList() {
+            const container = document.getElementById('consents-list-items');
+            const count = document.getElementById('consents-count');
+            count.textContent = state.consents.length;
+
+            if (state.consents.length === 0) {
+                container.innerHTML = '<div style="padding:12px;text-align:center;color:var(--text-muted);">Нет созданных согласий</div>';
                 return;
             }
 
-            const parts = docInput.split(/\s+/);
-            let formattedName = parts[0];
-            let initials = parts[0].substring(0, 1);
-
-            if (parts.length > 1) {
-                formattedName += ` ${parts[1].substring(0, 1)}.`;
-                initials += parts[1].substring(0, 1);
-            }
-            if (parts.length > 2) {
-                formattedName += ` ${parts[2].substring(0, 1)}.`;
-            }
-
-            document.getElementById('top-doctor-display').textContent = formattedName;
-            document.getElementById('top-doctor-avatar').textContent = initials.toUpperCase().substring(0, 2);
+            let html = '';
+            state.consents.forEach((c, i) => {
+                const statusClass = c.isSigned ? 'signed' : 'draft';
+                const statusText = c.isSigned ? 'Подписан' : 'Черновик';
+                const dateStr = c.signDate ? formatDate(c.signDate) : '—';
+                const timeStr = c.signTime || '—';
+                html += `
+                    <div class="consent-item" data-id="${c.id}">
+                        <div class="info">
+                            <span class="num">#${i+1}</span>
+                            <span class="status ${statusClass}">${statusText}</span>
+                            <span class="date">${dateStr} ${timeStr !== '—' ? timeStr : ''}</span>
+                            <span style="font-size:11px;color:var(--text-muted);">${c.interventions.length} вмешательств</span>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-sm primary" onclick="openConsent(${c.id})">✏️ Открыть</button>
+                            ${state.consents.length > 1 ? `<button class="btn-sm danger" onclick="deleteConsent(${c.id})">🗑️</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
         }
 
+        function openConsent(id) {
+            switchConsent(id);
+            openEditorForCurrent();
+        }
+
+        function deleteConsent(id) {
+            if (state.consents.length <= 1) {
+                alert('Нельзя удалить единственное согласие.');
+                return;
+            }
+            if (!confirm('Удалить это согласие?')) return;
+            const idx = state.consents.findIndex(c => c.id === id);
+            if (idx !== -1) {
+                state.consents.splice(idx, 1);
+                if (state.currentConsentId === id) {
+                    state.currentConsentId = state.consents[0].id;
+                }
+                renderConsentsList();
+                populateConsentSelect();
+                switchConsent(state.currentConsentId);
+                updateMainScreenMeta();
+            }
+        }
+
+        // ============================================================
+        //  ТАБЛИЦА ВМЕШАТЕЛЬСТВ — РЕНДЕРИНГ ФОРМЫ
+        // ============================================================
+        function renderIntervRows() {
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            const tbody = document.getElementById('interv-tbody');
+            const emptyMsg = document.getElementById('interv-empty-msg');
+            const countBadge = document.getElementById('interv-count-badge');
+
+            const rows = consent.interventions;
+            if (!rows.length) {
+                tbody.innerHTML = '';
+                emptyMsg.style.display = 'block';
+                countBadge.textContent = '0 записей';
+                return;
+            }
+            emptyMsg.style.display = 'none';
+            countBadge.textContent = rows.length + ' записей';
+
+            let html = '';
+            const locked = consent.isSigned;
+            rows.forEach((item, idx) => {
+                html += `
+                    <tr data-idx="${idx}">
+                        <td><input class="interv-input" data-field="intervention" type="text" value="${escHtml(item.intervention)}" placeholder="Вмешательство" ${locked ? 'disabled' : ''}></td>
+                        <td><input class="interv-input" data-field="anesthesia" type="text" value="${escHtml(item.anesthesia)}" placeholder="Пособие" ${locked ? 'disabled' : ''}></td>
+                        <td><input class="interv-input" data-field="date" type="text" value="${escHtml(item.date)}" placeholder="ДД.ММ.ГГГГ" ${locked ? 'disabled' : ''}></td>
+                        <td><input class="interv-input" data-field="signature" type="text" value="${escHtml(item.signature)}" placeholder="Подпись" ${locked ? 'disabled' : ''}></td>
+                        <td>
+                            <div class="interv-row-actions">
+                                <button class="btn-del-row" onclick="removeIntervRow(${idx})" title="Удалить строку" ${locked ? 'disabled' : ''}>✕</button>
+                                <button class="btn-add-row" onclick="addIntervRowAfter(${idx})" title="Добавить строку после" ${locked ? 'disabled' : ''}>+</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+            // Обновляем превью
+            updatePreviewInterv();
+        }
+
+        function renderIntervTable() {
+            renderIntervRows();
+        }
+
+        function addIntervRow() {
+            const consent = getCurrentConsent();
+            if (!consent || consent.isSigned) return;
+            consent.interventions.push({ intervention: '', anesthesia: '', date: '', signature: '' });
+            markDirty();
+            renderIntervRows();
+            updateConsentItemInList(state.currentConsentId);
+        }
+
+        function addIntervRowAfter(idx) {
+            const consent = getCurrentConsent();
+            if (!consent || consent.isSigned) return;
+            consent.interventions.splice(idx + 1, 0, { intervention: '', anesthesia: '', date: '', signature: '' });
+            markDirty();
+            renderIntervRows();
+            updateConsentItemInList(state.currentConsentId);
+        }
+
+        function removeIntervRow(idx) {
+            const consent = getCurrentConsent();
+            if (!consent || consent.isSigned) return;
+            if (consent.interventions.length <= 1) {
+                if (!confirm('Удалить единственную строку?')) return;
+            }
+            consent.interventions.splice(idx, 1);
+            markDirty();
+            renderIntervRows();
+            updateConsentItemInList(state.currentConsentId);
+        }
+
+        function clearIntervRows() {
+            const consent = getCurrentConsent();
+            if (!consent || consent.isSigned) return;
+            if (!consent.interventions.length) return;
+            if (!confirm('Удалить все строки?')) return;
+            consent.interventions = [];
+            markDirty();
+            renderIntervRows();
+            updateConsentItemInList(state.currentConsentId);
+        }
+
+        // ============================================================
+        //  ТАБЛИЦА ОСЛОЖНЕНИЙ — РЕНДЕРИНГ ФОРМЫ
+        // ============================================================
+        function renderComplRows() {
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            const tbody = document.getElementById('compl-tbody');
+            const countBadge = document.getElementById('compl-count-badge');
+
+            const comp = consent.complications;
+            const keys = Object.keys(comp);
+            let html = '';
+            let visibleCount = 0;
+            const locked = consent.isSigned;
+
+            keys.forEach(key => {
+                const c = comp[key];
+                if (!c) return;
+                visibleCount++;
+                const label = c.label || key;
+                const sub = c.sub || '';
+                html += `
+                    <tr>
+                        <td class="row-label-cell">
+                            ${escHtml(label)}
+                            ${sub ? '<br><span class="sub">' + escHtml(sub) + '</span>' : ''}
+                        </td>
+                        <td><textarea class="compl-textarea" data-key="${key}" data-field="result" rows="2" ${locked ? 'disabled' : ''}>${escHtml(c.result || '')}</textarea></td>
+                        <td><textarea class="compl-textarea" data-key="${key}" data-field="manipulations" rows="2" ${locked ? 'disabled' : ''}>${escHtml(c.manipulations || '')}</textarea></td>
+                        <td><textarea class="compl-textarea" data-key="${key}" data-field="complications" rows="2" ${locked ? 'disabled' : ''}>${escHtml(c.complications || '')}</textarea></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+            countBadge.textContent = visibleCount + ' разделов';
+            updatePreviewCompl();
+        }
+
+        function renderComplTable() {
+            renderComplRows();
+        }
+
+        function addComplRow() {
+            const consent = getCurrentConsent();
+            if (!consent || consent.isSigned) return;
+            const newKey = 'custom_' + Date.now();
+            consent.complications[newKey] = {
+                label: 'Новый вид',
+                sub: '',
+                result: '',
+                manipulations: '',
+                complications: ''
+            };
+            markDirty();
+            renderComplRows();
+            updateConsentItemInList(state.currentConsentId);
+        }
+
+        function removeLastComplRow() {
+            const consent = getCurrentConsent();
+            if (!consent || consent.isSigned) return;
+            const keys = Object.keys(consent.complications);
+            // Защитим базовые 6 ключей от удаления
+            const baseKeys = ['general', 'conduction', 'sedation', 'monitoring', 'bypass', 'other'];
+            const removable = keys.filter(k => !baseKeys.includes(k));
+            if (removable.length === 0) {
+                alert('Нельзя удалить базовые разделы. Добавьте свои.');
+                return;
+            }
+            const lastKey = removable[removable.length - 1];
+            delete consent.complications[lastKey];
+            markDirty();
+            renderComplRows();
+            updateConsentItemInList(state.currentConsentId);
+        }
+
+        // ============================================================
+        //  ПРЕДПРОСМОТР — ОБНОВЛЕНИЕ
+        // ============================================================
+        function updatePreviewInterv() {
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            const tbody = document.getElementById('preview-interv-tbody');
+            const rows = consent.interventions;
+            if (!rows.length) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="4">— нет записей —</td></tr>`;
+                return;
+            }
+            let html = '';
+            rows.forEach(item => {
+                html += `
+                    <tr>
+                        <td>${escHtml(item.intervention || '')}</td>
+                        <td>${escHtml(item.anesthesia || '')}</td>
+                        <td>${escHtml(item.date || '')}</td>
+                        <td>${escHtml(item.signature || '')}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function updatePreviewCompl() {
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            const tbody = document.getElementById('preview-compl-tbody');
+            const comp = consent.complications;
+            const keys = Object.keys(comp);
+            let html = '';
+            keys.forEach(key => {
+                const c = comp[key];
+                if (!c) return;
+                const label = c.label || key;
+                const sub = c.sub || '';
+                html += `
+                    <tr>
+                        <td class="row-label">${escHtml(label)}${sub ? '<br><span class="sub">' + escHtml(sub) + '</span>' : ''}</td>
+                        <td>${escHtml(c.result || '')}</td>
+                        <td>${escHtml(c.manipulations || '')}</td>
+                        <td>${escHtml(c.complications || '')}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ============================================================
+        //  СИНХРОНИЗАЦИЯ ПОЛЕЙ
+        // ============================================================
+        function syncFields() {
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            // Чтение из полей формы
+            const khoVal = document.getElementById('f-kho-num').value;
+            const docVal = document.getElementById('f-doctor-name').value;
+            const repNameVal = document.getElementById('f-rep-name').value;
+            const repBirthVal = document.getElementById('f-rep-birth').value;
+            const repPassVal = document.getElementById('f-rep-passport').value;
+            const repAddrVal = document.getElementById('f-rep-address').value;
+
+            consent.khoNum = khoVal || state.khoNum;
+            consent.doctorName = docVal || state.doctorName;
+            // Обновляем глобальные для представителя
+            state.repName = repNameVal;
+            state.repBirth = repBirthVal;
+            state.repPassport = repPassVal;
+            state.repAddress = repAddrVal;
+
+            // Обновляем блок подписи
+            const block = document.getElementById('p-signatory-block');
+            if (state.signatoryMode === 'representative') {
+                block.innerHTML = `Я, <b>${escHtml(state.repName)}</b>, являясь законным представителем на основании документа (реквизиты) зафиксированных в системе, в отношении <b>${escHtml(state.clientName)}</b> <b>${escHtml(state.clientBirth)}</b> г.р.`;
+                document.getElementById('p-footer-signatory-name').textContent = state.repName || state.clientName;
+            } else {
+                block.innerHTML = `Я, <b>${escHtml(state.clientName)}</b> ${escHtml(state.clientBirth)} года рождения, документ, удостоверяющий личность: <b>${escHtml(state.clientDocType)}</b> серия <b>${escHtml(state.clientDocSer)}</b> номер <b>${escHtml(state.clientDocNum)}</b>, выдан <b>${escHtml(state.clientDocOrigin)}</b>`;
+                document.getElementById('p-footer-signatory-name').textContent = state.clientName;
+            }
+
+            document.getElementById('p-kho-num').textContent = consent.khoNum || '_____';
+            document.getElementById('p-footer-doctor-name').textContent = consent.doctorName || '_______________________';
+
+            // Даты подписи
+            if (consent.signDate) {
+                document.getElementById('p-sign-date').textContent = formatDate(consent.signDate);
+            } else {
+                document.getElementById('p-sign-date').textContent = '__.__.____';
+            }
+            if (consent.signTime) {
+                document.getElementById('p-sign-time').textContent = consent.signTime;
+            } else {
+                document.getElementById('p-sign-time').textContent = '__ : __';
+            }
+        }
+
+        // ============================================================
+        //  РЕЖИМ ПОДПИСИ
+        // ============================================================
         function toggleSignatoryMode(mode) {
             state.signatoryMode = mode;
             document.getElementById('rep-form-block').classList.toggle('visible', mode === 'representative');
             syncFields();
+            markDirty();
         }
 
+        // ============================================================
+        //  МЕТКИ ГРЯЗИ / БЛОКИРОВКИ
+        // ============================================================
         function markDirty() { state.isDirty = true; }
 
-        function syncFields() {
-            markDirty();
-            state.clientName = document.getElementById('f-client-name').value;
-            state.clientBirth = document.getElementById('f-client-birth').value;
-            state.khoNum = document.getElementById('f-kho-num').value;
-            state.clientDocType = document.getElementById('f-client-doc-type').value;
-            state.clientDocSer = document.getElementById('f-client-doc-ser').value;
-            state.clientDocNum = document.getElementById('f-client-doc-num').value;
-            state.clientDocOrigin = document.getElementById('f-client-doc-origin').value;
-            state.clientAddress = document.getElementById('f-client-address').value;
-            state.repName = document.getElementById('f-rep-name').value;
-            state.doctorName = document.getElementById('f-doctor-name').value;
-
-            const block = document.getElementById('p-signatory-block');
-            if (state.signatoryMode === 'representative') {
-                block.innerHTML = `Я, <b>${state.repName}</b>, являясь законным представителем на основании документа (реквизиты) зафиксированных в системе, в отношении <b>${state.clientName}</b> <b>${state.clientBirth}</b> г.р.`;
-                document.getElementById('p-footer-signatory-name').textContent = state.repName;
-            } else {
-                block.innerHTML = `Я, <b>${state.clientName}</b> ${state.clientBirth} года рождения, документ, удостоверяющий личность: <b>${state.clientDocType}</b> серия <b>${state.clientDocSer}</b> номер <b>${state.clientDocNum}</b>, выдан <b>${state.clientDocOrigin}</b>`;
-                document.getElementById('p-footer-signatory-name').textContent = state.clientName;
-            }
-
-            document.getElementById('p-kho-num').textContent = state.khoNum || "_____";
-            document.getElementById('p-footer-doctor-name').textContent = state.doctorName || "_______________________";
-        }
-
-        function openEditor() {
-            openScreen('screen-editor');
-            toggleSignatoryMode(state.signatoryMode);
-            applyLockState();
-            syncFields();
-            state.isDirty = false;
-        }
-
-        function openViewer() {
-            openEditor();
-            setFieldsDisabled(true);
-            document.getElementById('editor-screen-title').textContent = "Просмотр согласия";
-        }
-
-        function setFieldsDisabled(status) {
-            const inputs = document.querySelectorAll('#form-container .form-control, #form-container input[type="radio"]');
-            inputs.forEach(i => i.disabled = status);
-        }
-
         function applyLockState() {
-            if (state.isSigned) {
-                setFieldsDisabled(true);
-                document.getElementById('btn-action-save').disabled = true;
-                document.getElementById('btn-action-sign').disabled = true;
-                document.getElementById('btn-action-print').disabled = false;
-                document.getElementById('btn-action-edit').disabled = false;
-            } else {
-                setFieldsDisabled(false);
-                document.getElementById('btn-action-save').disabled = false;
-                document.getElementById('btn-action-sign').disabled = false;
-                document.getElementById('btn-action-print').disabled = true;
-                document.getElementById('btn-action-edit').disabled = true;
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            const locked = consent.isSigned;
+
+            // Поля, кроме пациентских (они всегда disabled)
+            document.querySelectorAll('#form-container .form-control:not(.patient-readonly .form-control)').forEach(i => i.disabled = locked);
+            document.querySelectorAll('#form-container input[type="radio"]').forEach(i => i.disabled = locked);
+
+            // Таблицы
+            document.querySelectorAll('#interv-tbody .interv-input').forEach(i => i.disabled = locked);
+            document.querySelectorAll('#compl-tbody .compl-textarea').forEach(i => i.disabled = locked);
+
+            // Кнопки действий
+            document.getElementById('btn-action-save').disabled = locked;
+            document.getElementById('btn-action-sign').disabled = locked;
+            document.getElementById('btn-action-print').disabled = !locked;
+            document.getElementById('btn-action-edit').disabled = !locked;
+
+            // Кнопки управления таблицами
+            document.querySelectorAll('.table-toolbar button, .interv-row-actions button').forEach(b => b.disabled = locked);
+        }
+
+        // ============================================================
+        //  ОТКРЫТИЕ / ЗАКРЫТИЕ ЭКРАНОВ
+        // ============================================================
+        function openScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function openEditorForCurrent() {
+            const consent = getCurrentConsent();
+            if (!consent) {
+                alert('Нет выбранного согласия.');
+                return;
             }
-        }
-
-        function validateForm() {
-            if (!document.getElementById('f-client-name').value || !document.getElementById('f-doctor-name').value) {
-                alert("Заполните все обязательные поля (*)");
-                return false;
-            }
-            return true;
-        }
-
-        function saveDraft(andClose) {
-            if (!validateForm()) return;
-            if (state.isSigned) { openModal('modal-replace-date'); return; }
-            commitFields();
-            if (andClose) openScreen('screen-main');
-            else alert("Сохранено как черновик.");
-        }
-
-        function commitFields() {
-            state.isFormed = true;
+            openScreen('screen-editor');
+            // Подгружаем данные
+            document.getElementById('f-kho-num').value = consent.khoNum || state.khoNum;
+            document.getElementById('f-doctor-name').value = consent.doctorName || state.doctorName;
+            toggleSignatoryMode(state.signatoryMode);
+            renderIntervTable();
+            renderComplTable();
+            syncFields();
+            applyLockState();
             state.isDirty = false;
-            updateMainScreenMeta();
+            const idx = state.consents.indexOf(consent);
+            document.getElementById('editor-screen-title').textContent = 'Редактор согласия #' + (idx + 1);
+            // Обновить селектор
+            document.getElementById('consent-select').value = consent.id;
+            populateConsentSelect();
         }
 
-        function openSignModal() {
-            if (!validateForm()) return;
-            const now = new Date();
-            document.getElementById('modal-f-date').value = now.toISOString().substring(0, 10);
-            document.getElementById('modal-f-time').value = now.toTimeString().substring(0, 5);
-            openModal('modal-sign');
-        }
-
-        function submitSign() {
-            state.signDate = document.getElementById('modal-f-date').value;
-            state.signTime = document.getElementById('modal-f-time').value;
-            commitFields();
-            state.isSigned = true;
-
-            document.getElementById('p-sign-date').textContent = formatDate(state.signDate);
-            document.getElementById('p-sign-time').textContent = state.signTime;
-
-            closeModal('modal-sign');
-            applyLockState();
-            updateMainScreenMeta();
-            setTimeout(() => { triggerPrint(); }, 200);
-        }
-
-        function openUnlockModal() { openModal('modal-unlock'); }
-        function confirmUnlock() {
-            state.isSigned = false;
-            closeModal('modal-unlock');
-            applyLockState();
-            markDirty();
-        }
-
-        function finalizeRepublish(shouldReplace) {
-            closeModal('modal-replace-date');
-            commitFields();
-            if (shouldReplace) {
-                state.isSigned = false;
-                openSignModal();
-            } else {
-                state.isSigned = true;
-                applyLockState();
-                openScreen('screen-main');
-            }
+        function openViewerForCurrent() {
+            openEditorForCurrent();
+            // Блокируем всё
+            document.querySelectorAll('#form-container .form-control, #form-container input[type="radio"]').forEach(i => i.disabled = true);
+            document.querySelectorAll('#interv-tbody .interv-input').forEach(i => i.disabled = true);
+            document.querySelectorAll('#compl-tbody .compl-textarea').forEach(i => i.disabled = true);
+            document.querySelectorAll('.table-toolbar button, .interv-row-actions button').forEach(b => b.disabled = true);
+            document.getElementById('editor-screen-title').textContent = 'Просмотр согласия';
         }
 
         function handleCloseEditor() {
@@ -639,25 +1527,236 @@
             else openScreen('screen-main');
         }
 
-        function forceCloseEditor() { closeModal('modal-unsaved'); openScreen('screen-main'); }
+        function forceCloseEditor() {
+            closeModal('modal-unsaved');
+            openScreen('screen-main');
+        }
 
-        function updateMainScreenMeta() {
-            if (state.isFormed) {
-                document.getElementById('badge-doc-status').textContent = state.isSigned ? "Подписан" : "Черновик";
-                document.getElementById('badge-doc-status').className = state.isSigned ? "status-badge status-signed" : "status-badge status-draft";
-                document.getElementById('meta-sign-date').textContent = state.signDate ? formatDate(state.signDate) : "—";
-                document.getElementById('meta-sign-time').textContent = state.signTime ? state.signTime : "—";
-                document.getElementById('btn-main-view').disabled = false;
-                document.getElementById('btn-main-download').disabled = false;
-                document.getElementById('btn-main-print').disabled = !state.isSigned;
+        // ============================================================
+        //  СОХРАНЕНИЕ / ПОДПИСАНИЕ
+        // ============================================================
+        function validateForm() {
+            const consent = getCurrentConsent();
+            if (!consent) return false;
+            if (!state.clientName || !consent.doctorName) {
+                alert('Заполните обязательные поля (ФИО пациента и врач)');
+                return false;
+            }
+            return true;
+        }
+
+        function commitFields() {
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            consent.isFormed = true;
+            state.isDirty = false;
+            updateMainScreenMeta();
+            updateConsentItemInList(consent.id);
+            renderConsentsList();
+        }
+
+        function saveDraft(andClose) {
+            if (!validateForm()) return;
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            if (consent.isSigned) { openModal('modal-replace-date'); return; }
+            // Сохраняем данные из полей
+            consent.khoNum = document.getElementById('f-kho-num').value;
+            consent.doctorName = document.getElementById('f-doctor-name').value;
+            commitFields();
+            if (andClose) openScreen('screen-main');
+            else alert('Сохранено как черновик.');
+        }
+
+        function openSignModal() {
+            if (!validateForm()) return;
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            const now = new Date();
+            document.getElementById('modal-f-date').value = now.toISOString().substring(0, 10);
+            document.getElementById('modal-f-time').value = now.toTimeString().substring(0, 5);
+            openModal('modal-sign');
+        }
+
+        function submitSign() {
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            consent.signDate = document.getElementById('modal-f-date').value;
+            consent.signTime = document.getElementById('modal-f-time').value;
+            consent.isSigned = true;
+            commitFields();
+
+            document.getElementById('p-sign-date').textContent = formatDate(consent.signDate);
+            document.getElementById('p-sign-time').textContent = consent.signTime;
+
+            closeModal('modal-sign');
+            applyLockState();
+            updateMainScreenMeta();
+            syncFields();
+            renderConsentsList();
+            populateConsentSelect();
+            setTimeout(() => { triggerPrint(); }, 200);
+        }
+
+        function openUnlockModal() { openModal('modal-unlock'); }
+
+        function confirmUnlock() {
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            consent.isSigned = false;
+            closeModal('modal-unlock');
+            applyLockState();
+            markDirty();
+            // Разблокируем поля
+            document.querySelectorAll('#form-container .form-control:not(.patient-readonly .form-control)').forEach(i => i.disabled = false);
+            document.querySelectorAll('#interv-tbody .interv-input').forEach(i => i.disabled = false);
+            document.querySelectorAll('#compl-tbody .compl-textarea').forEach(i => i.disabled = false);
+            document.querySelectorAll('.table-toolbar button, .interv-row-actions button').forEach(b => b.disabled = false);
+            updateConsentItemInList(consent.id);
+            renderConsentsList();
+        }
+
+        function finalizeRepublish(shouldReplace) {
+            closeModal('modal-replace-date');
+            const consent = getCurrentConsent();
+            if (!consent) return;
+            commitFields();
+            if (shouldReplace) {
+                consent.isSigned = false;
+                openSignModal();
+            } else {
+                consent.isSigned = true;
+                applyLockState();
+                openScreen('screen-main');
             }
         }
 
-        function triggerPrint() { window.print(); }
-        function openScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function formatDate(d) { return formatDateRu(d); }
+        // ============================================================
+        //  ГЛАВНЫЙ ЭКРАН — МЕТАДАННЫЕ
+        // ============================================================
+        function updateMainScreenMeta() {
+            const consent = getCurrentConsent();
+            const card = document.getElementById('current-consent-card');
+            if (!consent) {
+                card.style.display = 'none';
+                return;
+            }
+            card.style.display = 'block';
+            const idx = state.consents.indexOf(consent);
+            document.getElementById('current-consent-label').textContent = 'Согласие #' + (idx + 1);
 
-        updateDoctorTop();
+            if (consent.isFormed) {
+                document.getElementById('badge-doc-status').textContent = consent.isSigned ? 'Подписан' : 'Черновик';
+                document.getElementById('badge-doc-status').className = consent.isSigned ? 'status-badge status-signed' : 'status-badge status-draft';
+                document.getElementById('meta-sign-date').textContent = consent.signDate ? formatDate(consent.signDate) : '—';
+                document.getElementById('meta-sign-time').textContent = consent.signTime ? consent.signTime : '—';
+                document.getElementById('btn-main-view').disabled = false;
+                document.getElementById('btn-main-download').disabled = false;
+                document.getElementById('btn-main-print').disabled = !consent.isSigned;
+            } else {
+                document.getElementById('badge-doc-status').textContent = 'Не сформировано';
+                document.getElementById('badge-doc-status').className = 'status-badge status-draft';
+                document.getElementById('meta-sign-date').textContent = '—';
+                document.getElementById('meta-sign-time').textContent = '—';
+                document.getElementById('btn-main-view').disabled = true;
+                document.getElementById('btn-main-download').disabled = true;
+                document.getElementById('btn-main-print').disabled = true;
+            }
+        }
+
+        // ============================================================
+        //  ПЕЧАТЬ
+        // ============================================================
+        function triggerPrint() {
+            syncFields();
+            updatePreviewInterv();
+            updatePreviewCompl();
+            window.print();
+        }
+
+        // ============================================================
+        //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+        // ============================================================
+        function escHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function formatDate(d) {
+            if (!d) return '__.__.____';
+            const p = d.split('-');
+            if (p.length !== 3) return d;
+            return p[2] + '.' + p[1] + '.' + p[0];
+        }
+
+        function updateDoctorTop() {
+            const docInput = document.getElementById('f-doctor-name').value.trim();
+            const display = document.getElementById('top-doctor-display');
+            const avatar = document.getElementById('top-doctor-avatar');
+            if (!docInput) {
+                display.textContent = 'Не указан';
+                avatar.textContent = '??';
+                return;
+            }
+            const parts = docInput.split(/\s+/);
+            let formatted = parts[0];
+            let initials = parts[0].substring(0, 1);
+            if (parts.length > 1) {
+                formatted += ' ' + parts[1].substring(0, 1) + '.';
+                initials += parts[1].substring(0, 1);
+            }
+            if (parts.length > 2) {
+                formatted += ' ' + parts[2].substring(0, 1) + '.';
+            }
+            display.textContent = formatted;
+            avatar.textContent = initials.toUpperCase().substring(0, 2);
+        }
+
+        // ============================================================
+        //  ИНИЦИАЛИЗАЦИЯ
+        // ============================================================
+        (function init() {
+            // Создаём начальное согласие
+            if (state.consents.length === 0) {
+                createNewConsentInternal(true);
+            }
+            renderConsentsList();
+            populateConsentSelect();
+            switchConsent(state.consents[0].id);
+            updateMainScreenMeta();
+            applyLockState();
+            updateDoctorTop();
+            document.getElementById('rep-form-block').classList.remove('visible');
+        })();
+
+        // для вызова из onclick
+        window.openEditorForCurrent = openEditorForCurrent;
+        window.openViewerForCurrent = openViewerForCurrent;
+        window.createNewConsent = createNewConsent;
+        window.createNewConsentAndSwitch = createNewConsentAndSwitch;
+        window.deleteCurrentConsent = deleteCurrentConsent;
+        window.switchConsent = switchConsent;
+        window.openConsent = openConsent;
+        window.deleteConsent = deleteConsent;
+        window.addIntervRow = addIntervRow;
+        window.addIntervRowAfter = addIntervRowAfter;
+        window.removeIntervRow = removeIntervRow;
+        window.clearIntervRows = clearIntervRows;
+        window.addComplRow = addComplRow;
+        window.removeLastComplRow = removeLastComplRow;
+        window.toggleSignatoryMode = toggleSignatoryMode;
+        window.syncFields = syncFields;
+        window.markDirty = markDirty;
+        window.saveDraft = saveDraft;
+        window.openSignModal = openSignModal;
+        window.submitSign = submitSign;
+        window.openUnlockModal = openUnlockModal;
+        window.confirmUnlock = confirmUnlock;
+        window.finalizeRepublish = finalizeRepublish;
+        window.handleCloseEditor = handleCloseEditor;
+        window.forceCloseEditor = forceCloseEditor;
+        window.triggerPrint = triggerPrint;
+        window.updateDoctorTop = updateDoctorTop;
     </script>
 </body>
 </html>
