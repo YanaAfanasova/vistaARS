@@ -218,7 +218,7 @@
         <div class="modal-body" style="display:flex; gap:20px; max-height:60vh; overflow-y:auto;">
             <!-- Левая колонка: список препаратов -->
             <div style="flex:1; border-right:1px solid #ddd; padding-right:15px;">
-                <h4 style="margin-bottom:10px; font-size:13px;">Введённые препараты</h4>
+                <h4 style="margin-bottom:10px; font-size:13px;">Введённые ЛС</h4>
                 <div id="drugListForWriteOff"></div>
             </div>
             <!-- Правая колонка: выбор ТН -->
@@ -1177,26 +1177,25 @@
         });
 
         document.getElementById('confirmWriteOffBtn')?.addEventListener('click', function() {
-            // Проверяем, что для всех препаратов выбраны ТН
             const allDrugs = window._allDrugsForWriteOff || [];
             let allSelected = true;
             allDrugs.forEach(drug => {
                 if (!selectedTnForDrugs[drug.index]) {
                     allSelected = false;
-                }
+                    }
             });
             if (!allSelected) {
-                alert('Для всех препаратов необходимо выбрать торговое наименование!');
+                alert('Для всех ЛС необходимо выбрать торговое наименование!');
                 return;
             }
 
-            // Фиксация списания (имитация)
+    // Фиксация списания
             console.log('Списание выполнено:', selectedTnForDrugs);
             alert('Препараты списаны. Операция завершена.');
             document.getElementById('writeOffModal').style.display = 'none';
-            // Возврат в историю болезни (имитация)
-            alert('Возврат к списку операций или в историю болезни...');
-            // Здесь можно сделать переход: window.location.href = '...';
+    
+    // ★ ПЕРЕХОД НА ПРОТОКОЛ АНЕСТЕЗИИ ★
+            window.location.href = 'protocol-anesthesia.html';
         });
 
         document.getElementById('cancelTnBtn')?.addEventListener('click', function() {
