@@ -308,6 +308,7 @@
     <div class="footer-actions">
         <button class="btn btn-green" id="signBtn">Подписать и закрыть для редактирования</button>
         <button class="btn btn-danger" id="deleteBtn">Удалить</button>
+        <button class="btn btn-outline" id="printBtn">Печать</button>
     </div>
 </main>
 
@@ -481,6 +482,7 @@
         document.getElementById('copyFieldsBtn').addEventListener('click', function() {
             alert('Копирование полей осмотров (заглушка)');
         });
+        document.getElementById('printBtn').addEventListener('click', ()=>alert('Печать документа'));
 
         // Автоматическое заполнение даты (если поле пустое)
         (function setDefaultDate() {

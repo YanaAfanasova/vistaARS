@@ -839,6 +839,7 @@
     <div class="footer-actions">
         <button class="btn btn-green" id="signBtn">Подписать и закрыть для редактирования</button>
         <button class="btn btn-danger" id="deleteBtn">Удалить</button>
+        <button class="btn btn-outline" id="printBtn">Печать</button>
     </div>
 </main>
 
@@ -1123,6 +1124,7 @@
             setupStub('saveTemplateBtn', 'Сохранение шаблона (заглушка)');
             setupStub('loadTemplateBtn', 'Загрузка шаблона (заглушка)');
             setupStub('copyFieldsBtn', 'Копирование полей (заглушка)');
+            document.getElementById('printBtn').addEventListener('click', ()=>alert('Печать документа'));
 
             // Делегирование событий: Снятие подсветки ошибок + мгновенный автопересчёт при изменении данных
             if (DOM.form) {

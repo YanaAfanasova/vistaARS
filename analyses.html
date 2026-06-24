@@ -625,7 +625,9 @@
 
         </div>
     </div>
-
+    <div class="footer-actions"></div>
+        <button class="btn btn-outline" id="printBtn">Печать</button>
+    </div>
 </div>
 
 <!-- ===== СКРИПТЫ ===== -->
@@ -725,6 +727,7 @@
         const selectedOpMoment = document.getElementById('selectedOpMoment');
         const opTimeControls = document.getElementById('opTimeControls');
         const hospTimeControls = document.getElementById('hospTimeControls');
+        document.getElementById('printBtn').addEventListener('click', ()=>alert('Печать документа'));
 
         // -------------------- Функции для таблицы (режим операции) --------------------
         function renderOpTable() {

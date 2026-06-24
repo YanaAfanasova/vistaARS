@@ -209,6 +209,7 @@
     <div class="footer-actions">
         <button class="btn btn-green" id="signBtn">Подписать и закрыть для редактирования</button>
         <button class="btn btn-danger" id="deleteBtn">Удалить</button>
+        <button class="btn btn-outline" id="printBtn">Печать</button>
     </div>
 </main>
 
@@ -334,6 +335,7 @@
         document.getElementById('saveTemplateBtn').addEventListener('click', ()=>alert('Сохранение шаблона (заглушка)'));
         document.getElementById('loadTemplateBtn').addEventListener('click', ()=>alert('Загрузка шаблона (заглушка)'));
         document.getElementById('copyFieldsBtn').addEventListener('click', ()=>alert('Копирование полей (заглушка)'));
+        document.getElementById('printBtn').addEventListener('click', ()=>alert('Печать документа'));
 
         // Снятие подсветки при редактировании
         getFields().forEach(el => {
