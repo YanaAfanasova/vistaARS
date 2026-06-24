@@ -190,6 +190,78 @@
 <div id="drugRegisterModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Зарегистрировать введение</span><span class="close-modal" data-modal="drugRegisterModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Препарат</label><input type="text" id="regDrugName" readonly></div><div class="form-field"><label>Формат</label><select id="regFormat"><option>разовое</option><option>непрерывное</option></select></div><div class="form-field"><label>Доза</label><input type="text" id="regDose"> <select id="regUnit" style="width:80px;"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div><div class="form-field"><label>Время (мин от 09:00) / Start-End</label><input type="text" id="regTime"></div><div class="form-field" id="regSpeedRow"><label>Скорость (мл/ч)</label><input type="text" id="regSpeed"></div><div class="form-field"><label>Способ введения</label><select id="regRoute"><option>в/в</option><option>в/м</option><option>эпидурально</option><option>ингаляционно</option><option>подкожно</option></select></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelDrugRegBtn">Отмена</button><button class="btn btn-green" id="confirmDrugRegBtn">Зарегистрировать</button></div></div></div>
 <div id="addPlanModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить в план</span><span class="close-modal" data-modal="addPlanModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Название препарата</label><input type="text" id="planName"></div><div class="form-field"><label>Формат</label><select id="planFormat"><option value="single">Разовое</option><option value="continuous">Непрерывное</option></select></div><div class="form-field"><label>Доза</label><input type="text" id="planDose"></div><div class="form-field"><label>Единица</label><select id="planUnit"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div><div class="form-field"><label>Время / Start-End</label><input type="text" id="planTime" placeholder="например 30 или 30-150"></div><div class="form-field" id="planSpeedRow"><label>Скорость (мл/ч)</label><input type="text" id="planSpeed"></div><div class="form-field"><label>Способ введения</label><select id="planRoute"><option>в/в</option><option>в/м</option><option>эпидурально</option><option>ингаляционно</option><option>подкожно</option></select></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelPlanModalBtn">Отмена</button><button class="btn btn-green" id="savePlanModalBtn">Сохранить в план</button></div></div></div>
 
+<!-- Окно подтверждения завершения операции -->
+<div id="confirmCompleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>Подтверждение завершения операции</span>
+            <span class="close-modal" data-modal="confirmCompleteModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p style="font-size:14px;">Вы действительно хотите завершить операцию?</p>
+            <p style="color:#666; font-size:12px;">После завершения будет открыто окно списания препаратов.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="cancelConfirmBtn">Отмена</button>
+            <button class="btn btn-green" id="proceedConfirmBtn">Продолжить</button>
+        </div>
+    </div>
+</div>
+
+<!-- Окно списания препаратов -->
+<div id="writeOffModal" class="modal">
+    <div class="modal-content" style="width:700px; max-width:95%;">
+        <div class="modal-header">
+            <span>Списание препаратов</span>
+            <span class="close-modal" data-modal="writeOffModal">&times;</span>
+        </div>
+        <div class="modal-body" style="display:flex; gap:20px; max-height:60vh; overflow-y:auto;">
+            <!-- Левая колонка: список препаратов -->
+            <div style="flex:1; border-right:1px solid #ddd; padding-right:15px;">
+                <h4 style="margin-bottom:10px; font-size:13px;">Введённые препараты</h4>
+                <div id="drugListForWriteOff"></div>
+            </div>
+            <!-- Правая колонка: выбор ТН -->
+            <div style="flex:1;">
+                <h4 style="margin-bottom:10px; font-size:13px;">Действия</h4>
+                <div id="tnSelectionArea"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="cancelWriteOffBtn">Отмена</button>
+            <button class="btn btn-green" id="confirmWriteOffBtn">Списать</button>
+        </div>
+    </div>
+</div>
+
+<!-- Окно выбора торгового наименования -->
+<div id="selectTnModal" class="modal">
+    <div class="modal-content" style="width:500px; max-width:95%;">
+        <div class="modal-header">
+            <span>Выбор торгового наименования</span>
+            <span class="close-modal" data-modal="selectTnModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-field">
+                <label>Поиск по справочнику ТН</label>
+                <input type="text" id="tnSearchInput" placeholder="Введите название..." style="width:100%; padding:8px;">
+            </div>
+            <div style="max-height:300px; overflow-y:auto; border:1px solid #eee; border-radius:4px;">
+                <table style="width:100%; border-collapse:collapse; font-size:12px;">
+                    <thead style="background:#f5f7fa; position:sticky; top:0;">
+                        <tr><th style="padding:8px; text-align:left;">Наименование</th><th style="padding:8px; text-align:left;">Форма выпуска</th><th style="padding:8px; text-align:left;">Серия</th><th style="padding:8px; text-align:left;">Годен до</th></tr>
+                    </thead>
+                    <tbody id="tnResultsBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer" style="justify-content:space-between;">
+            <span style="font-size:11px; color:#999;">Выберите строку для подстановки</span>
+            <button class="btn btn-outline" id="cancelTnBtn">Отмена</button>
+        </div>
+    </div>
+</div> 
+
 <script src="common.js"></script>
 <script>
     (function(){
@@ -948,7 +1020,226 @@
             });
         }
         init();
+        // ========== ДОБАВИТЬ В КОНЕЦ IIFE (перед закрытием скобки (function(){ ... })(); ) ==========
+
+        // ----- Функции для завершения операции и списания -----
+        let selectedTnForDrugs = {}; // { drugIndex: 'выбранное ТН' }
+
+        function showConfirmCompleteModal() {
+            document.getElementById('confirmCompleteModal').style.display = 'flex';
+        }
+
+        function showWriteOffModal() {
+            // Собираем все введённые препараты (разовые + инфузии)
+            const allDrugs = [];
+            actualSingles.forEach((d, idx) => {
+                allDrugs.push({ index: 'single_' + idx, name: d.name, detail: d.detail, type: 'single' });
+            });
+            actualInfusions.forEach((d, idx) => {
+                allDrugs.push({ index: 'infusion_' + idx, name: d.name, detail: d.detail, type: 'infusion' });
+            });
+
+            // Очищаем предыдущие выборы
+            selectedTnForDrugs = {};
+
+            // Заполняем левую колонку списком
+            const listContainer = document.getElementById('drugListForWriteOff');
+            listContainer.innerHTML = '';
+            allDrugs.forEach((drug, i) => {
+                const div = document.createElement('div');
+                div.style.padding = '6px 0';
+                div.style.borderBottom = '1px solid #f0f0f0';
+                div.innerHTML = `<strong>${drug.name}</strong> <span style="color:#666; font-size:11px;">${drug.detail}</span>`;
+                div.dataset.index = drug.index;
+                listContainer.appendChild(div);
+            });
+
+            // Заполняем правую колонку полями выбора ТН
+            const tnArea = document.getElementById('tnSelectionArea');
+            tnArea.innerHTML = '';
+            allDrugs.forEach((drug, i) => {
+                const wrapper = document.createElement('div');
+                wrapper.style.marginBottom = '10px';
+                wrapper.style.display = 'flex';
+                wrapper.style.alignItems = 'center';
+                wrapper.style.gap = '8px';
+
+                const label = document.createElement('span');
+                label.style.fontSize = '11px';
+                label.style.fontWeight = '600';
+                label.style.minWidth = '70px';
+                label.textContent = drug.name;
+
+                const tnField = document.createElement('input');
+                tnField.type = 'text';
+                tnField.readOnly = true;
+                tnField.placeholder = 'не выбрано';
+                tnField.style.flex = '1';
+                tnField.style.padding = '4px 6px';
+                tnField.style.border = '1px solid #ccc';
+                tnField.style.borderRadius = '4px';
+                tnField.style.fontSize = '11px';
+                tnField.dataset.drugIndex = drug.index;
+
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-outline';
+                btn.textContent = 'Подобрать товар';
+                btn.style.padding = '3px 8px';
+                btn.style.fontSize = '11px';
+                btn.dataset.drugIndex = drug.index;
+                btn.addEventListener('click', function(e) {
+                    const idx = this.dataset.drugIndex;
+                    showSelectTnModal(idx);
+                });
+
+                wrapper.appendChild(label);
+                wrapper.appendChild(tnField);
+                wrapper.appendChild(btn);
+                tnArea.appendChild(wrapper);
+            });
+
+            document.getElementById('writeOffModal').style.display = 'flex';
+            // Сохраняем список препаратов для использования при списании
+            window._allDrugsForWriteOff = allDrugs;
+        }
+
+        function showSelectTnModal(drugIndex) {
+            // Очищаем результаты и поиск
+            document.getElementById('tnSearchInput').value = '';
+            renderTnResults('');
+
+            // Сохраняем индекс препарата, для которого выбираем ТН
+            window._selectedDrugIndex = drugIndex;
+            document.getElementById('selectTnModal').style.display = 'flex';
+
+            // Фокус на поиск
+            document.getElementById('tnSearchInput').focus();
+        }
+
+        // Заглушка справочника ТН
+        const tnCatalog = [
+            { name: 'Пропофол-Липуро', form: 'эмульсия 10 мг/мл', series: 'P12345', expiry: '12.2026' },
+            { name: 'Пропофол-Фрезениус', form: 'эмульсия 10 мг/мл', series: 'F67890', expiry: '08.2025' },
+            { name: 'Фентанил-Эском', form: 'р-р 0,05 мг/мл', series: 'E11223', expiry: '03.2027' },
+            { name: 'Фентанил-Гедеон', form: 'р-р 0,05 мг/мл', series: 'G44556', expiry: '11.2026' },
+            { name: 'Ремифентанил-Глаксо', form: 'порошок 2 мг', series: 'R99887', expiry: '09.2025' },
+            { name: 'Бупивакаин-Каби', form: 'р-р 0,5%', series: 'B33445', expiry: '05.2027' },
+            { name: 'Натрия хлорид 0,9%', form: 'р-р 100 мл', series: 'N66778', expiry: '12.2028' },
+        ];
+
+        function renderTnResults(query) {
+            const tbody = document.getElementById('tnResultsBody');
+            tbody.innerHTML = '';
+            const filtered = tnCatalog.filter(item =>
+                item.name.toLowerCase().includes(query.toLowerCase()) ||
+                item.form.toLowerCase().includes(query.toLowerCase()) ||
+                item.series.toLowerCase().includes(query.toLowerCase())
+            );
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="padding:20px; text-align:center; color:#999;">Ничего не найдено</td></tr>`;
+                return;
+            }
+            filtered.forEach(item => {
+                const row = document.createElement('tr');
+                row.style.cursor = 'pointer';
+                row.addEventListener('click', function() {
+                    // Подстановка выбранного ТН в соответствующее поле
+                    const drugIndex = window._selectedDrugIndex;
+                    const tnInput = document.querySelector(`#tnSelectionArea input[data-drug-index="${drugIndex}"]`);
+                    if (tnInput) {
+                        tnInput.value = `${item.name} (${item.form}, сер. ${item.series}, годен до ${item.expiry})`;
+                        selectedTnForDrugs[drugIndex] = tnInput.value;
+                    }
+                    document.getElementById('selectTnModal').style.display = 'none';
+                });
+                row.innerHTML = `
+                    <td style="padding:6px;">${item.name}</td>
+                    <td style="padding:6px;">${item.form}</td>
+                    <td style="padding:6px;">${item.series}</td>
+                    <td style="padding:6px;">${item.expiry}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Обработчики для окон
+        document.getElementById('cancelConfirmBtn')?.addEventListener('click', function() {
+            document.getElementById('confirmCompleteModal').style.display = 'none';
+        });
+
+        document.getElementById('proceedConfirmBtn')?.addEventListener('click', function() {
+            document.getElementById('confirmCompleteModal').style.display = 'none';
+            showWriteOffModal();
+        });
+
+        document.getElementById('cancelWriteOffBtn')?.addEventListener('click', function() {
+            document.getElementById('writeOffModal').style.display = 'none';
+        });
+
+        document.getElementById('confirmWriteOffBtn')?.addEventListener('click', function() {
+            // Проверяем, что для всех препаратов выбраны ТН
+            const allDrugs = window._allDrugsForWriteOff || [];
+            let allSelected = true;
+            allDrugs.forEach(drug => {
+                if (!selectedTnForDrugs[drug.index]) {
+                    allSelected = false;
+                }
+            });
+            if (!allSelected) {
+                alert('Для всех препаратов необходимо выбрать торговое наименование!');
+                return;
+            }
+
+            // Фиксация списания (имитация)
+            console.log('Списание выполнено:', selectedTnForDrugs);
+            alert('Препараты списаны. Операция завершена.');
+            document.getElementById('writeOffModal').style.display = 'none';
+            // Возврат в историю болезни (имитация)
+            alert('Возврат к списку операций или в историю болезни...');
+            // Здесь можно сделать переход: window.location.href = '...';
+        });
+
+        document.getElementById('cancelTnBtn')?.addEventListener('click', function() {
+            document.getElementById('selectTnModal').style.display = 'none';
+        });
+
+        // Поиск при вводе в окне выбора ТН
+        document.getElementById('tnSearchInput')?.addEventListener('input', function() {
+            renderTnResults(this.value);
+        });
+
+        // При открытии окна выбора ТН инициализируем список
+        document.getElementById('selectTnModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+
+        // Обработчик для кнопки "Завершить операцию"
+        document.querySelector('.btn.btn-green')?.addEventListener('click', function(e) {
+            // Если это кнопка с текстом "Завершить операцию"
+            if (this.textContent.trim() === 'Завершить операцию') {
+                showConfirmCompleteModal();
+            }
+        });
+
+        // Закрытие модалок по крестику и по клику на оверлей (уже есть общий обработчик для .close-modal, но добавим для новых)
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modalId = this.dataset.modal;
+                document.getElementById(modalId).style.display = 'none';
+            });
+        });
+        // Закрытие по клику на фон для новых окон
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        });
     })();
 </script>
+ 
 </body>
 </html>
