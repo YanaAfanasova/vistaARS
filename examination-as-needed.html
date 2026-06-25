@@ -1,4 +1,3 @@
-<!--
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -6,6 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Осмотр по необходимости — VISTAMED</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Стили для компактной группировки */
+        .inner-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .inner-table td {
+            padding: 4px 6px;
+            vertical-align: top;
+        }
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.85rem;
+        }
+        .input-wrapper label {
+            margin-bottom: 2px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+        .input-wrapper input,
+        .input-wrapper select,
+        .input-wrapper textarea {
+            width: 100%;
+            padding: 4px 6px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            background: #fff;
+        }
+        .input-wrapper input:focus,
+        .input-wrapper select:focus,
+        .input-wrapper textarea:focus {
+            border-color: var(--primary-green);
+            outline: none;
+        }
+        .input-wrapper textarea {
+            resize: vertical;
+            min-height: 40px;
+        }
+        .col-25 { width: 25%; }
+        .col-33 { width: 33.33%; }
+        .col-50 { width: 50%; }
+        .col-100 { width: 100%; }
+
+        .inline-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .inline-fields label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+        }
+        .inline-fields select {
+            padding: 2px 4px;
+        }
+
+        .highlight-missing input,
+        .highlight-missing select,
+        .highlight-missing textarea {
+            border-color: var(--danger) !important;
+            background-color: #fff0f0 !important;
+        }
+        .highlight-missing td {
+            background-color: #fff5f5;
+        }
+    </style>
 </head>
 <body>
 
@@ -13,78 +87,12 @@
     <div class="logo-section">
         <span class="logo-text">Виста-МЕД</span>
         <span class="logo-tag">АРС</span>
-        <button type="button" class="btn-back" onclick="goBackToHistory()">⟲ Вернуться в историю болезни</button>
     </div>
     <div class="user-section">
         <div class="doctor-meta">
             <div class="doctor-name">Турчанинов А.Ю.</div>
-            <div class="doctor-specialty">Анестезиолог</div>
+            <div class="doctor-specialty">анестезиолог-реаниматолог</div>
         </div>
-        <div class="user-avatar">АЮ</div>
-    </div>
-</header>
-
-<div class="patient-bar" id="patientBar">
-    <div class="patient-data">
-        <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
-        <div class="param"><span>Дата рожд.:</span><strong>15.04.1978 (46 лет)</strong></div>
-        <div class="param"><span>Рост / Вес:</span><strong>178 см / 82 кг</strong></div>
-        <div class="param"><span>Площадь тела:</span><strong>2.01 м²</strong></div>
-        <div class="param"><span>Группа крови:</span><strong>A(II) Rh+</strong></div>
-        <div class="param"><span>№ ИБ:</span><strong>ИБ-2024-0892</strong></div>
-        <div class="param"><span>Диагноз:</span><strong>Острый аппендицит</strong></div>
-        <div class="param danger"><span>Аллергоанамнез:</span><strong>Пенициллин — анафилаксия</strong></div>
-    </div>
-    <button type="button" class="btn-toggle-patient" id="togglePatientBtn">▲ Скрыть</button>
-</div>
-<div class="patient-bar-expand" id="patientBarExpand" style="display:none;">
-    <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
-</div>
-
-<nav class="tabs-nav">
-    <a href="consents.html" class="tab-item">Согласия</a>
-    <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
-    <a href="examination-as-needed.html" class="tab-item active">Осмотр по необходимости</a>
-    <a href="ns-and-pv.html" class="tab-item">Получение НС и ПВ</a>
-    <a href="anesthesia-card.html" class="tab-item">Карта анестезии</a>
-    <a href="protocol-anesthesia.html" class="tab-item">Протокол анестезии</a>
-    <a href="protocol-ic.html" class="tab-item">Протокол ИК</a>
-    <a href="analyses.html" class="tab-item">Анализы</a>
-</nav>
-
-<main class="main-content">
-    <h1 class="page-title">Осмотр по необходимости</h1>
-    <div class="page-placeholder">
-        <p>Дополнительные осмотры анестезиолога в периоперационном периоде.</p>
-        <p class="text-muted" style="margin-top:8px;">Страница в разработке.</p>
-    </div>
-</main>
-
-<script src="common.js"></script>
-</body>
-</html>
--->
-
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Осмотр по необходимости — VISTAMED</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
-<header class="top-nav">
-    <div class="logo-section">
-         <span class="logo-text">Виста-МЕД</span>
-        <span class="logo-tag">АРС</span>
-    </div>
-    <div class="user-section">
-        <div class="doctor-meta">
-            <div class="doctor-name">Турчанинов А.Ю.</div>
-          <div class="doctor-specialty">анестезиолог-реаниматолог</div>
-       </div>
         <div class="user-avatar">АЮ</div>
         <button class="btn-back" onclick="alert('Переход к истории болезни...')">⟲ Вернуться в историю болезни</button>
     </div>
@@ -137,137 +145,282 @@
     <div class="constructor-table" id="examForm">
         <table>
             <tbody>
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 1. ОБЩИЕ СВЕДЕНИЯ -->
+                <!-- ============================================================ -->
                 <tr class="section-header">
                     <th colspan="2">Общие сведения</th>
                 </tr>
                 <tr>
-                    <th class="field-label">Дата выполнения</th>
-                    <td><input type="datetime-local" id="examDate" value="2026-05-28T08:00"></td>
-                </tr>
-                <tr>
-                    <th class="field-label">Назначил</th>
+                    <th class="field-label">Дата и персонал</th>
                     <td>
-                        <select id="assignedDoctor">
-                            <option value="И. А. Беденко" selected>И. А. Беденко</option>
-                            <option value="А. Ю. Турчанинов">А. Ю. Турчанинов</option>
-                            <option value="А. И. Иванов">А. И. Иванов</option>
-                        </select>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-33">
+                                    <div class="input-wrapper">
+                                        <label>Дата выполнения</label>
+                                        <input type="datetime-local" id="examDate" value="2026-05-28T08:00">
+                                    </div>
+                                </td>
+                                <td class="col-33">
+                                    <div class="input-wrapper">
+                                        <label>Назначил</label>
+                                        <select id="assignedDoctor">
+                                            <option value="И. А. Беденко" selected>И. А. Беденко</option>
+                                            <option value="А. Ю. Турчанинов">А. Ю. Турчанинов</option>
+                                            <option value="А. И. Иванов">А. И. Иванов</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td class="col-33">
+                                    <div class="input-wrapper">
+                                        <label>Исполнитель</label>
+                                        <select id="executorDoctor">
+                                            <option value="не определено" selected>не определено</option>
+                                            <option value="И. А. Беденко">И. А. Беденко</option>
+                                            <option value="А. Ю. Турчанинов">А. Ю. Турчанинов</option>
+                                            <option value="А. И. Иванов">А. И. Иванов</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
-                <tr>
-                    <th class="field-label">Исполнитель</th>
-                    <td>
-                        <select id="executorDoctor">
-                            <option value="не определено" selected>не определено</option>
-                            <option value="И. А. Беденко">И. А. Беденко</option>
-                            <option value="А. Ю. Турчанинов">А. Ю. Турчанинов</option>
-                            <option value="А. И. Иванов">А. И. Иванов</option>
-                        </select>
-                    </td>
-                </tr>
+
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 2. ЖАЛОБЫ И АНАМНЕЗ -->
+                <!-- ============================================================ -->
                 <tr class="section-header">
                     <th colspan="2">Жалобы и анамнез</th>
                 </tr>
                 <tr>
                     <th class="field-label">Жалобы</th>
-                    <td><input type="text" id="complaints" value="Жалоб нет"></td>
+                    <td><textarea id="complaints" rows="2" style="width:100%;">Жалоб нет</textarea></td>
                 </tr>
                 <tr>
                     <th class="field-label">Трансфузионный анамнез</th>
-                    <td><input type="text" id="transfusion" value="нет"></td>
+                    <td><input type="text" id="transfusion" value="нет" style="width:100%;"></td>
                 </tr>
                 <tr>
                     <th class="field-label">Аллергоанамнез</th>
-                    <td><input type="text" id="allergy" value="не отягощён"></td>
+                    <td><input type="text" id="allergy" value="не отягощён" style="width:100%;"></td>
                 </tr>
+
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 3. ДИАГНОЗ -->
+                <!-- ============================================================ -->
                 <tr class="section-header">
                     <th colspan="2">Диагноз</th>
                 </tr>
                 <tr>
                     <th class="field-label">Диагноз</th>
-                    <td><textarea id="diagnosis" rows="3">ИБС. Стенокардия напряжения III ФК. Постинфарктный кардиосклероз неуточненной давности. Гипертоническая болезнь III ст., риск - 4. Целевой уровень АД не достигнут. ХСН с умеренно сниженной ФВ (48%) I ст., ФК III.</textarea></td>
-                </tr>
-                <tr class="section-header">
-                    <th colspan="2">Физикально обследование</th>
-                </tr>
-                <tr>
-                    <th class="field-label">Кожные покровы, видимые слизистые</th>
-                    <td><input type="text" id="skinMucous" value="обычной окраски"></td>
+                    <td><textarea id="diagnosis" rows="3" style="width:100%;">ИБС. Стенокардия напряжения III ФК. Постинфарктный кардиосклероз неуточненной давности. Гипертоническая болезнь III ст., риск - 4. Целевой уровень АД не достигнут. ХСН с умеренно сниженной ФВ (48%) I ст., ФК III.</textarea></td>
                 </tr>
 
-                <tr>
-                    <th class="field-label">Телосложение</th>
-                    <td><input type="text" id="bodyBuild" value="правильное"></td>
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 4. ФИЗИКАЛЬНОЕ ОБСЛЕДОВАНИЕ -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Физикальное обследование</th>
                 </tr>
+                <!-- Группа 1: Кожные покровы, Телосложение, Общее состояние -->
                 <tr>
-                    <th class="field-label">Общее состояние</th>
-                    <td><input type="text" id="generalCondition" value="удовлетворительное"></td>
+                    <th class="field-label">Общие параметры</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-33">
+                                    <div class="input-wrapper">
+                                        <label>Кожные покровы, видимые слизистые</label>
+                                        <input type="text" id="skinMucous" list="skinMucousList" value="обычной окраски">
+                                        <datalist id="skinMucousList">
+                                            <option value="обычной окраски">
+                                            <option value="бледные">
+                                            <option value="цианотичные">
+                                        </datalist>
+                                    </div>
+                                </td>
+                                <td class="col-33">
+                                    <div class="input-wrapper">
+                                        <label>Телосложение</label>
+                                        <input type="text" id="bodyBuild" list="bodyBuildList" value="правильное">
+                                        <datalist id="bodyBuildList">
+                                            <option value="правильное">
+                                            <option value="повышенного питания">
+                                        </datalist>
+                                    </div>
+                                </td>
+                                <td class="col-33">
+                                    <div class="input-wrapper">
+                                        <label>Общее состояние</label>
+                                        <input type="text" id="generalCondition" list="generalConditionList" value="удовлетворительное">
+                                        <datalist id="generalConditionList">
+                                            <option value="удовлетворительное">
+                                            <option value="средней тяжести">
+                                            <option value="тяжелое">
+                                            <option value="крайне тяжелое">
+                                            <option value="терминальное">
+                                        </datalist>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
+                <!-- Группа 2: Органы дыхания, Тоны сердца -->
                 <tr>
-                    <th class="field-label">Органы дыхания</th>
-                    <td><input type="text" id="respiratory" value="проводится во все отделы"></td>
+                    <th class="field-label">Дыхание и сердце</th>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50">
+                                    <div class="input-wrapper">
+                                        <label>Органы дыхания</label>
+                                        <input type="text" id="respiratory" list="respiratoryList" value="проводится во все отделы">
+                                        <datalist id="respiratoryList">
+                                            <option value="проводится во все отделы">
+                                            <option value="ослаблено в нижних отделах">
+                                            <option value="ослаблено над всем легочным полем">
+                                            <option value="самостоятельное">
+                                            <option value="ИВЛ">
+                                        </datalist>
+                                    </div>
+                                </td>
+                                <td class="col-50">
+                                    <div class="input-wrapper">
+                                        <label>Тоны сердца</label>
+                                        <input type="text" id="heartSounds" list="heartSoundsList" value="ритмичные">
+                                        <datalist id="heartSoundsList">
+                                            <option value="ритмичные">
+                                            <option value="аритмичные">
+                                        </datalist>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
-                <tr>
-                    <th class="field-label">Тоны сердца</th>
-                    <td><input type="text" id="heartSounds" value="ритмичные"></td>
-                </tr>
+
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 5. ВИТАЛЬНЫЕ ПАРАМЕТРЫ -->
+                <!-- ============================================================ -->
                 <tr class="section-header">
                     <th colspan="2">Витальные параметры</th>
                 </tr>
                 <tr>
-                    <th class="field-label">Витальные параметры</th>
+                    <th class="field-label">Параметры</th>
                     <td>
-                        <div class="inline-fields">
-                            <label>ЧДД: <input type="number" id="respRate" value="18" style="width:60px;"></label>
-                            <label>АД справа: <input type="text" id="bpRight" value="180/110" style="width:70px;"></label>
-                            <label>АД слева: <input type="text" id="bpLeft" value="170/100" style="width:70px;"></label>
-                            <label>ЧСС: <input type="number" id="heartRate" value="72" style="width:60px;"></label>
-                        </div>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-25">
+                                    <div class="input-wrapper">
+                                        <label>ЧДД</label>
+                                        <input type="number" id="respRate" value="18">
+                                    </div>
+                                </td>
+                                <td class="col-25">
+                                    <div class="input-wrapper">
+                                        <label>АД справа</label>
+                                        <input type="text" id="bpRight" value="180/110">
+                                    </div>
+                                </td>
+                                <td class="col-25">
+                                    <div class="input-wrapper">
+                                        <label>АД слева</label>
+                                        <input type="text" id="bpLeft" value="170/100">
+                                    </div>
+                                </td>
+                                <td class="col-25">
+                                    <div class="input-wrapper">
+                                        <label>ЧСС</label>
+                                        <input type="number" id="heartRate" value="72">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
+
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 6. ПЛАНИРУЕМОЕ ВМЕШАТЕЛЬСТВО И РИСК -->
+                <!-- ============================================================ -->
                 <tr class="section-header">
                     <th colspan="2">Планируемое вмешательство и анестезиологический риск</th>
                 </tr>
                 <tr>
-                    <th class="field-label">Планируется оперативное вмешательство</th>
-                    <td><input type="text" id="plannedSurgery" value="ревизия раны"></td>
-                </tr>
-                <tr>
-                    <th class="field-label">Вид планируемой анестезии</th>
+                    <th class="field-label">Операция и анестезия</th>
                     <td>
-                        <select id="anesthesiaType">
-                            <option value="эндотрахеальный наркоз" selected>эндотрахеальный наркоз</option>
-                            <option value="внутривенный">внутривенный</option>
-                            <option value="комбинированный">комбинированный</option>
-                            <option value="местная анестезия">местная анестезия</option>
-                        </select>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-33">
+                                    <div class="input-wrapper">
+                                        <label>Планируется оперативное вмешательство</label>
+                                        <input type="text" id="plannedSurgery" value="ревизия раны">
+                                    </div>
+                                </td>
+                                <td class="col-33">
+                                    <div class="input-wrapper">
+                                        <label>Вид планируемой анестезии</label>
+                                        <input type="text" id="anesthesiaType" list="anesthesiaTypeList" value="эндотрахеальный наркоз">
+                                        <datalist id="anesthesiaTypeList">
+                                            <option value="эндотрахеальный наркоз">
+                                            <option value="местное обезболивание">
+                                            <option value="внутривенная анестезия">
+                                        </datalist>
+                                    </div>
+                                </td>
+                                <td class="col-33">
+                                    <div class="input-wrapper">
+                                        <label>Вид операции</label>
+                                        <input type="text" id="operationType" list="operationTypeList" value="плановая">
+                                        <datalist id="operationTypeList">
+                                            <option value="плановая">
+                                            <option value="экстренная">
+                                        </datalist>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
                 <tr>
-                    <th class="field-label">Вид операции</th>
+                    <th class="field-label">Оценка риска ASA</th>
                     <td>
-                        <select id="operationType">
-                            <option value="плановая" selected>плановая</option>
-                            <option value="экстренная">экстренная</option>
-                            <option value="срочная">срочная</option>
-                        </select>
+                        <table class="inner-table">
+                            <tr>
+                                <td class="col-50">
+                                    <div class="input-wrapper">
+                                        <label>Оценка степени риска анестезиологического пособия ASA</label>
+                                        <input type="text" id="asaRisk" list="asaList" value="III">
+                                        <datalist id="asaList">
+                                            <option value="I">
+                                            <option value="II">
+                                            <option value="III">
+                                            <option value="IV">
+                                            <option value="V">
+                                        </datalist>
+                                    </div>
+                                </td>
+                                <td class="col-50"></td>
+                            </tr>
+                        </table>
                     </td>
+                </tr>
+
+                <!-- ============================================================ -->
+                <!-- РАЗДЕЛ 7. ДОПОЛНИТЕЛЬНЫЕ ДАННЫЕ (новое поле из БД) -->
+                <!-- ============================================================ -->
+                <tr class="section-header">
+                    <th colspan="2">Дополнительные данные и примечания</th>
                 </tr>
                 <tr>
-                    <th class="field-label">Оценка степени риска анестезиологического пособия ASA</th>
-                    <td>
-                        <select id="asaRisk">
-                            <option value="I">I</option>
-                            <option value="II">II</option>
-                            <option value="III" selected>III</option>
-                            <option value="IV">IV</option>
-                            <option value="V">V</option>
-                        </select>
-                    </td>
+                    <th class="field-label">Примечания</th>
+                    <td><input type="text" id="additionalNotes" value="" style="width:100%;" placeholder="Введите дополнительные сведения"></td>
                 </tr>
-				<tr>
+                <tr></tr>
                     <th class="field-label">Особенности</th>
-                    <td><input type="text" id="peculiarities" value=""></td>
+                    <td><input type="text" id="peculiarities" value="" style="width:100%;"></td>
                 </tr>
             </tbody>
         </table>
@@ -366,9 +519,17 @@
                 const list = document.getElementById('missingFieldsList');
                 list.innerHTML = '';
                 missing.forEach(el => {
-                    let row = el.closest('tr');
-                    let label = row ? row.querySelector('th') : null;
-                    let labelText = label ? label.innerText.trim() : 'неизвестное поле';
+                    let labelText = '';
+                    const wrapper = el.closest('.input-wrapper');
+                    const labelElement = wrapper ? wrapper.querySelector('label') : null;
+                    if (labelElement) {
+                        labelText = labelElement.innerText.trim();
+                    } else {
+                        const row = el.closest('tr');
+                        const th = row ? row.querySelector('th.field-label') : null;
+                        labelText = th ? th.innerText.trim() : 'неизвестное поле';
+                    }
+                    labelText = labelText.replace(/[:*]/g, '').trim();
                     const li = document.createElement('li');
                     li.textContent = labelText;
                     list.appendChild(li);
@@ -411,7 +572,6 @@
 
         document.getElementById('printBtn').addEventListener('click', ()=>alert('Печать документа'));
 
-
         // Снятие подсветки при редактировании
         getFields().forEach(el => {
             el.addEventListener('input', function() {
@@ -425,19 +585,6 @@
                 this.classList.remove('highlight-missing');
             });
         });
-
-        // Преобразование даты из datetime-local в читаемый русский формат (при необходимости)
-        function formatDateForDisplay(dateTimeLocal) {
-            if (!dateTimeLocal) return '';
-            const [datePart, timePart] = dateTimeLocal.split('T');
-            const [year, month, day] = datePart.split('-');
-            const [hour, minute] = timePart.split(':');
-            const monthNames = [
-                'января','февраля','марта','апреля','мая','июня',
-                'июля','августа','сентября','октября','ноября','декабря'
-            ];
-            return `${parseInt(day)} ${monthNames[parseInt(month)-1]} ${year} ${hour}:${minute}`;
-        }
 
         // Автозаполнение даты, если поле пустое
         const dateField = document.getElementById('examDate');
