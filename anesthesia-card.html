@@ -615,6 +615,7 @@
     </div>
 
     <script src="common.js"></script>
+    <script src="print-utils.js"></script>
     <script>
     (function() {
         // ========== Оригинальные переменные и функции (с небольшими расширениями) ==========
@@ -1692,8 +1693,11 @@
             document.getElementById('saveLabBtn')?.addEventListener('click', saveLabEntry);
 
             // Подписи
+            // Подписать ЭП → печатная форма
             document.getElementById('signEpBtn')?.addEventListener('click', function() {
-                alert('Электронная подпись (заглушка).');
+                const data = collectPrintData();
+                localStorage.setItem('anesthesiaPrintData', JSON.stringify(data));
+                window.open('print-form.html', '_blank');
             });
 
             // Завершение операции
@@ -1763,8 +1767,20 @@
                 window.toggleSection(this);
             });
         }
-
+            document.getElementById('signEpBtn')?.addEventListener('click', function() {
+            const data = collectPrintData();
+            localStorage.setItem('anesthesiaPrintData', JSON.stringify(data));
+            window.open('print-form.html', '_blank');
+            });
+        // ---- Экспорт данных для печатной формы ----
+        window.stages = stages;
+        window.anesthesiaStages = anesthesiaStages;
+        window.actualSingles = actualSingles;
+        window.actualInfusions = actualInfusions;
+        window.vitalData = vitalData;
+        window.labData = labData;
         init();
+        
     })();
     </script>
 </body>

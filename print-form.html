@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Печатная форма 530н</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .no-print {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .no-print button {
+            padding: 10px 20px;
+            font-size: 14pt;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="formContainer">
+        <p style="text-align:center; color:#999;">Загрузка данных...</p>
+    </div>
+
+    <div class="no-print">
+        <button onclick="window.print()">🖨 Печать</button>
+        <button onclick="window.close()">✖ Закрыть</button>
+    </div>
+
+    <script src="print-utils.js"></script>
+    <script>
+        (function() {
+            // Получаем данные (из localStorage или собираем заново)
+            const data = collectPrintData();
+            if (data) {
+                // Генерируем HTML и вставляем в контейнер
+                document.getElementById('formContainer').innerHTML = generatePrintHtml(data);
+            } else {
+                document.getElementById('formContainer').innerHTML = '<p style="color:red;">Нет данных для отображения.</p>';
+            }
+
+            // Опционально: очищаем localStorage после загрузки, чтобы не хранить лишнее
+            // localStorage.removeItem('anesthesiaPrintData');
+        })();
+    </script>
+</body>
+</html>
