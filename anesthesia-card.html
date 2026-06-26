@@ -6,6 +6,23 @@
     <title>Карта анестезии — VISTAMED (530н)</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* ===== Общие стили ===== */
+        .panel-card.collapsible .collapsible-content {
+            display: none;
+        }
+        .panel-card.collapsible h4 {
+            cursor: pointer;
+            user-select: none;
+            margin: 0 0 6px 0;
+        }
+        .panel-card.collapsible h4::before {
+            content: "▼ ";
+            font-size: 12px;
+        }
+        .panel-card.collapsible.collapsed h4::before {
+            content: "► ";
+        }
+
         /* Дополнительные стили для новых элементов */
         .equipment-bar {
             display: flex;
@@ -37,22 +54,6 @@
         .duration-box strong {
             font-weight: 700;
             color: #0056b3;
-        }
-        .panel-card.collapsible h4 {
-            cursor: pointer;
-            user-select: none;
-            margin: 0 0 6px 0;
-        }
-        .panel-card.collapsible h4::before {
-            content: "▼ ";
-            font-size: 12px;
-        }
-        .panel-card.collapsible.collapsed h4::before {
-            content: "► ";
-        }
-        .collapsible-content {
-            display: none;
-            padding-top: 8px;
         }
         .collapsible-content .form-field {
             margin-bottom: 8px;
@@ -196,6 +197,7 @@
             font-size: 10px;
             white-space: nowrap;
         }
+        /* ===== Конец стилей ===== */
     </style>
 </head>
 <body>
@@ -215,7 +217,7 @@
         </div>
     </header>
 
-    <!-- Пациентская информация (без изменений) -->
+    <!-- Пациентская информация -->
     <div class="patient-bar" id="patientBar">
         <div class="patient-data">
             <div class="param"><span>Пациент:</span><strong>Петров Иван Сергеевич</strong></div>
@@ -240,7 +242,7 @@
         <button type="button" class="btn-toggle-patient" id="expandPatientBtn">▼ Показать данные пациента</button>
     </div>
 
-    <!-- Навигация по вкладкам (добавлена "Лабораторный мониторинг") -->
+    <!-- Навигация по вкладкам -->
     <nav class="tabs-nav">
         <a href="consents.html" class="tab-item">Согласия</a>
         <a href="anesthesia-primary-exam.html" class="tab-item">Первичный осмотр</a>
@@ -254,29 +256,7 @@
         <div class="tab-item" data-tab="lab">Лабораторный мониторинг</div>
     </nav>
 
-    <!-- Блок оборудования (новый) -->
-    <div class="equipment-bar">
-        <div>
-            <label>Наркозный аппарат:</label>
-            <input type="text" id="ventilator" list="ventilatorList" placeholder="Выберите или введите">
-            <datalist id="ventilatorList">
-                <option value="Drager Primus">
-                <option value="Mindray A7">
-                <option value="GE Avance">
-                <option value="Philips Respironics">
-            </datalist>
-        </div>
-        <div>
-            <label>Дыхательный контур:</label>
-            <input type="text" id="circuit" placeholder="например, полузакрытый">
-        </div>
-        <div class="duration-box">
-            <div><label>Длительность операции:</label><strong id="surgeryDuration">--:--</strong></div>
-            <div><label>Длительность анестезии:</label><strong id="anesthesiaDuration">--:--</strong></div>
-        </div>
-    </div>
-
-    <!-- Управляющая панель (добавлены длительности, но уже вынесены выше) -->
+    <!-- Управляющая панель -->
     <div class="control-bar">
         <div class="scale-selector">
             <span>Масштаб времени:</span>
@@ -292,7 +272,7 @@
             <div style="margin-left:20px;"><label style="color:var(--primary-green);">Идет операция:</label><br><strong style="color:var(--primary-green);" id="currentOperationTime">01:31:24</strong></div>
         </div>
         <div>
-            <button class="btn btn-green">Завершить операцию</button>
+            <button class="btn btn-green" id="finishOpBtn">Завершить операцию</button>
             <button class="btn btn-outline" id="addStageBtn">+ Добавить этап</button>
             <button class="btn btn-outline btn-outline-accent" id="applyPlanBtn">Применить план в карту</button>
             <button class="btn btn-outline" id="addDrugBtn">Ввести ЛС</button>
@@ -305,7 +285,33 @@
             <div class="timeline-table" id="timelineTable" style="position:relative;"></div>
         </div>
         <div class="right-panel">
-            <!-- Моментальное добавление показателя (существующий) -->
+            <!-- Блок оборудования -->
+            <div class="panel-card">
+                <h4>Оборудование и время</h4>
+                <div class="form-field">
+                    <label>Наркозный аппарат:</label>
+                    <input type="text" id="ventilator" list="ventilatorList" placeholder="Выберите или введите">
+                    <datalist id="ventilatorList">
+                        <option value="Drager Primus">
+                        <option value="Mindray A7">
+                        <option value="GE Avance">
+                        <option value="Philips Respironics">
+                    </datalist>
+                </div>
+                <div class="form-field">
+                    <label>Дыхательный контур:</label>
+                    <input type="text" id="circuit" placeholder="например, полузакрытый">
+                </div>
+                <!-- Длительности (скрыты, но могут быть показаны) -->
+                <div class="duration-box" style="display:flex; gap:15px; margin-top:6px;">
+                    <div class="form-field"><label>Длительность операции:</label><strong id="surgeryDuration">--:--</strong></div>
+                    <div class="form-field"><label>Длительность анестезии:</label><strong id="anesthesiaDuration">--:--</strong></div>
+                </div>
+                
+            </div>
+            
+
+            <!-- Моментальное добавление показателя -->
             <div class="panel-card">
                 <h4>Моментальное добавление показателя</h4>
                 <div class="form-field">
@@ -316,7 +322,7 @@
                         <option>SpO₂ (%)</option>
                         <option>ЦВД (смH₂O)</option>
                         <option>Температура (°C)</option>
-                        <option>CO₂ (мм рт.ст.)</option> <!-- добавлено -->
+                        <option>CO₂ (мм рт.ст.)</option>
                     </select>
                 </div>
                 <div class="form-field">
@@ -330,7 +336,7 @@
                 <button class="btn btn-green" id="quickVitalBtn" style="width:100%;">Добавить показатель</button>
             </div>
 
-            <!-- Гидробаланс (новый) -->
+            <!-- Гидробаланс -->
             <div class="panel-card">
                 <h4>Гидробаланс</h4>
                 <div class="fluid-balance">
@@ -339,33 +345,35 @@
                 </div>
             </div>
 
-            <!-- Катетеры (существующий) -->
-            <div class="panel-card">
-                <h4>Установка катетеров</h4>
-                <div class="person-schema" id="catheterSchema">
-                    <svg class="person-svg" viewBox="0 0 200 300">
-                        <circle cx="100" cy="40" r="20" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
-                        <circle cx="100" cy="75" r="12" class="catheter-point" data-catheter="central" data-name="Центральный катетер"/>
-                        <rect x="70" y="90" width="60" height="100" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
-                        <line x1="70" y1="100" x2="35" y2="120" stroke="#999" stroke-width="3"/>
-                        <circle cx="35" cy="120" r="8" class="catheter-point" data-catheter="peripheral" data-name="Периферический катетер (левая рука)"/>
-                        <line x1="130" y1="100" x2="165" y2="120" stroke="#999" stroke-width="3"/>
-                        <circle cx="165" cy="120" r="8" class="catheter-point" data-catheter="peripheral" data-name="Периферический катетер (правая рука)"/>
-                        <line x1="85" y1="190" x2="70" y2="240" stroke="#999" stroke-width="3"/>
-                        <circle cx="70" cy="240" r="8" class="catheter-point" data-catheter="arterial" data-name="Артериальный катетер (левая нога)"/>
-                        <line x1="115" y1="190" x2="130" y2="240" stroke="#999" stroke-width="3"/>
-                        <circle cx="130" cy="240" r="8" class="catheter-point" data-catheter="arterial" data-name="Артериальный катетер (правая нога)"/>
-                        <circle cx="100" cy="170" r="8" class="catheter-point" data-catheter="femoral" data-name="Бедренный катетер"/>
-                    </svg>
-                </div>
-                <div id="catheterInfo" class="catheter-info">
-                    Нажмите на зону для установки катетера
+            <!-- Катетеры (сворачиваемый) -->
+            <div class="panel-card collapsible">
+                <h4 id="toggleCatheter">Установка катетеров</h4>
+                <div class="collapsible-content">
+                    <div class="person-schema" id="catheterSchema">
+                        <svg class="person-svg" viewBox="0 0 200 300">
+                            <circle cx="100" cy="40" r="20" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
+                            <circle cx="100" cy="75" r="12" class="catheter-point" data-catheter="central" data-name="Центральный катетер"/>
+                            <rect x="70" y="90" width="60" height="100" fill="#f0f0f0" stroke="#999" stroke-width="1.5"/>
+                            <line x1="70" y1="100" x2="35" y2="120" stroke="#999" stroke-width="3"/>
+                            <circle cx="35" cy="120" r="8" class="catheter-point" data-catheter="peripheral" data-name="Периферический катетер (левая рука)"/>
+                            <line x1="130" y1="100" x2="165" y2="120" stroke="#999" stroke-width="3"/>
+                            <circle cx="165" cy="120" r="8" class="catheter-point" data-catheter="peripheral" data-name="Периферический катетер (правая рука)"/>
+                            <line x1="85" y1="190" x2="70" y2="240" stroke="#999" stroke-width="3"/>
+                            <circle cx="70" cy="240" r="8" class="catheter-point" data-catheter="arterial" data-name="Артериальный катетер (левая нога)"/>
+                            <line x1="115" y1="190" x2="130" y2="240" stroke="#999" stroke-width="3"/>
+                            <circle cx="130" cy="240" r="8" class="catheter-point" data-catheter="arterial" data-name="Артериальный катетер (правая нога)"/>
+                            <circle cx="100" cy="170" r="8" class="catheter-point" data-catheter="femoral" data-name="Бедренный катетер"/>
+                        </svg>
+                    </div>
+                    <div id="catheterInfo" class="catheter-info">
+                        Нажмите на зону для установки катетера
+                    </div>
                 </div>
             </div>
 
-            <!-- ИВЛ (сворачиваемый блок) -->
+            <!-- ИВЛ (сворачиваемый) -->
             <div class="panel-card collapsible">
-                <h4 onclick="toggleSection(this)">ИВЛ</h4>
+                <h4 id="toggleIvl">ИВЛ</h4>
                 <div class="collapsible-content">
                     <div class="form-field">
                         <label>Режим</label>
@@ -389,15 +397,13 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Блок инфузионной терапии (дополнительная информация) – можно разместить здесь же -->
         </div>
     </div>
 
-    <!-- Вкладка План (без изменений) -->
+    <!-- Вкладка План -->
     <div id="planView" style="display:none;"></div>
 
-    <!-- Вкладка Лабораторный мониторинг (новая) -->
+    <!-- Вкладка Лабораторный мониторинг -->
     <div id="labView" style="display:none; padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <h3>Лабораторный мониторинг</h3>
@@ -413,14 +419,12 @@
                         <th>Глюкоза (ммоль/л)</th><th>Осм. (мосм/л)</th><th>АЧТВ (сек)</th><th>ПТИ (сек)</th>
                     </tr>
                 </thead>
-                <tbody id="labTbody">
-                    <!-- заполняется скриптом -->
-                </tbody>
+                <tbody id="labTbody"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- Футер с подписями (новый) -->
+    <!-- Футер с подписями -->
     <div class="footer-sign">
         <div class="left">
             <div><strong>Врач-анестезиолог-реаниматолог:</strong> <span id="anesthesiologistName">Турчанинов А.Ю.</span></div>
@@ -433,20 +437,56 @@
         </div>
     </div>
 
-    <!-- Модальные окна (существующие и новые) -->
+    <!-- ========== МОДАЛЬНЫЕ ОКНА ========== -->
 
-    <!-- Окно добавления этапа операции (без изменений) -->
-    <div id="stageModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Добавить этап операции</span><span class="close-modal" data-modal="stageModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Этап</label><select id="stageSelect"></select></div><div class="form-field"><label>Время (ЧЧ:ММ)</label><input type="text" id="stageTime"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelStageBtn">Отмена</button><button class="btn btn-green" id="saveStageBtn">Сохранить</button></div></div></div>
+    <!-- Окно добавления этапа операции -->
+    <div id="stageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><span>Добавить этап операции</span><span class="close-modal" data-modal="stageModal">&times;</span></div>
+            <div class="modal-body">
+                <div class="form-field"><label>Этап</label><select id="stageSelect"></select></div>
+                <div class="form-field"><label>Время (ЧЧ:ММ)</label><input type="text" id="stageTime"></div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-outline" id="cancelStageBtn">Отмена</button><button class="btn btn-green" id="saveStageBtn">Сохранить</button></div>
+        </div>
+    </div>
 
-    <!-- Окно ввода показателя (без изменений) -->
-    <div id="vitalModal" class="modal"><div class="modal-content"><div class="modal-header"><span>Ввод показателя</span><span class="close-modal" data-modal="vitalModal">&times;</span></div><div class="modal-body"><div class="form-field"><label>Показатель</label><input type="text" id="vitalParam" readonly></div><div class="form-field"><label>Время</label><input type="text" id="vitalTime" readonly></div><div class="form-field"><label>Значение</label><input type="text" id="vitalValue"></div></div><div class="modal-footer"><button class="btn btn-outline" id="cancelVitalBtn">Отмена</button><button class="btn btn-green" id="saveVitalBtn">Сохранить</button></div></div></div>
+    <!-- Окно ввода показателя -->
+    <div id="vitalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><span>Ввод показателя</span><span class="close-modal" data-modal="vitalModal">&times;</span></div>
+            <div class="modal-body">
+                <div class="form-field"><label>Показатель</label><input type="text" id="vitalParam" readonly></div>
+                <div class="form-field"><label>Время</label><input type="text" id="vitalTime" readonly></div>
+                <div class="form-field"><label>Значение</label><input type="text" id="vitalValue"></div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-outline" id="cancelVitalBtn">Отмена</button><button class="btn btn-green" id="saveVitalBtn">Сохранить</button></div>
+        </div>
+    </div>
 
-    <!-- Окно списания ИМН (без изменений) -->
+    <!-- Окно списания ИМН -->
     <div id="imnModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><span>Списание ИМН со склада</span><span class="close-modal" data-modal="imnModal">&times;</span></div>
             <div class="modal-body">
-                <div class="form-field"><label>Инструмент / расходник</label><select id="imnSelect">...</select></div>
+                <div class="form-field"><label>Инструмент / расходник</label><select id="imnSelect">
+                    <option value="Скальпель №10">Скальпель №10</option>
+                    <option value="Скальпель №15">Скальпель №15</option>
+                    <option value="Зажим Кохера">Зажим Кохера</option>
+                    <option value="Зажим Бильрота">Зажим Бильрота</option>
+                    <option value="Иглодержатель">Иглодержатель</option>
+                    <option value="Пинцет анатомический">Пинцет анатомический</option>
+                    <option value="Пинцет хирургический">Пинцет хирургический</option>
+                    <option value="Ножницы">Ножницы</option>
+                    <option value="Кровоостанавливающий зажим">Кровоостанавливающий зажим</option>
+                    <option value="Троакар">Троакар</option>
+                    <option value="Эндоскопические ножницы">Эндоскопические ножницы</option>
+                    <option value="Эндоскопический зажим">Эндоскопический зажим</option>
+                    <option value="Шовный материал (викрил)">Шовный материал (викрил)</option>
+                    <option value="Шовный материал (пролен)">Шовный материал (пролен)</option>
+                    <option value="Марлевые салфетки">Марлевые салфетки</option>
+                    <option value="Дренажная трубка">Дренажная трубка</option>
+                </select></div>
                 <div class="form-field"><label>Количество</label><input type="number" id="imnQuantity" value="1" min="1" step="1"></div>
                 <div class="form-field"><label>Время</label><input type="text" id="imnTime" readonly></div>
             </div>
@@ -462,7 +502,7 @@
                 <div class="form-field"><label>Препарат</label><input type="text" id="regDrugName" readonly></div>
                 <div class="form-field"><label>Формат</label><select id="regFormat"><option>разовое</option><option>непрерывное</option></select></div>
                 <div class="form-field"><label>Доза</label><input type="text" id="regDose"> <select id="regUnit" style="width:80px;"><option>мг</option><option>мкг</option><option>г</option><option>мл</option></select></div>
-                <!-- Новые поля: Тип введения и Общий объём -->
+                <!-- Новые поля -->
                 <div class="form-field"><label>Тип введения</label><select id="regInfusionType"><option>болюс</option><option>капельно</option></select></div>
                 <div class="form-field"><label>Общий объём (мл)</label><input type="text" id="regVolume" placeholder="например 100"></div>
                 <div class="form-field"><label>Время (мин от 09:00) / Start-End</label><input type="text" id="regTime"></div>
@@ -473,7 +513,7 @@
         </div>
     </div>
 
-    <!-- Окно добавления в план (без изменений, но можно расширить аналогично) -->
+    <!-- Окно добавления в план -->
     <div id="addPlanModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><span>Добавить в план</span><span class="close-modal" data-modal="addPlanModal">&times;</span></div>
@@ -490,7 +530,7 @@
         </div>
     </div>
 
-    <!-- Окно подтверждения завершения операции (без изменений) -->
+    <!-- Окно подтверждения завершения операции -->
     <div id="confirmCompleteModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><span>Подтверждение завершения операции</span><span class="close-modal" data-modal="confirmCompleteModal">&times;</span></div>
@@ -499,7 +539,7 @@
         </div>
     </div>
 
-    <!-- Окно списания препаратов (без изменений) -->
+    <!-- Окно списания препаратов -->
     <div id="writeOffModal" class="modal">
         <div class="modal-content" style="width:700px; max-width:95%;">
             <div class="modal-header"><span>Списание препаратов</span><span class="close-modal" data-modal="writeOffModal">&times;</span></div>
@@ -511,7 +551,7 @@
         </div>
     </div>
 
-    <!-- Окно выбора торгового наименования (без изменений) -->
+    <!-- Окно выбора торгового наименования -->
     <div id="selectTnModal" class="modal">
         <div class="modal-content" style="width:500px; max-width:95%;">
             <div class="modal-header"><span>Выбор торгового наименования</span><span class="close-modal" data-modal="selectTnModal">&times;</span></div>
@@ -528,7 +568,7 @@
         </div>
     </div>
 
-    <!-- Новое окно для выбора анестезиологических этапов -->
+    <!-- Окно выбора анестезиологических этапов -->
     <div id="anesthesiaStageModal" class="modal">
         <div class="modal-content" style="width:400px;">
             <div class="modal-header"><span>Выбор анестезиологического этапа</span><span class="close-modal" data-modal="anesthesiaStageModal">&times;</span></div>
@@ -548,7 +588,7 @@
         </div>
     </div>
 
-    <!-- Новое окно для добавления лабораторного измерения -->
+    <!-- Окно добавления лабораторного измерения -->
     <div id="labModal" class="modal">
         <div class="modal-content large">
             <div class="modal-header"><span>Добавить лабораторное измерение</span><span class="close-modal" data-modal="labModal">&times;</span></div>
@@ -683,7 +723,6 @@
 
         // Функция обновления длительности
         function updateDurations() {
-            // Определяем начало и конец операции по этапам
             const startOp = stages.find(s => s.text === "Кожный разрез (Начало операции)");
             const endOp = stages.find(s => s.text === "Конец операции");
             if (startOp) surgeryStartMin = startOp.minutes;
@@ -696,7 +735,6 @@
                 document.getElementById('surgeryDuration').textContent = '--:--';
             }
 
-            // Длительность анестезии: от первого события (индукция) до последнего (экстубация)
             const aStages = stages.filter(s => ["Индукция анестезии", "Экстубация"].includes(s.text));
             if (aStages.length >= 1) {
                 const first = aStages.reduce((a,b) => a.minutes < b.minutes ? a : b);
@@ -711,7 +749,7 @@
             }
         }
 
-        // Отрисовка инфузионных сегментов (без изменений)
+        // Отрисовка инфузионных сегментов
         function drawInfusionSegments() {
             const wrapper = anesthesiaView?.querySelector('.timeline-table');
             if (!wrapper) return;
@@ -782,7 +820,7 @@
             });
         }
 
-        // Отрисовка линий этапов (без изменений)
+        // Отрисовка линий этапов
         function drawStageLines() {
             const table = document.getElementById('timelineTable');
             if (!table) return;
@@ -830,7 +868,7 @@
             });
         }
 
-        // Основная функция построения таблицы (расширена)
+        // Основная функция построения таблицы
         function buildTable() {
             let labels = getTimeLabels(currentScale);
             let cols = labels.length;
@@ -850,7 +888,7 @@
             }
             html+=`</div>`;
 
-            // Строка анестезиологических этапов (новая)
+            // Строка анестезиологических этапов
             html+=`<div style="background:#f8f9fc; padding:4px 12px;">ЭТАПЫ АНЕСТЕЗИИ (А, Вв, Т, Пв, Э, Д, Б)</div><div class="data-row astage-row"><div class="row-label">Анест. этапы</div>`;
             for(let i=0;i<cols;i++){
                 let slotStart=i*currentScale;
@@ -902,7 +940,7 @@
                 html+=`</div>`;
             });
 
-            // ИМН (без изменений)
+            // ИМН
             let imns=['Лапароскопические инструменты','Зажимы, иглодержатели'];
             html+=`<div style="background:#f8f9fc; padding:4px 12px;">ИМН (списание со склада)</div>`;
             imns.forEach((imn,idx)=>{
@@ -937,7 +975,7 @@
                 });
             });
 
-            // Анестезиологические этапы (новая строка)
+            // Анестезиологические этапы
             document.querySelectorAll('.astage-row .time-slot').forEach(slot=>{
                 slot.addEventListener('click',()=>{
                     let col=parseInt(slot.getAttribute('data-col'));
@@ -966,7 +1004,7 @@
                 });
             });
 
-            // Препараты (клик по ячейке существующего препарата)
+            // Препараты
             document.querySelectorAll('.drug-row .time-slot').forEach(slot=>{
                 let drugName=slot.getAttribute('data-drug-name');
                 if(drugName){
@@ -981,7 +1019,7 @@
             });
         }
 
-        // Модальные окна (существующие с расширением для новых полей)
+        // ---- Модальные окна ----
 
         function openStageModal(defaultTime){
             let select=document.getElementById('stageSelect');
@@ -999,11 +1037,8 @@
         }
 
         function openAnesthesiaStageModal(minutes) {
-            // Показываем окно с чекбоксами
             document.getElementById('astageTimeDisplay').textContent = minutesToTime(minutes);
-            // Сбросить чекбоксы
             document.querySelectorAll('.astage-check').forEach(cb => cb.checked = false);
-            // Если уже есть коды для этой минуты, отметить их
             if (anesthesiaStages[minutes]) {
                 anesthesiaStages[minutes].forEach(code => {
                     const cb = document.querySelector(`.astage-check[value="${code}"]`);
@@ -1079,7 +1114,7 @@
             window._drugRegExisting={drug, minutes};
         }
 
-        // Планирование
+        // ---- Планирование ----
         function openAddPlanModal(){
             document.getElementById('planName').value='';
             document.getElementById('planFormat').value='single';
@@ -1235,7 +1270,7 @@
             alert(`План применён: ${newPlanned.length} препаратов`);
         }
 
-        // Быстрое добавление показателя
+        // ---- Быстрое добавление показателя ----
         document.getElementById('quickVitalBtn')?.addEventListener('click',()=>{
             let param=document.getElementById('quickVitalParam').value;
             let timeStr=document.getElementById('quickVitalTime').value;
@@ -1249,7 +1284,7 @@
             document.getElementById('quickVitalValue').value='';
         });
 
-        // Катетеры (без изменений)
+        // ---- Катетеры ----
         let catheters=[];
         function updateCatheterInfo(){
             let infoDiv=document.getElementById('catheterInfo');
@@ -1268,7 +1303,7 @@
             });
         });
 
-        // Добавление текущей линии
+        // ---- Текущая линия времени ----
         function addCurrentLine(){
             if(!anesthesiaView) return;
             let old=anesthesiaView.querySelector('.current-time-line');
@@ -1286,7 +1321,7 @@
             anesthesiaView.appendChild(line);
         }
 
-        // ========== Функции для лабораторного мониторинга ==========
+        // ---- Лабораторный мониторинг ----
         function renderLabTable() {
             const tbody = document.getElementById('labTbody');
             if (!tbody) return;
@@ -1333,7 +1368,7 @@
             document.getElementById('labModal').style.display = 'none';
         }
 
-        // ========== Функции для завершения операции и списания ==========
+        // ---- Завершение операции и списание ----
         let selectedTnForDrugs = {};
         function showConfirmCompleteModal() {
             document.getElementById('confirmCompleteModal').style.display = 'flex';
@@ -1451,7 +1486,7 @@
             document.getElementById('tnSearchInput').focus();
         }
 
-        // ========== Инициализация и обработчики ==========
+        // ---- Инициализация ----
         function init(){
             timelineTable=document.getElementById('timelineTable');
             anesthesiaView=document.getElementById('anesthesiaView');
@@ -1484,10 +1519,26 @@
                 });
             });
 
-            // Кнопки
+            // Кнопки управления
             document.getElementById('addStageBtn')?.addEventListener('click',()=>openStageModal(minutesToTime(106)));
             document.getElementById('applyPlanBtn')?.addEventListener('click', applyPlanToCard);
-            document.getElementById('addDrugBtn')?.addEventListener('click',()=>alert('Окно ввода препарата (можно расширить)'));
+            document.getElementById('addDrugBtn')?.addEventListener('click', function(){
+                // Открываем модальное окно регистрации препарата с пустыми полями
+                document.getElementById('regDrugName').value = '';
+                document.getElementById('regFormat').value = 'single';
+                document.getElementById('regDose').value = '';
+                document.getElementById('regUnit').value = 'мг';
+                document.getElementById('regInfusionType').value = 'болюс';
+                document.getElementById('regVolume').value = '';
+                document.getElementById('regTime').value = '';
+                document.getElementById('regSpeed').value = '';
+                document.getElementById('regRoute').value = 'в/в';
+                document.getElementById('regSpeedRow').style.display = 'none';
+                document.getElementById('drugRegisterModal').style.display = 'flex';
+                // Сбрасываем флаги плана/существующего
+                window._drugRegPlan = null;
+                window._drugRegExisting = null;
+            });
 
             // Переключение вкладок
             document.querySelectorAll('.tab-item').forEach(tab=>{
@@ -1520,7 +1571,7 @@
                 });
             });
 
-            // Закрытие модальных окон
+            // Закрытие модальных окон (крестик и клик на фон)
             document.querySelectorAll('.close-modal').forEach(btn=>{
                 btn.addEventListener('click',()=>{
                     let modalId=btn.getAttribute('data-modal');
@@ -1576,7 +1627,7 @@
                 document.getElementById('imnModal').style.display='none';
             });
 
-            // Регистрация препарата (расширенная)
+            // Регистрация препарата
             document.getElementById('cancelDrugRegBtn')?.addEventListener('click',()=>document.getElementById('drugRegisterModal').style.display='none');
             document.getElementById('confirmDrugRegBtn')?.addEventListener('click',()=>{
                 let name=document.getElementById('regDrugName').value;
@@ -1589,12 +1640,19 @@
                 let infusionType = document.getElementById('regInfusionType').value;
                 let volume = document.getElementById('regVolume').value.trim();
 
+                // Если имя не заполнено, но есть план или существующий препарат – берём из них
+                if (!name && window._drugRegPlan) name = window._drugRegPlan.name;
+                if (!name && window._drugRegExisting) name = window._drugRegExisting.drug.name;
+
+                if (!name) { alert('Введите название препарата.'); return; }
+
                 if(window._drugRegPlan){
                     if(format==='continuous'){
                         let [start,end]=timeStr.split('-').map(Number);
                         actualInfusions.push({ id:'custom_'+Date.now(), name, detail:`${dose} ${unit}, ${route}`, segments:[{ start, end, height:12, css:'remi-seg', tooltip:`${dose} ${unit}` }], volume, infusionType });
                     }else{
                         let minutes=parseInt(timeStr);
+                        if (isNaN(minutes)) { alert('Неверное время.'); return; }
                         actualSingles.push({ name, detail:`${dose} ${unit}, ${route}`, minutes, markerClass:'marker-square', volume, infusionType });
                     }
                     plannedElements=plannedElements.filter(p=>p.id!==window._drugRegPlan.id);
@@ -1605,8 +1663,15 @@
                         actualInfusions.push({ id:'custom_'+Date.now(), name, detail:`${dose} ${unit}, ${route}`, segments:[{ start, end, height:12, css:'remi-seg', tooltip:`${dose} ${unit}` }], volume, infusionType });
                     }else{
                         let minutes=parseInt(timeStr);
+                        if (isNaN(minutes)) { alert('Неверное время.'); return; }
                         actualSingles.push({ name, detail:`${dose} ${unit}, ${route}`, minutes, markerClass:'marker-square', volume, infusionType });
                     }
+                    buildTable();
+                } else {
+                    // Если нет ни плана, ни существующего – добавляем как новый разовый (по умолчанию)
+                    let minutes = parseInt(timeStr);
+                    if (isNaN(minutes)) { alert('Неверное время.'); return; }
+                    actualSingles.push({ name, detail:`${dose} ${unit}, ${route}`, minutes, markerClass:'marker-square', volume, infusionType });
                     buildTable();
                 }
                 document.getElementById('drugRegisterModal').style.display='none';
@@ -1632,10 +1697,8 @@
             });
 
             // Завершение операции
-            document.querySelector('.btn.btn-green')?.addEventListener('click', function(e) {
-                if (this.textContent.trim() === 'Завершить операцию') {
-                    showConfirmCompleteModal();
-                }
+            document.getElementById('finishOpBtn')?.addEventListener('click', function(e) {
+                showConfirmCompleteModal();
             });
 
             document.getElementById('cancelConfirmBtn')?.addEventListener('click', function() {
@@ -1673,16 +1736,32 @@
                 renderTnResults(this.value);
             });
 
-            // Сворачивание ИВЛ
+            // ===== СВОРАЧИВАНИЕ ПАНЕЛЕЙ (исправленное) =====
+            // Делаем функции глобальными, чтобы они были доступны из HTML
             window.toggleSection = function(el) {
-                const content = el.nextElementSibling;
+                // Если передан элемент h4, ищем родительский .panel-card.collapsible
+                const panel = el.closest('.panel-card.collapsible');
+                if (!panel) return;
+                const content = panel.querySelector('.collapsible-content');
+                if (!content) return;
                 const isVisible = content.style.display !== 'none';
                 content.style.display = isVisible ? 'none' : 'block';
-                el.parentElement.classList.toggle('collapsed', !isVisible);
+                panel.classList.toggle('collapsed', !isVisible);
             };
-            // Инициализация ИВЛ свёрнутым
-            document.querySelector('.panel-card.collapsible .collapsible-content').style.display = 'none';
-            document.querySelector('.panel-card.collapsible').classList.add('collapsed');
+
+            // Инициализация: все сворачиваемые панели скрыты
+            document.querySelectorAll('.panel-card.collapsible .collapsible-content').forEach(el => {
+                el.style.display = 'none';
+                el.closest('.panel-card.collapsible').classList.add('collapsed');
+            });
+
+            // Вешаем обработчики на заголовки (убираем onclick из HTML для чистоты)
+            document.getElementById('toggleCatheter')?.addEventListener('click', function() {
+                window.toggleSection(this);
+            });
+            document.getElementById('toggleIvl')?.addEventListener('click', function() {
+                window.toggleSection(this);
+            });
         }
 
         init();
