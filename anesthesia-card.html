@@ -267,10 +267,7 @@
         </div>
         <div class="param"><span>Операция:</span><strong> КАГ</strong></div>
         <div class="param"><span>Операционная:</span><strong> № 2</strong></div>
-        <div class="time-status">
-            <div><label>Начало операции:</label><br><strong>09:15 18.05.2026, вт</strong></div>
-            <div style="margin-left:20px;"><label style="color:var(--primary-green);">Идет операция:</label><br><strong style="color:var(--primary-green);" id="currentOperationTime">01:31:24</strong></div>
-        </div>
+
         <div>
             <button class="btn btn-green" id="finishOpBtn">Завершить операцию</button>
             <button class="btn btn-outline" id="addStageBtn">+ Добавить этап</button>
@@ -736,7 +733,7 @@
                 document.getElementById('surgeryDuration').textContent = '--:--';
             }
 
-            const aStages = stages.filter(s => ["Индукция анестезии", "Экстубация"].includes(s.text));
+            const aStages = stages.filter(s => ["Больной на столе", "Экстубация"].includes(s.text));
             if (aStages.length >= 1) {
                 const first = aStages.reduce((a,b) => a.minutes < b.minutes ? a : b);
                 const last = aStages.reduce((a,b) => a.minutes > b.minutes ? a : b);
